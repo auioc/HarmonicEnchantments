@@ -1,5 +1,7 @@
 package org.auioc.mcmod.harmonicenc;
 
+import org.auioc.mcmod.harmonicenc.common.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicenc.common.itemgroup.HECreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,9 +41,13 @@ public final class Initialization {
 
         public void registerConfig() {}
 
-        private void modSetup() {}
+        private void modSetup() {
+            HEEnchantments.ENCHANTMENTS.register(modEventBus);
+        }
 
-        private void forgeSetup() {}
+        private void forgeSetup() {
+            HECreativeModeTabs.init();
+        }
 
     }
 
