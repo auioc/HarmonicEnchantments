@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.extensions.IForgeItemStack;
 
-@Mixin(value = IForgeItemStack.class)
+@Mixin(value = IForgeItemStack.class, remap = false)
 public interface MixinIForgeItemStack {
 
     // @org.spongepowered.asm.mixin.Debug(export = true, print = true)
