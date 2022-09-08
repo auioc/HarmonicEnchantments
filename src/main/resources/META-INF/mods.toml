@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="GNU GPLv3"
+issueTrackerURL="https://github.com/auioc/HarmonicEnchantments/issues"
+
+[[mods]]
+modId="harmonicenc"
+version="${file.jarVersion}"
+updateJSONURL="https://hi.auioc.org/HarmonicEnchantments/update/1.18.2.json"
+displayName="HarmonicEnchantments"
+displayURL="http://hi.auioc.org/HarmonicEnchantments/"
+credits="AUIOC"
+authors="WakelssSloth56"
+description='''
+Harmonic Enchantments
+'''
+
+[[dependencies.harmonicenc]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.harmonicenc]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.harmonicenc]]
+    modId="arnicalib"
+    mandatory=true
+    versionRange="[5.4.4,)"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,99 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
+
+project.ext.modId = "${mod_id}"
+project.ext.modName = "${mod_name}"
+project.ext.modVersion= "${mod_version}"
+group = "${group}"
+archivesBaseName = "${project.modId}"
+apply from: 'gradle/version.gradle'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+    mappings channel: "${mappings_channel}", version: "${mappings_version}"
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'file.encoding', 'UTF-8'
+            property 'user.language', 'en'
+            property 'log4j.configurationFile', 'log4j2.xml'
+            property 'mixin.debug', 'true'
+            arg "-mixin.config=${project.modId}.mixin.json"
+            mods {
+                harmonicenc {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'file.encoding', 'UTF-8'
+            property 'user.language', 'en'
+            property 'log4j.configurationFile', 'log4j2.xml'
+            property 'mixin.debug', 'true'
+            arg "-mixin.config=${project.modId}.mixin.json"
+            mods {
+                harmonicenc {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.remove(sourceSets.test)
+
+repositories {
+    maven {
+        url "https://maven.pkg.github.com/auioc/arnicalib-mcmod"
+        credentials {
+            username = System.getenv("GITHUB_ACTOR") ? System.getenv("GITHUB_ACTOR") : System.getenv("GITHUB_USERNAME")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+    maven {
+        name = "CurseMaven"
+        url = "https://www.cursemaven.com"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    testAnnotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    implementation "org.auioc.mcmod:arnicalib:${minecraft_version}-${arnicalib_version}:forgelib"
+
+    if (System.getenv('CI') == null) {
+        runtimeOnly fg.deobf("curse.maven:jade-324717:3970956")
+    }
+}
+
+mixin {
+    add sourceSets.main, "${project.modId}.mixin-refmap.json"
+}
+
+apply from: 'gradle/tasks.gradle'
+
+apply from: 'gradle/artifacts.gradle'
+
+apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/signing.gradle'
+

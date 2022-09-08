@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "package": "org.auioc.mcmod.harmonicenc.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [],
+    "client": [],
+    "server": [],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "refmap": "harmonicenc.mixin-refmap.json",
+    "minVersion": "0.8"
+}
