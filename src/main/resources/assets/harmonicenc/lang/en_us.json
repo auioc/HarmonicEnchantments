@@ -1,5 +1,7 @@
 {
     "harmonicenc.title": "HarmonicEnchantments",
 
-    "itemGroup.heEnchantedBooks": "HarmonicEnchantments"
+    "itemGroup.heEnchantedBooks": "HarmonicEnchantments",
+
+    "enchantment.harmonicenc.rapier": "Rapier"
 }
