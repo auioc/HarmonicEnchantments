@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.auioc.mcmod.harmonicenc.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicenc.api.enchantment.IToolActionControllerEnchantment;
@@ -18,10 +19,24 @@ import net.minecraftforge.common.ToolAction;
 
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
 
-    private static void runIterationOnItem(BiConsumer<Enchantment, Integer> visitor, ItemStack itemStack) {
+    public static void runIteration(BiConsumer<Enchantment, Integer> visitor, Map<Enchantment, Integer> enchMap) {
+        for (var enchEntry : enchMap.entrySet()) {
+            visitor.accept(enchEntry.getKey(), enchEntry.getValue());
+        }
+    }
+
+    public static void runIterationOnItem(BiConsumer<Enchantment, Integer> visitor, ItemStack itemStack) {
         if (itemStack.isEmpty()) return;
         for (var enchEntry : getEnchantments(itemStack).entrySet()) {
             visitor.accept(enchEntry.getKey(), enchEntry.getValue());
+        }
+    }
+
+    public static void runIterationOnItems(BiConsumer<Enchantment, Integer> visitor, Iterable<ItemStack> itemStacks, Predicate<ItemStack> predicate) {
+        for (var itemStack : itemStacks) {
+            if (predicate.test(itemStack)) {
+                runIterationOnItem(visitor, itemStack);
+            }
         }
     }
 
