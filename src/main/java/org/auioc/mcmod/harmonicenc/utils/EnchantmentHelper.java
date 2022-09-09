@@ -5,16 +5,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.auioc.mcmod.harmonicenc.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicenc.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicenc.api.enchantment.IToolActionControllerEnchantment;
+import org.auioc.mcmod.harmonicenc.api.entity.IEnchantableEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
 
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
@@ -60,6 +68,32 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             }
         }, itemStack);
         return bool.booleanValue();
+    }
+
+    public static void copyItemEnchantmentsToEntity(ItemStack itemStack, Entity entity, BiPredicate<Enchantment, Integer> predicate) {
+        if (entity instanceof IEnchantableEntity _entity) {
+            for (var enchEntry : EnchantmentHelper.getEnchantments(itemStack).entrySet()) {
+                if (predicate.test(enchEntry.getKey(), enchEntry.getValue())) {
+                    _entity.addEnchantment(enchEntry.getKey(), enchEntry.getValue());
+                }
+            }
+        }
+    }
+
+    public static float onProjectileHitLiving(LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float originalAmount) {
+        var enchMap = ((IEnchantableEntity) projectile).getEnchantments();
+        if (enchMap == null) return originalAmount;
+
+        var amount = new MutableFloat(originalAmount);
+        runIteration(
+            (ench, lvl) -> {
+                if (ench instanceof IProjectileEnchantment _ench) {
+                    amount.setValue(_ench.onHitLiving(lvl, target, projectile, owner, postion, amount.floatValue()));
+                }
+            },
+            enchMap
+        );
+        return amount.floatValue();
     }
 
 }
