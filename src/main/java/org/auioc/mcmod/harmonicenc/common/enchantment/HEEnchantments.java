@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicenc.common.enchantment;
 
 import java.util.function.Supplier;
 import org.auioc.mcmod.harmonicenc.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicenc.common.enchantment.impl.HandinessEnchantment;
 import org.auioc.mcmod.harmonicenc.common.enchantment.impl.RapierEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,5 +18,6 @@ public final class HEEnchantments {
     }
 
     public static final RegistryObject<Enchantment> RAPIER = register("rapier", RapierEnchantment::new);
+    public static final RegistryObject<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::new);
 
 }
