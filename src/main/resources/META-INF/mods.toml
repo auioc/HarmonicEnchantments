@@ -4,7 +4,7 @@ license="GNU GPLv3"
 issueTrackerURL="https://github.com/auioc/HarmonicEnchantments/issues"
 
 [[mods]]
-modId="harmonicenc"
+modId="harmonicench"
 version="${file.jarVersion}"
 updateJSONURL="https://hi.auioc.org/HarmonicEnchantments/update/1.18.2.json"
 displayName="HarmonicEnchantments"
@@ -15,19 +15,19 @@ description='''
 Harmonic Enchantments
 '''
 
-[[dependencies.harmonicenc]]
+[[dependencies.harmonicench]]
     modId="forge"
     mandatory=true
     versionRange="[40.1.0,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.harmonicenc]]
+[[dependencies.harmonicench]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.harmonicenc]]
+[[dependencies.harmonicench]]
     modId="arnicalib"
     mandatory=true
     versionRange="[5.4.4,)"
