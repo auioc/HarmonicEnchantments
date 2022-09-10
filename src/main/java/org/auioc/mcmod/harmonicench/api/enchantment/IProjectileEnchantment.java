@@ -6,9 +6,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class IProjectileEnchantment {
 
-    public static interface HitLiving {
+    public static interface HurtLiving {
 
-        float onHitLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount);
+        float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount);
 
     }
 

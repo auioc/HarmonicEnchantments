@@ -33,7 +33,7 @@ public class HECommonEventHandler {
                     && source.getDirectEntity() instanceof Projectile projectile
                     && source.getEntity() instanceof LivingEntity owner
             ) {
-                event.setAmount(EnchantmentHelper.onProjectileHitLiving(target, projectile, owner, _source.getIndirectSourcePosition(), event.getAmount()));
+                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, _source.getIndirectSourcePosition(), event.getAmount()));
             }
         }
     }

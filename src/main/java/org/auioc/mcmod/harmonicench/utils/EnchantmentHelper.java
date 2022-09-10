@@ -82,15 +82,15 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         }
     }
 
-    public static float onProjectileHitLiving(LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float originalAmount) {
+    public static float onProjectileHurtLiving(LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float originalAmount) {
         var enchMap = ((IEnchantableEntity) projectile).getEnchantments();
         if (enchMap == null) return originalAmount;
 
         var amount = new MutableFloat(originalAmount);
         runIteration(
             (ench, lvl) -> {
-                if (ench instanceof IProjectileEnchantment.HitLiving _ench) {
-                    amount.setValue(_ench.onHitLiving(lvl, target, projectile, owner, postion, amount.floatValue()));
+                if (ench instanceof IProjectileEnchantment.HurtLiving _ench) {
+                    amount.setValue(_ench.onHurtLiving(lvl, target, projectile, owner, postion, amount.floatValue()));
                 }
             },
             enchMap

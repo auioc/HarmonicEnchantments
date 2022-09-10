@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HitLiving {
+public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);
@@ -37,7 +37,7 @@ public class HandinessEnchantment extends AbstractHEEnchantment implements IProj
     }
 
     @Override
-    public float onHitLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float amount) {
+    public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float amount) {
         int amplifier = Math.min(lvl, this.getMaxLevel()) - 1;
         double duration = 6;
         if (lvl > this.getMaxLevel()) for (int k = 3, n = lvl + 1; k < n; k++) duration += (2 / (((double) k) - 2.0D));

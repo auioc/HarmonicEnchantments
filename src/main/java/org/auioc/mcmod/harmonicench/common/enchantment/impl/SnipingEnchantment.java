@@ -10,7 +10,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HitLiving {
+public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public SnipingEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND);
@@ -35,7 +35,7 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
     }
 
     @Override
-    public float onHitLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount) {
+    public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount) {
         double distance = ownerPostion.distanceTo(target.position());
         if (distance > 10.0D) {
             double m = 0.0D;

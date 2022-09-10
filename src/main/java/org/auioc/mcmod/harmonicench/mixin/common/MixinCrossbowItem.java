@@ -29,7 +29,7 @@ public class MixinCrossbowItem {
         CallbackInfoReturnable<AbstractArrow> cir,
         ArrowItem arrowitem, AbstractArrow abstractarrow, int i
     ) {
-        EnchantmentHelper.copyItemEnchantmentsToEntity(p_40917_, abstractarrow, (ench, lvl) -> ench instanceof IProjectileEnchantment.HitLiving);
+        EnchantmentHelper.copyItemEnchantmentsToEntity(p_40917_, abstractarrow, (ench, lvl) -> ench instanceof IProjectileEnchantment.HurtLiving);
     }
 
 }
