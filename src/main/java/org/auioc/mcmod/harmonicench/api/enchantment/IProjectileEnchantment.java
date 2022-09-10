@@ -19,4 +19,10 @@ public class IProjectileEnchantment {
 
     }
 
+    public static interface SpectralArrow {
+
+        void handleSpectralArrow(int lvl, net.minecraft.world.entity.projectile.SpectralArrow spectralArrow);
+
+    }
+
 }

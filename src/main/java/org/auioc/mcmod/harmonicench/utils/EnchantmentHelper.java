@@ -23,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -111,6 +112,9 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             (ench, lvl) -> {
                 if (ench instanceof IProjectileEnchantment.PotionArrow _ench && abstractArrow instanceof Arrow arrow) {
                     _ench.handlePotionArrow(lvl, arrow);
+                }
+                if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {
+                    _ench.handleSpectralArrow(lvl, spectralArrow);
                 }
             },
             weapon
