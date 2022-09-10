@@ -35,6 +35,7 @@ public class MixinBowItem {
         Player player, boolean flag, ItemStack itemstack, int i, float f, boolean flag1, ArrowItem arrowitem, AbstractArrow abstractarrow, int j, int k
     ) {
         EnchantmentHelper.copyItemEnchantmentsToEntity(p_40667_, abstractarrow, (ench, lvl) -> ench instanceof IProjectileEnchantment.HurtLiving);
+        EnchantmentHelper.handleArrow(p_40667_, abstractarrow);
     }
 
 }
