@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment;
 
 import java.util.function.Supplier;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.BaneOfChampionsEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.HandinessEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.RapierEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SiphoningEnchantment;
@@ -23,5 +24,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::new);
     public static final RegistryObject<Enchantment> SNIPING = register("sniping", SnipingEnchantment::new);
     public static final RegistryObject<Enchantment> SIPHONING = register("siphoning", SiphoningEnchantment::new);
+    public static final RegistryObject<Enchantment> BANE_OF_CHAMPIONS = register("bane_of_champions", BaneOfChampionsEnchantment::new);
 
 }
