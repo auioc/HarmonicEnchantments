@@ -10,9 +10,11 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -94,6 +96,20 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             enchMap
         );
         return amount.floatValue();
+    }
+
+    public static void onLivingDeath(LivingEntity target, DamageSource source) {
+        if (source.getEntity() instanceof LivingEntity sourceLiving) {
+            runIterationOnItems(
+                (ench, lvl) -> {
+                    if (ench instanceof ILivingEnchantment.Death _ench) {
+                        _ench.onLivingDeath(lvl, target, source);
+                    }
+                },
+                sourceLiving.getAllSlots(),
+                (itemStack) -> !itemStack.is(Items.ENCHANTED_BOOK)
+            );
+        }
     }
 
 }

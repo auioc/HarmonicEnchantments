@@ -5,6 +5,7 @@ import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -35,6 +36,11 @@ public class HECommonEventHandler {
                 event.setAmount(EnchantmentHelper.onProjectileHitLiving(target, projectile, owner, _source.getIndirectSourcePosition(), event.getAmount()));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDeath(final LivingDeathEvent event) {
+        EnchantmentHelper.onLivingDeath(event.getEntityLiving(), event.getSource());
     }
 
 }
