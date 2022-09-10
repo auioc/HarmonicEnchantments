@@ -11,5 +11,10 @@ public class ILivingEnchantment {
 
     }
 
+    public static interface Hurt {
+
+        float onLivingHurt(int lvl, LivingEntity target, DamageSource source, float amount);
+
+    }
 
 }

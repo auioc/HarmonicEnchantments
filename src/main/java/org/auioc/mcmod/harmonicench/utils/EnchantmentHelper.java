@@ -29,6 +29,8 @@ import net.minecraftforge.common.ToolAction;
 
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
 
+    public static final Predicate<ItemStack> NOT_BOOK = (itemStack) -> !itemStack.is(Items.ENCHANTED_BOOK);
+
     public static void runIteration(BiConsumer<Enchantment, Integer> visitor, Map<Enchantment, Integer> enchMap) {
         for (var enchEntry : enchMap.entrySet()) {
             visitor.accept(enchEntry.getKey(), enchEntry.getValue());
@@ -48,6 +50,10 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
                 runIterationOnItem(visitor, itemStack);
             }
         }
+    }
+
+    public static void runIterationOnLiving(BiConsumer<Enchantment, Integer> visitor, LivingEntity living) {
+        runIterationOnItems(visitor, living.getAllSlots(), NOT_BOOK);
     }
 
     public static Optional<List<Map<Attribute, AttributeModifier>>> getAttributeModifiers(ItemStack itemStack, EquipmentSlot slotType) {
@@ -100,16 +106,31 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static void onLivingDeath(LivingEntity target, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
-            runIterationOnItems(
+            runIterationOnLiving(
                 (ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Death _ench) {
                         _ench.onLivingDeath(lvl, target, source);
                     }
                 },
-                sourceLiving.getAllSlots(),
-                (itemStack) -> !itemStack.is(Items.ENCHANTED_BOOK)
+                sourceLiving
             );
         }
+    }
+
+    public static float onLivingHurt(LivingEntity target, DamageSource source, float originalAmount) {
+        if (source.getEntity() instanceof LivingEntity sourceLiving) {
+            var amount = new MutableFloat(originalAmount);
+            runIterationOnLiving(
+                (ench, lvl) -> {
+                    if (ench instanceof ILivingEnchantment.Hurt _ench) {
+                        amount.setValue(_ench.onLivingHurt(lvl, target, source, amount.floatValue()));
+                    }
+                },
+                sourceLiving
+            );
+            return amount.floatValue();
+        }
+        return originalAmount;
     }
 
 }

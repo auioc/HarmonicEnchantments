@@ -27,14 +27,18 @@ public class HECommonEventHandler {
     public static void onLivingHurt(final LivingHurtEvent event) {
         var source = event.getSource();
         var target = event.getEntityLiving();
+        float amount = event.getAmount();
+
         if (source.isProjectile()) {
             if (
                 source instanceof IMixinIndirectEntityDamageSource _source
                     && source.getDirectEntity() instanceof Projectile projectile
                     && source.getEntity() instanceof LivingEntity owner
             ) {
-                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, _source.getIndirectSourcePosition(), event.getAmount()));
+                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, _source.getIndirectSourcePosition(), amount));
             }
+        } else {
+            event.setAmount(EnchantmentHelper.onLivingHurt(target, source, amount));
         }
     }
 
