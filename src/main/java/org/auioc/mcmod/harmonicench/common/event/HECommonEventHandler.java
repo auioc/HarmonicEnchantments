@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
+import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinIndirectEntityDamageSource;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -26,8 +27,12 @@ public class HECommonEventHandler {
         var source = event.getSource();
         var target = event.getEntityLiving();
         if (source.isProjectile()) {
-            if (source.getDirectEntity() instanceof Projectile projectile && source.getEntity() instanceof LivingEntity owner) {
-                event.setAmount(EnchantmentHelper.onProjectileHitLiving(target, projectile, owner, source.getSourcePosition(), event.getAmount()));
+            if (
+                source instanceof IMixinIndirectEntityDamageSource _source
+                    && source.getDirectEntity() instanceof Projectile projectile
+                    && source.getEntity() instanceof LivingEntity owner
+            ) {
+                event.setAmount(EnchantmentHelper.onProjectileHitLiving(target, projectile, owner, _source.getIndirectSourcePosition(), event.getAmount()));
             }
         }
     }
