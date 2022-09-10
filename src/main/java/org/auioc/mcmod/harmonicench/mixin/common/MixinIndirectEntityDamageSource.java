@@ -33,7 +33,8 @@ public class MixinIndirectEntityDamageSource implements IMixinIndirectEntityDama
         String p_19406_, Entity p_19407_, @Nullable Entity p_19408_, CallbackInfo ci
     ) {
         if (p_19408_ != null) {
-            this.indirectSourcePosition = p_19408_.position();
+            var pos = p_19408_.position();
+            this.indirectSourcePosition = new Vec3(pos.x, pos.y, pos.z);
         }
     }
 
