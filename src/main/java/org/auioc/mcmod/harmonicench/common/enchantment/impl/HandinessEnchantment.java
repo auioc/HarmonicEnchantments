@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment {
+public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HitLiving {
 
     public HandinessEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);

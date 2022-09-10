@@ -10,7 +10,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment {
+public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HitLiving {
 
     public SnipingEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND);

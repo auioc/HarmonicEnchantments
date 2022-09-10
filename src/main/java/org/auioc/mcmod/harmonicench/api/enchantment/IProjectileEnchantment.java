@@ -4,10 +4,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
-public interface IProjectileEnchantment {
+public class IProjectileEnchantment {
 
-    default float onHitLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount) {
-        return amount;
+    public static interface HitLiving {
+
+        float onHitLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount);
+
     }
 
 }

@@ -89,7 +89,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         var amount = new MutableFloat(originalAmount);
         runIteration(
             (ench, lvl) -> {
-                if (ench instanceof IProjectileEnchantment _ench) {
+                if (ench instanceof IProjectileEnchantment.HitLiving _ench) {
                     amount.setValue(_ench.onHitLiving(lvl, target, projectile, owner, postion, amount.floatValue()));
                 }
             },
