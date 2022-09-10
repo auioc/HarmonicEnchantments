@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment {
 
     public HandinessEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);
     }
 
     @Override

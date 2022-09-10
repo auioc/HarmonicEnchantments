@@ -20,7 +20,7 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");
 
     public RapierEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND);
     }
 
     @Override

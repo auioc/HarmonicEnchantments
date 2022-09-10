@@ -15,7 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class SiphoningEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Death {
 
     public SiphoningEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND);
     }
 
     @Override

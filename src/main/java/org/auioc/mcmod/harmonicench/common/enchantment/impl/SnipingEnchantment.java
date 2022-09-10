@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment {
 
     public SnipingEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, new EquipmentSlot[] {EquipmentSlot.MAINHAND});
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND);
     }
 
     @Override
