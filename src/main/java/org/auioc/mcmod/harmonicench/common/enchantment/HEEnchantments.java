@@ -7,6 +7,7 @@ import org.auioc.mcmod.harmonicench.common.enchantment.impl.EfficacyEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.FreeRidingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.HandinessEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.RapierEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SiphoningEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SnipingEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -29,5 +30,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> BANE_OF_CHAMPIONS = register("bane_of_champions", BaneOfChampionsEnchantment::new);
     public static final RegistryObject<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::new);
     public static final RegistryObject<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::new);
+    public static final RegistryObject<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::new);
 
 }
