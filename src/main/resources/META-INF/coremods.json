@@ -1,3 +1,4 @@
 {
-    "he.ItemStack": "coremods/ItemStack.js"
+    "he.ItemStack": "coremods/ItemStack.js",
+    "he.LivingEntity": "coremods/LivingEntity.js"
 }
