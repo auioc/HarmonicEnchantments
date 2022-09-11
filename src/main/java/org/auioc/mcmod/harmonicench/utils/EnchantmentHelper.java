@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -148,6 +152,19 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             return amount.floatValue();
         }
         return originalAmount;
+    }
+
+    public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
+        var damage = new MutableInt(originalDamage);
+        runIterationOnLiving(
+            (ench, lvl) -> {
+                if (ench instanceof IItemEnchantment.Hurt _ench) {
+                    damage.setValue(_ench.onItemHurt(lvl, itemStack, damage.intValue(), random, player));
+                }
+            },
+            player
+        );
+        return damage.intValue();
     }
 
 }
