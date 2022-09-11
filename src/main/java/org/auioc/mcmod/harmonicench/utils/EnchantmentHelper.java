@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
@@ -51,15 +52,18 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         }
     }
 
-    public static void runIterationOnItems(BiConsumer<Enchantment, Integer> visitor, Iterable<ItemStack> itemStacks, Predicate<ItemStack> predicate) {
+    public static void runIterationOnItems(TriConsumer<ItemStack, Enchantment, Integer> visitor, Iterable<ItemStack> itemStacks, Predicate<ItemStack> predicate) {
         for (var itemStack : itemStacks) {
             if (predicate.test(itemStack)) {
-                runIterationOnItem(visitor, itemStack);
+                if (itemStack.isEmpty()) continue;
+                for (var enchEntry : getEnchantments(itemStack).entrySet()) {
+                    visitor.accept(itemStack, enchEntry.getKey(), enchEntry.getValue());
+                }
             }
         }
     }
 
-    public static void runIterationOnLiving(BiConsumer<Enchantment, Integer> visitor, LivingEntity living) {
+    public static void runIterationOnLiving(TriConsumer<ItemStack, Enchantment, Integer> visitor, LivingEntity living) {
         runIterationOnItems(visitor, living.getAllSlots(), NOT_BOOK);
     }
 
@@ -128,7 +132,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static void onLivingDeath(LivingEntity target, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             runIterationOnLiving(
-                (ench, lvl) -> {
+                (itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Death _ench) {
                         _ench.onLivingDeath(lvl, target, source);
                     }
@@ -142,7 +146,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             var amount = new MutableFloat(originalAmount);
             runIterationOnLiving(
-                (ench, lvl) -> {
+                (itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Hurt _ench) {
                         amount.setValue(_ench.onLivingHurt(lvl, target, source, amount.floatValue()));
                     }
@@ -157,14 +161,24 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
         var damage = new MutableInt(originalDamage);
         runIterationOnLiving(
-            (ench, lvl) -> {
+            (_itemStack, ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.Hurt _ench) {
-                    damage.setValue(_ench.onItemHurt(lvl, itemStack, damage.intValue(), random, player));
+                    damage.setValue(_ench.onItemHurt(lvl, _itemStack, damage.intValue(), random, player));
                 }
             },
             player
         );
         return damage.intValue();
+    }
+
+    public static int getDamageProtectionWithItem(Iterable<ItemStack> items, DamageSource source) {
+        MutableInt protection = new MutableInt();
+        runIterationOnItems((itemStack, ench, lvl) -> {
+            if (ench instanceof IItemEnchantment.Protection _ench) {
+                protection.add(_ench.getDamageProtection(lvl, itemStack, source));
+            }
+        }, items, NOT_BOOK);
+        return protection.intValue();
     }
 
 }
