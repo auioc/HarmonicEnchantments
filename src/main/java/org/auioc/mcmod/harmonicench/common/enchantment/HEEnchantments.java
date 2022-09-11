@@ -3,6 +3,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment;
 import java.util.function.Supplier;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.BaneOfChampionsEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.BlessingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.EfficacyEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.FreeRidingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.HandinessEnchantment;
@@ -31,5 +32,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::new);
     public static final RegistryObject<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::new);
     public static final RegistryObject<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::new);
+    public static final RegistryObject<Enchantment> BLESSING = register("blessing", BlessingEnchantment::new);
 
 }
