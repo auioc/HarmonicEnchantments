@@ -8,6 +8,7 @@
         "common.MixinProjectile",
         "common.MixinBowItem",
         "common.MixinCrossbowItem",
+        "common.MixinAbstractArrow",
         "common.MixinArrow",
         "common.MixinSpectralArrow"
     ],
