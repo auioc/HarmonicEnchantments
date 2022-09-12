@@ -8,7 +8,6 @@
         "common.MixinProjectile",
         "common.MixinBowItem",
         "common.MixinCrossbowItem",
-        "common.MixinIndirectEntityDamageSource",
         "common.MixinArrow",
         "common.MixinSpectralArrow"
     ],

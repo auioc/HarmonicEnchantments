@@ -35,8 +35,8 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
     }
 
     @Override
-    public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 ownerPostion, float amount) {
-        double distance = ownerPostion.distanceTo(target.position());
+    public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 shootingPosition, float amount) {
+        double distance = shootingPosition.distanceTo(target.position());
         if (distance > 10.0D) {
             double m = 0.0D;
             for (int k = 1, n = lvl + 1; k < n; k++) m += (1.0D / (double) k) * ((distance - 10.0D) / 50.0D);

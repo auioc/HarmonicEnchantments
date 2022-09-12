@@ -53,7 +53,7 @@ function initializeCoreMod() {
                 );
                 methodNode.instructions.insert(at, toInject);
 
-                print(ASMAPI.methodNodeToString(methodNode));
+                // print(ASMAPI.methodNodeToString(methodNode));
                 return methodNode;
             },
         },
