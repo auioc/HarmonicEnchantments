@@ -2,15 +2,18 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
+import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinAbstractArrow;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
+public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving, IProjectileEnchantment.AbstractArrow {
 
     public SnipingEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND);
@@ -31,7 +34,10 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
 
     @Override
     protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.QUICK_CHARGE && other != Enchantments.MULTISHOT;
+        return super.checkCompatibility(other)
+            && other != Enchantments.QUICK_CHARGE
+            && other != Enchantments.MULTISHOT
+            && other != HEEnchantments.EFFICACY.get();
     }
 
     @Override
@@ -43,6 +49,12 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
             return (float) (amount * (m + 1));
         }
         return amount;
+    }
+
+    @Override
+    public void handleAbstractArrow(int lvl, AbstractArrow arrow) {
+        var _arrow = ((IMixinAbstractArrow) arrow);
+        _arrow.setGravity(_arrow.getGravity() * (1.0D - (Math.min(lvl, this.getMaxLevel()) * 0.11D)));
     }
 
 }
