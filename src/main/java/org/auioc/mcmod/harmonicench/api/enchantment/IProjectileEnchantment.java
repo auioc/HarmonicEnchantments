@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
+import org.auioc.mcmod.harmonicench.api.entity.IPotionArrow;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,9 +13,15 @@ public class IProjectileEnchantment {
 
     }
 
+    public static interface AbstractArrow {
+
+        void handleAbstractArrow(int lvl, net.minecraft.world.entity.projectile.AbstractArrow arrow);
+
+    }
+
     public static interface PotionArrow {
 
-        void handlePotionArrow(int lvl, Arrow arrow);
+        void handlePotionArrow(int lvl, net.minecraft.world.entity.projectile.Arrow arrow, IPotionArrow potionArrow);
 
     }
 

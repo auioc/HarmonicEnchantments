@@ -4,7 +4,7 @@ import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinArrow;
+import org.auioc.mcmod.harmonicench.api.entity.IPotionArrow;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -51,13 +51,10 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
     }
 
     @Override
-    public void handlePotionArrow(int lvl, Arrow arrow) {
-        var _arrow = (IMixinArrow) arrow;
-        if (_arrow.getPotion() == Potions.EMPTY && _arrow.getEffects().isEmpty()) return;
+    public void handlePotionArrow(int lvl, Arrow arrow, IPotionArrow potionArrow) {
+        var effects = potionArrow.getEffects();
 
-        var effects = _arrow.getEffects();
-
-        for (var effectI : _arrow.getPotion().getEffects()) {
+        for (var effectI : potionArrow.getPotion().getEffects()) {
             effects.add(
                 new MobEffectInstance(
                     effectI.getEffect(),
@@ -66,7 +63,7 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
                 )
             );
         }
-        _arrow.setPotion(Potions.EMPTY);
+        potionArrow.setPotion(Potions.EMPTY);
 
         double amplifierBonus = 0.0D;
         for (int k = 1, n = lvl + 1; k < n; k++) amplifierBonus += 1.0D / ((double) k);

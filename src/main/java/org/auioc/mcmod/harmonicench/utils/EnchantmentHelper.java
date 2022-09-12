@@ -18,6 +18,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
+import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinArrow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
@@ -118,8 +120,14 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static void handleArrow(ItemStack weapon, AbstractArrow abstractArrow) {
         runIterationOnItem(
             (ench, lvl) -> {
+                if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
+                    _ench.handleAbstractArrow(lvl, abstractArrow);
+                }
                 if (ench instanceof IProjectileEnchantment.PotionArrow _ench && abstractArrow instanceof Arrow arrow) {
-                    _ench.handlePotionArrow(lvl, arrow);
+                    var potionArrow = (IMixinArrow) arrow;
+                    if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
+                        _ench.handlePotionArrow(lvl, arrow, potionArrow);
+                    }
                 }
                 if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {
                     _ench.handleSpectralArrow(lvl, spectralArrow);
