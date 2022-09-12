@@ -123,10 +123,10 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
                 if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
                     _ench.handleAbstractArrow(lvl, abstractArrow);
                 }
-                if (ench instanceof IProjectileEnchantment.PotionArrow _ench && abstractArrow instanceof Arrow arrow) {
+                if (ench instanceof IProjectileEnchantment.TippedArrow _ench && abstractArrow instanceof Arrow arrow) {
                     var potionArrow = (IMixinArrow) arrow;
                     if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
-                        _ench.handlePotionArrow(lvl, arrow, potionArrow);
+                        _ench.handleTippedArrow(lvl, arrow, potionArrow);
                     }
                 }
                 if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {

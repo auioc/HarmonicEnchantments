@@ -4,7 +4,7 @@ import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.api.entity.IPotionArrow;
+import org.auioc.mcmod.harmonicench.api.entity.ITippedArrow;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.PotionArrow, IProjectileEnchantment.SpectralArrow {
+public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow {
 
     public EfficacyEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);
@@ -51,7 +51,7 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
     }
 
     @Override
-    public void handlePotionArrow(int lvl, Arrow arrow, IPotionArrow potionArrow) {
+    public void handleTippedArrow(int lvl, Arrow arrow, ITippedArrow potionArrow) {
         var effects = potionArrow.getEffects();
 
         for (var effectI : potionArrow.getPotion().getEffects()) {
