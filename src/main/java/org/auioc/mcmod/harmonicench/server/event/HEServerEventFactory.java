@@ -4,6 +4,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.harmonicench.server.event.impl.FishingRodCastEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.ItemHurtEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
@@ -24,7 +25,7 @@ public final class HEServerEventFactory {
     }
 
     public static FishingRodCastEvent.Pre preFishingRodCast(Player player, Level level, ItemStack fishingRod, int speedBonus, int luckBonus) {
-        var event = new FishingRodCastEvent.Pre(player, level, fishingRod, speedBonus, luckBonus);
+        var event = new FishingRodCastEvent.Pre((ServerPlayer) player, (ServerLevel) level, fishingRod, speedBonus, luckBonus);
         BUS.post(event);
         return event;
     }
