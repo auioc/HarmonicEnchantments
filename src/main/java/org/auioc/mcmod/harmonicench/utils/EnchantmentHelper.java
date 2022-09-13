@@ -11,6 +11,8 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
@@ -201,6 +203,18 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             },
             itemStack
         );
+    }
+
+    public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, Level level, int originalSpeedBonus, int originalLuckBonus) {
+        var bonus = new MutablePair<Integer, Integer>(originalSpeedBonus, originalLuckBonus);
+        runIterationOnItem((ench, lvl) -> {
+            if (ench instanceof IItemEnchantment.FishingRod _ench) {
+                var r = _ench.preFishingRodCast(lvl, fishingRod, player, level, bonus.getLeft(), bonus.getRight());
+                bonus.setLeft(r.getLeft());
+                bonus.setRight(r.getRight());
+            }
+        }, fishingRod);
+        return bonus;
     }
 
 }
