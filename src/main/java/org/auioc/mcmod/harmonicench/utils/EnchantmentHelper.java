@@ -26,6 +26,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -34,6 +35,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
 
@@ -187,6 +189,18 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             }
         }, items, NOT_BOOK);
         return protection.intValue();
+    }
+
+    public static void onSelectedItemTick(ItemStack itemStack, Player player, Level level) {
+        if (itemStack.isEmpty() || itemStack.is(Items.ENCHANTED_BOOK)) return;
+        runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof IItemEnchantment.Tick.Selected _ench) {
+                    _ench.onSelectedTick(lvl, itemStack, player, level);
+                }
+            },
+            itemStack
+        );
     }
 
 }

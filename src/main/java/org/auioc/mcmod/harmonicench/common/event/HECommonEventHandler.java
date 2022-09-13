@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
+import org.auioc.mcmod.arnicalib.common.event.impl.ItemInventoryTickEvent;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinProjectile;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,6 +45,11 @@ public class HECommonEventHandler {
     @SubscribeEvent
     public static void onLivingDeath(final LivingDeathEvent event) {
         EnchantmentHelper.onLivingDeath(event.getEntityLiving(), event.getSource());
+    }
+
+    @SubscribeEvent
+    public static void onSelectedItemTick(final ItemInventoryTickEvent.Selected event) {
+        EnchantmentHelper.onSelectedItemTick(event.getItemStack(), event.getPlayer(), event.getLevel());
     }
 
 }
