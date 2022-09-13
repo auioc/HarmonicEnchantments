@@ -2,9 +2,14 @@ package org.auioc.mcmod.harmonicench.server.event;
 
 import java.util.Random;
 import javax.annotation.Nullable;
+import org.auioc.mcmod.harmonicench.server.event.impl.FishingRodCastEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.ItemHurtEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -18,7 +23,19 @@ public final class HEServerEventFactory {
         return event.getDamage();
     }
 
-    public static void hurt(int p_41630_, Random p_41631_, @Nullable ServerPlayer p_41632_) {
-        p_41630_ = onItemHurt(ItemStack.EMPTY, p_41630_, p_41631_, p_41632_);
+    public static FishingRodCastEvent.Pre preFishingRodCast(Player player, Level level, ItemStack fishingRod, int speedBonus, int luckBonus) {
+        var event = new FishingRodCastEvent.Pre(player, level, fishingRod, speedBonus, luckBonus);
+        BUS.post(event);
+        return event;
     }
+
+    public static void test(ItemStack itemstack, Level p_41290_, Player p_41291_) {
+        int k = EnchantmentHelper.getFishingSpeedBonus(itemstack);
+        int j = EnchantmentHelper.getFishingLuckBonus(itemstack);
+        var event = HEServerEventFactory.preFishingRodCast(p_41291_, p_41290_, itemstack, k, j);
+        k = event.getSpeedBonus();
+        j = event.getLuckBonus();
+        p_41290_.addFreshEntity(new FishingHook(p_41291_, p_41290_, j, k));
+    }
+
 }
