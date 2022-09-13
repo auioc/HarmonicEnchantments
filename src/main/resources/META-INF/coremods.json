@@ -1,4 +1,5 @@
 {
     "he.ItemStack": "coremods/ItemStack.js",
+    "he.FishingRodItem": "coremods/FishingRodItem.js",
     "he.LivingEntity": "coremods/LivingEntity.js"
 }
