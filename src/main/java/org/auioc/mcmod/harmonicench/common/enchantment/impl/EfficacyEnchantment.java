@@ -20,12 +20,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow {
 
     public EfficacyEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 4;
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND, 4);
     }
 
     public int getMinCost(int lvl) {

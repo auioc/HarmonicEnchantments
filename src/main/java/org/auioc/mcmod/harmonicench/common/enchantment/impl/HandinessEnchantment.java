@@ -15,12 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND);
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 2;
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND, 2);
     }
 
     public int getMinCost(int lvl) {

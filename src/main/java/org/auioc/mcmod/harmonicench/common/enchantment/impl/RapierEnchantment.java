@@ -20,12 +20,7 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");
 
     public RapierEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND);
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 3;
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND, 3);
     }
 
     public int getMinCost(int lvl) {
@@ -33,7 +28,7 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
     }
 
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return this.getMinCost(lvl) + 50;
     }
 
     @Override

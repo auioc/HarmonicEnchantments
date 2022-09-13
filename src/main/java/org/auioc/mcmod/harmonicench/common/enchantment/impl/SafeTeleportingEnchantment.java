@@ -16,23 +16,16 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
 
     public SafeTeleportingEnchantment() {
-        super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.ARMOR_FEET, EquipmentSlot.FEET);
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 4;
+        super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.ARMOR_FEET, EquipmentSlot.FEET, 4);
     }
 
     public int getMinCost(int lvl) {
         return 5 + (lvl - 1) * 6;
     }
 
-
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 6;
     }
-
 
     @Override
     protected boolean checkCompatibility(Enchantment other) {

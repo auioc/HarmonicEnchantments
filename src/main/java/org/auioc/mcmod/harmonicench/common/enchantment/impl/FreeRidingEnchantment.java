@@ -20,11 +20,6 @@ public class FreeRidingEnchantment extends AbstractHEEnchantment implements IIte
     }
 
     @Override
-    public int getMaxLevel() {
-        return 1;
-    }
-
-    @Override
     public boolean isTreasureOnly() {
         return true;
     }

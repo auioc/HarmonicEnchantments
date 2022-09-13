@@ -16,12 +16,7 @@ import net.minecraft.world.phys.Vec3;
 public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving, IProjectileEnchantment.AbstractArrow {
 
     public SnipingEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND);
-    }
-
-    @Override
-    public int getMaxLevel() {
-        return 3;
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND, 3);
     }
 
     public int getMinCost(int lvl) {

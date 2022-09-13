@@ -22,11 +22,6 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     }
 
     @Override
-    public int getMaxLevel() {
-        return 1;
-    }
-
-    @Override
     public boolean isTreasureOnly() {
         return true;
     }
