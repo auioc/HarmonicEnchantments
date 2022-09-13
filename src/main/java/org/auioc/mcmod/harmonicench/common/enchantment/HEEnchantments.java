@@ -27,5 +27,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> BLESSING = register("blessing", BlessingEnchantment::new);
     public static final RegistryObject<Enchantment> CURSE_OF_REBELLING = register("curse_of_rebelling", CurseOfRebellingEnchantment::new);
     public static final RegistryObject<Enchantment> ELECTRIFICATION = register("electrification", ElectrificationEnchantment::new);
+    public static final RegistryObject<Enchantment> LUCK_OF_THE_SNOW = register("luck_of_the_snow", LuckOfTheSnowEnchantment::new);
 
 }
