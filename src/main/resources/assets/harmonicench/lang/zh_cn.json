@@ -11,5 +11,8 @@
     "enchantment.harmonicench.efficacy": "效能",
     "enchantment.harmonicench.free_riding": "无偿骑乘",
     "enchantment.harmonicench.safe_teleporting": "传送保护",
-    "enchantment.harmonicench.blessing": "祝福"
+    "enchantment.harmonicench.blessing": "祝福",
+    "enchantment.harmonicench.curse_of_rebelling": "叛逆诅咒",
+
+    "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛"
 }

@@ -2,15 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment;
 
 import java.util.function.Supplier;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.BaneOfChampionsEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.BlessingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.EfficacyEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.FreeRidingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.HandinessEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.RapierEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.SiphoningEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.SnipingEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,5 +25,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::new);
     public static final RegistryObject<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::new);
     public static final RegistryObject<Enchantment> BLESSING = register("blessing", BlessingEnchantment::new);
+    public static final RegistryObject<Enchantment> CURSE_OF_REBELLING = register("curse_of_rebelling", CurseOfRebellingEnchantment::new);
 
 }

@@ -11,5 +11,8 @@
     "enchantment.harmonicench.efficacy": "Efficacy",
     "enchantment.harmonicench.free_riding": "Free Riding",
     "enchantment.harmonicench.safe_teleporting": "Safe Teleporting",
-    "enchantment.harmonicench.blessing": "Blessing"
+    "enchantment.harmonicench.blessing": "Blessing",
+    "enchantment.harmonicench.curse_of_rebelling": "Curse of Rebelling",
+
+    "death.attack.curseOfRebelling": "%1$s was betrayed by %2$s"
 }
