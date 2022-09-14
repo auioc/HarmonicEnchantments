@@ -3,11 +3,14 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import org.auioc.mcmod.arnicalib.utils.java.RandomUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -15,10 +18,10 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-public class ElectrificationEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Selected {
+public class ElectrificationEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Selected, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.TRIDENT, EquipmentSlot.MAINHAND, 5);
+        super(Enchantment.Rarity.RARE, EnchantmentCategory.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND}, 5);
     }
 
     @Override
@@ -48,16 +51,21 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
 
         var lightning = EntityType.LIGHTNING_BOLT.create(serverLevel);
         lightning.setPos(player.position());
-        lightning.setVisualOnly(true);
         serverLevel.addFreshEntity(lightning);
+    }
 
-        double effectDuration = 0.0D;
-        double effectLevel = 0.0D;
-        for (int k = 1, n = lvl + 1; k < n; k++) {
-            effectDuration += 15.0D * (1.0D / ((double) k));
-            effectLevel += 5.0D / (2.0D * ((double) k) + 1.0D);
+    @Override
+    public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
+        if (!isSource && this.isValidSlot(slot) && source == DamageSource.LIGHTNING_BOLT) {
+            double effectDuration = 0.0D;
+            double effectLevel = 0.0D;
+            for (int k = 1, n = lvl + 1; k < n; k++) {
+                effectDuration += 15.0D * (1.0D / ((double) k));
+                effectLevel += 5.0D / (2.0D * ((double) k) + 1.0D);
+            }
+            target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, ((int) effectDuration) * 20, ((int) effectLevel) - 1));
         }
-        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, ((int) effectDuration) * 20, ((int) effectLevel) - 1));
+        return amount;
     }
 
 }
