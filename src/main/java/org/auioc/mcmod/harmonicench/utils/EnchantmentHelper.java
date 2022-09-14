@@ -242,4 +242,19 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return bonus;
     }
 
+    public static Pair<Integer, Float> onLivingEat(LivingEntity living, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
+        var foodValues = new MutablePair<Integer, Float>(originalNutrition, originalSaturationModifier);
+        runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof ILivingEnchantment.FoodData _ench) {
+                    var r = _ench.onLivingEat(lvl, itemStack, slot, living, foodItemStack, foodValues.getLeft(), foodValues.getRight());
+                    foodValues.setLeft(r.getLeft());
+                    foodValues.setRight(r.getRight());
+                }
+            },
+            living
+        );
+        return foodValues;
+    }
+
 }
