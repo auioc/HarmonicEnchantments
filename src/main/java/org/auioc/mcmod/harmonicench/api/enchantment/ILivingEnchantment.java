@@ -1,6 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ILivingEnchantment {
@@ -13,7 +14,7 @@ public class ILivingEnchantment {
 
     public static interface Hurt {
 
-        float onLivingHurt(int lvl, LivingEntity target, DamageSource source, float amount);
+        float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount);
 
     }
 

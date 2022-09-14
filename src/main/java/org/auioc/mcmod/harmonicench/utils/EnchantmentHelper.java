@@ -165,19 +165,26 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static float onLivingHurt(LivingEntity target, DamageSource source, float originalAmount) {
+        var amount = new MutableFloat(originalAmount);
+        runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof ILivingEnchantment.Hurt _ench) {
+                    amount.setValue(_ench.onLivingHurt(lvl, false, slot, target, source, amount.floatValue()));
+                }
+            },
+            target
+        );
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
-            var amount = new MutableFloat(originalAmount);
             runIterationOnLiving(
                 (slot, itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Hurt _ench) {
-                        amount.setValue(_ench.onLivingHurt(lvl, target, source, amount.floatValue()));
+                        amount.setValue(_ench.onLivingHurt(lvl, true, slot, target, source, amount.floatValue()));
                     }
                 },
                 sourceLiving
             );
-            return amount.floatValue();
         }
-        return originalAmount;
+        return amount.floatValue();
     }
 
     public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
