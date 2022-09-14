@@ -10,7 +10,8 @@
         "common.MixinCrossbowItem",
         "common.MixinAbstractArrow",
         "common.MixinArrow",
-        "common.MixinSpectralArrow"
+        "common.MixinSpectralArrow",
+        "common.MixinFoodData"
     ],
     "client": [],
     "server": [],
