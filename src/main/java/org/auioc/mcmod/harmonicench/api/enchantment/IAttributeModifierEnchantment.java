@@ -11,12 +11,7 @@ public interface IAttributeModifierEnchantment extends IValidSlotsVisibleEnchant
     Map<Attribute, AttributeModifier> getAttributeModifiers(int lvl);
 
     default Optional<Map<Attribute, AttributeModifier>> getAttributeModifiers(int lvl, EquipmentSlot slot) {
-        for (var _slot : getValidSlots()) {
-            if (slot.equals(_slot)) {
-                return Optional.of(getAttributeModifiers(lvl));
-            }
-        }
-        return Optional.empty();
+        return isValidSlot(slot) ? Optional.of(getAttributeModifiers(lvl)) : Optional.empty();
     }
 
 }
