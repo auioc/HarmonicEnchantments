@@ -20,6 +20,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
+import org.auioc.mcmod.harmonicench.api.function.QuadConsumer;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinArrow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,54 +45,63 @@ import net.minecraftforge.common.ToolAction;
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
 
     public static final Predicate<ItemStack> NOT_BOOK = (itemStack) -> !itemStack.is(Items.ENCHANTED_BOOK);
+    public static final Predicate<ItemStack> NOT_ITEM = (itemStack) -> itemStack.isEmpty() || itemStack.is(Items.ENCHANTED_BOOK);
+    public static final Predicate<ItemStack> IS_ITEM = (itemStack) -> !itemStack.isEmpty() && !itemStack.is(Items.ENCHANTED_BOOK);
+
 
     public static void runIteration(BiConsumer<Enchantment, Integer> visitor, Map<Enchantment, Integer> enchMap) {
-        for (var enchEntry : enchMap.entrySet()) {
-            visitor.accept(enchEntry.getKey(), enchEntry.getValue());
-        }
+        for (var enchEntry : enchMap.entrySet()) visitor.accept(enchEntry.getKey(), enchEntry.getValue());
     }
 
     public static void runIterationOnItem(BiConsumer<Enchantment, Integer> visitor, ItemStack itemStack) {
-        if (itemStack.isEmpty()) return;
-        for (var enchEntry : getEnchantments(itemStack).entrySet()) {
-            visitor.accept(enchEntry.getKey(), enchEntry.getValue());
-        }
+        if (!itemStack.isEmpty()) runIteration(visitor, getEnchantments(itemStack));
     }
 
     public static void runIterationOnItems(TriConsumer<ItemStack, Enchantment, Integer> visitor, Iterable<ItemStack> itemStacks, Predicate<ItemStack> predicate) {
         for (var itemStack : itemStacks) {
-            if (predicate.test(itemStack)) {
-                if (itemStack.isEmpty()) continue;
-                for (var enchEntry : getEnchantments(itemStack).entrySet()) {
-                    visitor.accept(itemStack, enchEntry.getKey(), enchEntry.getValue());
-                }
+            if (!itemStack.isEmpty() && predicate.test(itemStack)) {
+                runIterationOnItem((ench, lvl) -> visitor.accept(itemStack, ench, lvl), itemStack);
             }
         }
     }
 
-    public static void runIterationOnLiving(TriConsumer<ItemStack, Enchantment, Integer> visitor, LivingEntity living) {
-        runIterationOnItems(visitor, living.getAllSlots(), NOT_BOOK);
+    public static void runIterationOnLiving(QuadConsumer<EquipmentSlot, ItemStack, Enchantment, Integer> visitor, LivingEntity living, EquipmentSlot[] slots) {
+        for (EquipmentSlot slot : slots) {
+            var itemStack = living.getItemBySlot(slot);
+            runIterationOnItem((ench, lvl) -> visitor.accept(slot, itemStack, ench, lvl), itemStack);
+        }
     }
 
+    public static void runIterationOnLiving(QuadConsumer<EquipmentSlot, ItemStack, Enchantment, Integer> visitor, LivingEntity living) {
+        runIterationOnLiving(visitor, living, EquipmentSlot.values());
+    }
+
+
     public static Optional<List<Map<Attribute, AttributeModifier>>> getAttributeModifiers(ItemStack itemStack, EquipmentSlot slotType) {
-        if (itemStack.isEmpty() || itemStack.is(Items.ENCHANTED_BOOK)) return Optional.empty();
+        if (NOT_ITEM.test(itemStack)) return Optional.empty();
         var modifiers = new ArrayList<Map<Attribute, AttributeModifier>>();
-        runIterationOnItem((ench, lvl) -> {
-            if (ench instanceof IAttributeModifierEnchantment _ench) {
-                _ench.getAttributeModifiers(lvl, slotType).ifPresent((m) -> modifiers.add(m));
-            }
-        }, itemStack);
+        runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof IAttributeModifierEnchantment _ench) {
+                    _ench.getAttributeModifiers(lvl, slotType).ifPresent((m) -> modifiers.add(m));
+                }
+            },
+            itemStack
+        );
         return Optional.of(modifiers);
     }
 
     public static boolean canPerformAction(ItemStack itemStack, ToolAction toolAction) {
-        if (itemStack.isEmpty() || itemStack.is(Items.ENCHANTED_BOOK)) return true;
+        if (NOT_ITEM.test(itemStack)) return true;
         var bool = new MutableBoolean(true);
-        runIterationOnItem((ench, lvl) -> {
-            if (ench instanceof IToolActionControllerEnchantment _ench) {
-                bool.setValue(bool.booleanValue() & _ench.canPerformAction(toolAction));
-            }
-        }, itemStack);
+        runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof IToolActionControllerEnchantment _ench) {
+                    bool.setValue(bool.booleanValue() & _ench.canPerformAction(toolAction));
+                }
+            },
+            itemStack
+        );
         return bool.booleanValue();
     }
 
@@ -144,7 +154,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static void onLivingDeath(LivingEntity target, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             runIterationOnLiving(
-                (itemStack, ench, lvl) -> {
+                (slot, itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Death _ench) {
                         _ench.onLivingDeath(lvl, target, source);
                     }
@@ -158,7 +168,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             var amount = new MutableFloat(originalAmount);
             runIterationOnLiving(
-                (itemStack, ench, lvl) -> {
+                (slot, itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Hurt _ench) {
                         amount.setValue(_ench.onLivingHurt(lvl, target, source, amount.floatValue()));
                     }
@@ -171,49 +181,57 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
+        if (NOT_ITEM.test(itemStack)) return originalDamage;
         var damage = new MutableInt(originalDamage);
-        runIterationOnLiving(
-            (_itemStack, ench, lvl) -> {
+        runIterationOnItem(
+            (ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.Hurt _ench) {
-                    damage.setValue(_ench.onItemHurt(lvl, _itemStack, damage.intValue(), random, player));
+                    damage.setValue(_ench.onItemHurt(lvl, itemStack, damage.intValue(), random, player));
                 }
             },
-            player
+            itemStack
         );
         return damage.intValue();
     }
 
     public static int getDamageProtectionWithItem(Iterable<ItemStack> items, DamageSource source) {
         MutableInt protection = new MutableInt();
-        runIterationOnItems((itemStack, ench, lvl) -> {
-            if (ench instanceof IItemEnchantment.Protection _ench) {
-                protection.add(_ench.getDamageProtection(lvl, itemStack, source));
-            }
-        }, items, NOT_BOOK);
+        runIterationOnItems(
+            (itemStack, ench, lvl) -> {
+                if (ench instanceof IItemEnchantment.Protection _ench) {
+                    protection.add(_ench.getDamageProtection(lvl, itemStack, source));
+                }
+            },
+            items, NOT_BOOK
+        );
         return protection.intValue();
     }
 
     public static void onSelectedItemTick(ItemStack itemStack, Player player, Level level) {
-        if (itemStack.isEmpty() || itemStack.is(Items.ENCHANTED_BOOK)) return;
-        runIterationOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IItemEnchantment.Tick.Selected _ench) {
-                    _ench.onSelectedTick(lvl, itemStack, player, level);
-                }
-            },
-            itemStack
-        );
+        if (IS_ITEM.test(itemStack)) {
+            runIterationOnItem(
+                (ench, lvl) -> {
+                    if (ench instanceof IItemEnchantment.Tick.Selected _ench) {
+                        _ench.onSelectedTick(lvl, itemStack, player, level);
+                    }
+                },
+                itemStack
+            );
+        }
     }
 
     public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, Level level, int originalSpeedBonus, int originalLuckBonus) {
         var bonus = new MutablePair<Integer, Integer>(originalSpeedBonus, originalLuckBonus);
-        runIterationOnItem((ench, lvl) -> {
-            if (ench instanceof IItemEnchantment.FishingRod _ench) {
-                var r = _ench.preFishingRodCast(lvl, fishingRod, player, level, bonus.getLeft(), bonus.getRight());
-                bonus.setLeft(r.getLeft());
-                bonus.setRight(r.getRight());
-            }
-        }, fishingRod);
+        runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof IItemEnchantment.FishingRod _ench) {
+                    var r = _ench.preFishingRodCast(lvl, fishingRod, player, level, bonus.getLeft(), bonus.getRight());
+                    bonus.setLeft(r.getLeft());
+                    bonus.setRight(r.getRight());
+                }
+            },
+            fishingRod
+        );
         return bonus;
     }
 
