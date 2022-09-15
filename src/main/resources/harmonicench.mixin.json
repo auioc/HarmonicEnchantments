@@ -11,7 +11,8 @@
         "common.MixinAbstractArrow",
         "common.MixinArrow",
         "common.MixinSpectralArrow",
-        "common.MixinFoodData"
+        "common.MixinFoodData",
+        "server.MixinPiglinAi"
     ],
     "client": [],
     "server": [],
