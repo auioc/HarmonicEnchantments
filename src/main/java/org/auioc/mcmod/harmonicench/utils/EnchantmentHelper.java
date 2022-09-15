@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -23,6 +24,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchant
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
 import org.auioc.mcmod.harmonicench.api.function.QuadConsumer;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinArrow;
+import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -256,6 +258,19 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             player
         );
         return foodValues;
+    }
+
+    public static PiglinStanceEvent.Stance onPiglinChooseStance(LivingEntity target, PiglinStanceEvent.Stance originalStance) {
+        var stance = new MutableObject<PiglinStanceEvent.Stance>(originalStance);
+        runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof ILivingEnchantment.PiglinStance _ench) {
+                    stance.setValue(_ench.onPiglinChooseStance(lvl, slot, target, stance.getValue()));
+                }
+            },
+            target
+        );
+        return stance.getValue();
     }
 
 }

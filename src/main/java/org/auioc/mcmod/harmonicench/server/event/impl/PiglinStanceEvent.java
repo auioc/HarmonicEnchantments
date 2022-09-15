@@ -15,6 +15,10 @@ public class PiglinStanceEvent extends LivingEvent {
         super(target);
     }
 
+    public LivingEntity getTarget() {
+        return super.getEntityLiving();
+    }
+
     public Stance getStance() {
         return this.stance;
     }

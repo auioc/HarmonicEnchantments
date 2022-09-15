@@ -4,6 +4,7 @@ import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
 import org.auioc.mcmod.harmonicench.server.event.impl.FishingRodCastEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.ItemHurtEvent;
+import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
@@ -42,6 +43,12 @@ public final class HEServerEventHandler {
         var r = EnchantmentHelper.preFishingRodCast(event.getFishingRod(), event.getPlayer(), event.getLevel(), event.getSpeedBonus(), event.getLuckBonus());
         event.setSpeedBonus(r.getLeft());
         event.setLuckBonus(r.getRight());
+    }
+
+    @SubscribeEvent
+    public static void onPiglinChooseStance(final PiglinStanceEvent event) {
+        var r = EnchantmentHelper.onPiglinChooseStance(event.getTarget(), event.getStance());
+        event.setStance(r);
     }
 
 }
