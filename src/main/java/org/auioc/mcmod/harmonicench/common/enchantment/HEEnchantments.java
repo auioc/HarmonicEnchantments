@@ -30,5 +30,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> LUCK_OF_THE_SNOW = register("luck_of_the_snow", LuckOfTheSnowEnchantment::new);
     public static final RegistryObject<Enchantment> DINING = register("dining", DiningEnchantment::new);
     public static final RegistryObject<Enchantment> ICE_ASPECT = register("ice_aspect", IceAspectEnchantment::new);
+    public static final RegistryObject<Enchantment> MOB_AFFINITY = register("mob_affinity", MobAffinityEnchantment::new);
 
 }
