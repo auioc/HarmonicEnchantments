@@ -19,6 +19,16 @@ public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements I
     }
 
     @Override
+    public int getMinCost(int lvl) {
+        return 15 + (lvl - 1) * 9;
+    }
+
+    @Override
+    public int getMaxCost(int lvl) {
+        return super.getMinCost(lvl) + 50;
+    }
+
+    @Override
     protected boolean checkCompatibility(Enchantment other) {
         return super.checkCompatibility(other) && other != Enchantments.FISHING_LUCK;
     }

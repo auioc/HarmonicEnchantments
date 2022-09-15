@@ -22,6 +22,16 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     }
 
     @Override
+    public int getMinCost(int lvl) {
+        return 10 + 20 * (lvl - 1);
+    }
+
+    @Override
+    public int getMaxCost(int lvl) {
+        return super.getMinCost(lvl) + 50;
+    }
+
+    @Override
     public boolean isTreasureOnly() {
         return true;
     }

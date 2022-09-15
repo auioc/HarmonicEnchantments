@@ -23,12 +23,14 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
         super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND, 3);
     }
 
+    @Override
     public int getMinCost(int lvl) {
         return 15 + (lvl - 1) * 9;
     }
 
+    @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 50;
+        return super.getMinCost(lvl) + 50;
     }
 
     @Override

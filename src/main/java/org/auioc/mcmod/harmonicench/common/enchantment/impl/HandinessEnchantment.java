@@ -18,10 +18,12 @@ public class HandinessEnchantment extends AbstractHEEnchantment implements IProj
         super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND, 2);
     }
 
+    @Override
     public int getMinCost(int lvl) {
         return 12 + (lvl - 1) * 20;
     }
 
+    @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 25;
     }

@@ -19,10 +19,12 @@ public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
         super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.ARMOR_FEET, EquipmentSlot.FEET, 4);
     }
 
+    @Override
     public int getMinCost(int lvl) {
         return 5 + (lvl - 1) * 6;
     }
 
+    @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 6;
     }

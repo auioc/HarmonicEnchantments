@@ -17,6 +17,16 @@ public class BlessingEnchantment extends AbstractHEEnchantment implements IItemE
     }
 
     @Override
+    public int getMinCost(int lvl) {
+        return 1;
+    }
+
+    @Override
+    public int getMaxCost(int lvl) {
+        return 51;
+    }
+
+    @Override
     protected boolean checkCompatibility(Enchantment other) {
         return super.checkCompatibility(other) && other != Enchantments.MENDING;
     }

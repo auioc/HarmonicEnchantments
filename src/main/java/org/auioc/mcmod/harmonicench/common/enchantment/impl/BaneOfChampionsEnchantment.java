@@ -17,17 +17,19 @@ public class BaneOfChampionsEnchantment extends AbstractHEEnchantment implements
         super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND, 5);
     }
 
+    @Override
     public int getMinCost(int lvl) {
         return 5 + (lvl - 1) * 8;
     }
 
+    @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 20;
     }
 
     @Override
     protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other instanceof DamageEnchantment;
+        return super.checkCompatibility(other) && !(other instanceof DamageEnchantment);
     }
 
     @Override

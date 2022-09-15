@@ -19,10 +19,12 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
         super(Enchantment.Rarity.RARE, EnchantmentCategory.CROSSBOW, EquipmentSlot.MAINHAND, 3);
     }
 
+    @Override
     public int getMinCost(int lvl) {
         return lvl * 10 - 9;
     }
 
+    @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 20;
     }

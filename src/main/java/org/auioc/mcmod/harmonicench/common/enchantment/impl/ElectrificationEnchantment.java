@@ -25,6 +25,16 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
     }
 
     @Override
+    public int getMinCost(int lvl) {
+        return 1 + (lvl - 1) * 8;
+    }
+
+    @Override
+    public int getMaxCost(int lvl) {
+        return this.getMinCost(lvl) + 20;
+    }
+
+    @Override
     protected boolean checkCompatibility(Enchantment other) {
         return super.checkCompatibility(other)
             && other != Enchantments.RIPTIDE
