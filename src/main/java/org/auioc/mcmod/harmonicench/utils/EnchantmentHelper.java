@@ -17,6 +17,7 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
@@ -242,17 +243,17 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return bonus;
     }
 
-    public static Pair<Integer, Float> onLivingEat(LivingEntity living, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
+    public static Pair<Integer, Float> onPlayerEat(ServerPlayer player, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
         var foodValues = new MutablePair<Integer, Float>(originalNutrition, originalSaturationModifier);
         runIterationOnLiving(
             (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof ILivingEnchantment.FoodData _ench) {
-                    var r = _ench.onLivingEat(lvl, itemStack, slot, living, foodItemStack, foodValues.getLeft(), foodValues.getRight());
+                if (ench instanceof IPlayerEnchantment.Eat _ench) {
+                    var r = _ench.onPlayerEat(lvl, itemStack, slot, player, foodItemStack, foodValues.getLeft(), foodValues.getRight());
                     foodValues.setLeft(r.getLeft());
                     foodValues.setRight(r.getRight());
                 }
             },
-            living
+            player
         );
         return foodValues;
     }

@@ -2,16 +2,16 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class DiningEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.FoodData {
+public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerEnchantment.Eat {
 
     public DiningEnchantment() {
         super(Enchantment.Rarity.RARE, EnchantmentCategory.BREAKABLE, EquipmentSlot.values());
@@ -41,15 +41,16 @@ public class DiningEnchantment extends AbstractHEEnchantment implements ILivingE
     }
 
     @Override
-    public Pair<Integer, Float> onLivingEat(int lvl, ItemStack itemStack, EquipmentSlot slot, LivingEntity living, ItemStack foodItemStack, int nutrition, float saturationModifier) {
+    public Pair<Integer, Float> onPlayerEat(int lvl, ItemStack itemStack, EquipmentSlot slot, ServerPlayer player, ItemStack foodItemStack, int nutrition, float saturationModifier) {
         if (itemStack.isDamaged() && nutrition > 0) {
             int damage = itemStack.getDamageValue();
             if (nutrition >= damage) {
                 nutrition -= damage;
                 damage = 0;
             } else {
-                nutrition = 0;
                 damage -= nutrition;
+                saturationModifier = 0;
+                nutrition = 0;
             }
             itemStack.setDamageValue(damage);
         }

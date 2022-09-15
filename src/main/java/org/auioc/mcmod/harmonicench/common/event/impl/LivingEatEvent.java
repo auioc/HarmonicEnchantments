@@ -4,7 +4,9 @@ import org.auioc.mcmod.harmonicench.api.event.FoodDataEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.eventbus.api.Cancelable;
 
+@Cancelable
 public class LivingEatEvent extends FoodDataEvent {
 
     private final ItemStack foodItemStack;

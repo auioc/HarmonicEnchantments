@@ -4,6 +4,8 @@ import org.auioc.mcmod.arnicalib.common.event.impl.ItemInventoryTickEvent;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinProjectile;
 import org.auioc.mcmod.harmonicench.common.event.impl.LivingEatEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
@@ -55,13 +57,13 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onLivingEat(final LivingEatEvent event) {
-        var living = event.getEntityLiving();
-        if (living != null && !living.level.isClientSide) {
-            var r = EnchantmentHelper.onLivingEat(living, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
+        if (event.getEntityLiving() instanceof ServerPlayer player) {
+            var r = EnchantmentHelper.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
             int nutrition = r.getLeft();
             float saturationModifier = r.getRight();
             if (nutrition == 0 && saturationModifier == 0.0F) {
                 event.setCanceled(true);
+                player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), player.getFoodData().getFoodLevel(), player.getFoodData().getSaturationLevel()));
             } else {
                 event.setNutrition(nutrition);
                 event.setSaturationModifier(saturationModifier);
