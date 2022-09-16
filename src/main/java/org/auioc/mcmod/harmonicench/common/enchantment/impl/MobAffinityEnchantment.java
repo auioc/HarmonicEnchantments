@@ -9,12 +9,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Potion {
+public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
     public MobAffinityEnchantment() {
         super(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.WEARABLE, new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}, 1);
@@ -41,6 +43,14 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
             return PiglinStanceEvent.Stance.NEUTRAL;
         }
         return stance;
+    }
+
+    @Override
+    public double onSetCatMorningGiftChance(int lvl, EquipmentSlot slot, Cat cat, Player ownerPlayer, double chance) {
+        if (this.isValidSlot(slot)) {
+            return 1.0D;
+        }
+        return chance;
     }
 
     @Override
