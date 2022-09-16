@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -27,6 +28,7 @@ import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinArrow;
 import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -271,6 +273,17 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             target
         );
         return stance.getValue();
+    }
+
+    public static void onPotionAdded(LivingEntity target, @Nullable Entity source, MobEffectInstance newEffect, @Nullable MobEffectInstance oldEffect) {
+        runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof ILivingEnchantment.Potion _ench) {
+                    _ench.onPotionAdded(lvl, slot, source, newEffect, oldEffect);
+                }
+            },
+            target
+        );
     }
 
 }

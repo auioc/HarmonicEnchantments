@@ -1,7 +1,10 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
+import javax.annotation.Nullable;
 import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -22,6 +25,12 @@ public class ILivingEnchantment {
     public static interface PiglinStance {
 
         PiglinStanceEvent.Stance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, PiglinStanceEvent.Stance stance);
+
+    }
+
+    public static interface Potion {
+
+        void onPotionAdded(int lvl, EquipmentSlot slot, @Nullable Entity source, MobEffectInstance newEffect, MobEffectInstance oldEffect);
 
     }
 

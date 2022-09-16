@@ -9,6 +9,7 @@ import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.event.entity.living.PotionEvent.PotionAddedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class HEServerEventHandler {
@@ -49,6 +50,11 @@ public final class HEServerEventHandler {
     public static void onPiglinChooseStance(final PiglinStanceEvent event) {
         var r = EnchantmentHelper.onPiglinChooseStance(event.getTarget(), event.getStance());
         event.setStance(r);
+    }
+
+    @SubscribeEvent
+    public static void onPotionAdded(final PotionAddedEvent event) {
+        EnchantmentHelper.onPotionAdded(event.getEntityLiving(), event.getPotionSource(), event.getPotionEffect(), event.getOldPotionEffect());
     }
 
 }
