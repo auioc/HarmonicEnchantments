@@ -12,7 +12,8 @@
         "common.MixinArrow",
         "common.MixinSpectralArrow",
         "common.MixinFoodData",
-        "server.MixinPiglinAi"
+        "server.MixinPiglinAi",
+        "server.MixinCatRelaxOnOwnerGoal"
     ],
     "client": [],
     "server": [],
