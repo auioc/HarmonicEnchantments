@@ -10,6 +10,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -284,6 +286,19 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             },
             target
         );
+    }
+
+    public static double onSetCatMorningGiftChance(Cat cat, Player ownerPlayer, double originalChance) {
+        var chance = new MutableDouble(originalChance);
+        runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof ILivingEnchantment.Cat _ench) {
+                    chance.setValue(_ench.onSetCatMorningGiftChance(lvl, slot, cat, ownerPlayer, chance.doubleValue()));
+                }
+            },
+            ownerPlayer
+        );
+        return chance.doubleValue();
     }
 
 }

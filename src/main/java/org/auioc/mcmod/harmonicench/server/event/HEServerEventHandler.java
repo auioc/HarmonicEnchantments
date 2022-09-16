@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.server.event;
 
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
+import org.auioc.mcmod.harmonicench.server.event.impl.CatMorningGiftChanceEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.FishingRodCastEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.ItemHurtEvent;
 import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
@@ -55,6 +56,12 @@ public final class HEServerEventHandler {
     @SubscribeEvent
     public static void onPotionAdded(final PotionAddedEvent event) {
         EnchantmentHelper.onPotionAdded(event.getEntityLiving(), event.getPotionSource(), event.getPotionEffect(), event.getOldPotionEffect());
+    }
+
+    @SubscribeEvent
+    public static void onSetCatMorningGiftChance(final CatMorningGiftChanceEvent event) {
+        var r = EnchantmentHelper.onSetCatMorningGiftChance(event.getCat(), event.getOwnerPlayer(), event.getChance());
+        event.setChance(r);
     }
 
 }

@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class ILivingEnchantment {
 
@@ -25,6 +26,12 @@ public class ILivingEnchantment {
     public static interface PiglinStance {
 
         PiglinStanceEvent.Stance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, PiglinStanceEvent.Stance stance);
+
+    }
+
+    public static interface Cat {
+
+        double onSetCatMorningGiftChance(int lvl, EquipmentSlot slot, net.minecraft.world.entity.animal.Cat cat, Player ownerPlayer, double chance);
 
     }
 
