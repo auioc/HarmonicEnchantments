@@ -1,6 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
+import org.auioc.mcmod.arnicalib.utils.game.EffectUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
@@ -50,22 +50,14 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     @Override
     public void onPotionAdded(int lvl, EquipmentSlot slot, Entity source, MobEffectInstance newEffect, MobEffectInstance oldEffect) {
         if (newEffect.getEffect() == MobEffects.BAD_OMEN) {
-            setEffectDuration(newEffect, 0);
+            EffectUtils.setDuration(newEffect, 0);
         } else if (source != null) {
             if (source.getType() == EntityType.AXOLOTL && newEffect.getEffect() == MobEffects.REGENERATION) {
-                setEffectAmplifier(newEffect, 1);
+                EffectUtils.setAmplifier(newEffect, 1);
             } else if (source.getType() == EntityType.DOLPHIN && newEffect.getEffect() == MobEffects.DOLPHINS_GRACE) {
-                setEffectDuration(newEffect, 10 * 20);
+                EffectUtils.setDuration(newEffect, 10 * 20);
             }
         }
-    }
-
-    private static void setEffectDuration(MobEffectInstance effect, int duration) {
-        ObfuscationReflectionHelper.setPrivateValue(MobEffectInstance.class, effect, duration, "f_19503_");
-    }
-
-    private static void setEffectAmplifier(MobEffectInstance effect, int amplifier) {
-        ObfuscationReflectionHelper.setPrivateValue(MobEffectInstance.class, effect, amplifier, "f_19504_");
     }
 
 }
