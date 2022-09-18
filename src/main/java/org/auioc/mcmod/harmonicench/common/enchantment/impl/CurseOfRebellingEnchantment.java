@@ -49,9 +49,9 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     @Override
     public int onItemHurt(int lvl, ItemStack itemStack, int damage, Random random, ServerPlayer player) {
         if (damage > 0) {
-            if (RandomUtils.percentageChance(1, player.getRandom())) {
-                player.hurt(new CurseOfRebellingDamageSource(itemStack), damage * 4);
-            }
+            int d = 0;
+            for (int i = 0; i < damage; ++i) if (RandomUtils.percentageChance(1, player.getRandom())) d++;
+            player.hurt(new CurseOfRebellingDamageSource(itemStack), d * 4);
         }
         return damage;
     }
@@ -63,7 +63,7 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
 
         public CurseOfRebellingDamageSource(ItemStack itemStack) {
             super("curseOfRebelling");
-            this.bypassArmor().bypassMagic().isMagic();
+            this.bypassArmor().bypassMagic().setMagic();
             this.betrayedItem = itemStack;
         }
 
