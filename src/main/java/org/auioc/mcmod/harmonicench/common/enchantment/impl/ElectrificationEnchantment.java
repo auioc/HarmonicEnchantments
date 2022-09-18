@@ -66,7 +66,7 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
 
     @Override
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (!isSource && this.isValidSlot(slot) && source == DamageSource.LIGHTNING_BOLT) {
+        if (!isSource && source == DamageSource.LIGHTNING_BOLT) {
             double effectDuration = 0.0D;
             double effectLevel = 0.0D;
             for (int k = 1, n = lvl + 1; k < n; k++) {

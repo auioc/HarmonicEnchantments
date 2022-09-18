@@ -13,7 +13,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.phys.Vec3;
 
 @Mixin(value = Projectile.class)
 public class MixinProjectile implements IMixinProjectile {
@@ -58,30 +57,6 @@ public class MixinProjectile implements IMixinProjectile {
             }
             p_37265_.put("Enchantments", enchList);
         }
-    }
-
-
-    private Vec3 shootingPosition;
-
-    @Inject(
-        method = "Lnet/minecraft/world/entity/projectile/Projectile;tick()V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/projectile/Projectile;gameEvent(Lnet/minecraft/world/level/gameevent/GameEvent;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;)V",
-            ordinal = 0
-        ),
-        require = 1,
-        allow = 1
-    )
-    private void tick(CallbackInfo ci) {
-        var pos = ((Projectile) (Object) this).position();
-        this.shootingPosition = new Vec3(pos.x, pos.y, pos.z);
-    }
-
-    @Nullable
-    @Override
-    public Vec3 getShootingPosition() {
-        return this.shootingPosition;
     }
 
 }

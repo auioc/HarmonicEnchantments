@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,9 +35,8 @@ public class IceAspectEnchantment extends AbstractHEEnchantment implements ILivi
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
         if (isSource && target.canFreeze()) {
             int ticksFrozen = target.getTicksFrozen();
-            double r = 0.0D;
             double f = (ticksFrozen == 0) ? 200.0D : 100.0D;
-            for (int k = 1, n = lvl + 1; k < n; k++) r += f / ((double) k);
+            double r = MathUtil.sigma(lvl, 1, (double i) -> f / i);
             target.setTicksFrozen(ticksFrozen + ((int) r));
         }
         return amount;

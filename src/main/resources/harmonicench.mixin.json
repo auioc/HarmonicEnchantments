@@ -3,17 +3,12 @@
     "package": "org.auioc.mcmod.harmonicench.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "common.MixinEnchantment",
-        "common.MixinIForgeItemStack",
-        "common.MixinProjectile",
+        "common.MixinAbstractArrow",
         "common.MixinBowItem",
         "common.MixinCrossbowItem",
-        "common.MixinAbstractArrow",
-        "common.MixinArrow",
-        "common.MixinSpectralArrow",
-        "common.MixinFoodData",
-        "server.MixinPiglinAi",
-        "server.MixinCatRelaxOnOwnerGoal"
+        "common.MixinIForgeItemStack",
+        "common.MixinProjectile",
+        "common.MixinSpectralArrow"
     ],
     "client": [],
     "server": [],

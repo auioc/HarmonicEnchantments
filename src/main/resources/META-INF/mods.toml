@@ -31,6 +31,6 @@ Harmonic Enchantments
 [[dependencies.harmonicench]]
     modId="arnicalib"
     mandatory=true
-    versionRange="[5.4.4,)"
+    versionRange="[5.5.0,)"
     ordering="NONE"
     side="BOTH"

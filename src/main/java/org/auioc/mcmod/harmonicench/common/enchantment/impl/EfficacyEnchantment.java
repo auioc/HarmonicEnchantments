@@ -1,10 +1,10 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.HashSet;
+import org.auioc.mcmod.arnicalib.api.game.entity.ITippedArrow;
 import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.api.entity.ITippedArrow;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;

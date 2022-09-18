@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import javax.annotation.Nullable;
-import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
+import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;

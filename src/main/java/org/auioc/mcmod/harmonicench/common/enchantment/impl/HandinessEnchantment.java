@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -37,7 +38,7 @@ public class HandinessEnchantment extends AbstractHEEnchantment implements IProj
     public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float amount) {
         int amplifier = Math.min(lvl, this.getMaxLevel()) - 1;
         double duration = 6;
-        if (lvl > this.getMaxLevel()) for (int k = 3, n = lvl + 1; k < n; k++) duration += (2 / (((double) k) - 2.0D));
+        if (lvl > this.getMaxLevel()) duration += MathUtil.sigma(lvl, 3, (double i) -> (2 / (i - 2.0D)));
         owner.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, ((int) duration) * 20, amplifier));
         return amount;
     }

@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,8 +45,7 @@ public class SiphoningEnchantment extends AbstractHEEnchantment implements ILivi
         var player = (Player) source.getEntity();
 
         double x = target.getMaxHealth();
-        double r = 0.0D;
-        for (int k = 1, n = lvl + 1; k < n; k++) r += (x / 15.0D) * (1.0D / ((double) k));
+        double r = MathUtil.sigma(lvl, 1, (double i) -> (x / 15.0D) * (1.0D / i));
 
         var food = player.getFoodData();
         if (food.needsFood()) {

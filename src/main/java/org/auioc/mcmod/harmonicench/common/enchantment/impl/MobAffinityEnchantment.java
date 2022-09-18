@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.server.event.impl.PiglinStanceEvent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -39,31 +39,23 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
 
     @Override
     public PiglinStanceEvent.Stance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, PiglinStanceEvent.Stance stance) {
-        if (this.isValidSlot(slot)) {
-            return PiglinStanceEvent.Stance.NEUTRAL;
-        }
-        return stance;
+        return PiglinStanceEvent.Stance.NEUTRAL;
     }
 
     @Override
     public double onSetCatMorningGiftChance(int lvl, EquipmentSlot slot, Cat cat, Player ownerPlayer, double chance) {
-        if (this.isValidSlot(slot)) {
-            return 1.0D;
-        }
-        return chance;
+        return 1.0D;
     }
 
     @Override
     public void onPotionAdded(int lvl, EquipmentSlot slot, Entity source, MobEffectInstance newEffect, MobEffectInstance oldEffect) {
-        if (this.isValidSlot(slot)) {
-            if (newEffect.getEffect() == MobEffects.BAD_OMEN) {
-                setEffectDuration(newEffect, 0);
-            } else if (source != null) {
-                if (source.getType() == EntityType.AXOLOTL && newEffect.getEffect() == MobEffects.REGENERATION) {
-                    setEffectAmplifier(newEffect, 1);
-                } else if (source.getType() == EntityType.DOLPHIN && newEffect.getEffect() == MobEffects.DOLPHINS_GRACE) {
-                    setEffectDuration(newEffect, 10 * 20);
-                }
+        if (newEffect.getEffect() == MobEffects.BAD_OMEN) {
+            setEffectDuration(newEffect, 0);
+        } else if (source != null) {
+            if (source.getType() == EntityType.AXOLOTL && newEffect.getEffect() == MobEffects.REGENERATION) {
+                setEffectAmplifier(newEffect, 1);
+            } else if (source.getType() == EntityType.DOLPHIN && newEffect.getEffect() == MobEffects.DOLPHINS_GRACE) {
+                setEffectDuration(newEffect, 10 * 20);
             }
         }
     }

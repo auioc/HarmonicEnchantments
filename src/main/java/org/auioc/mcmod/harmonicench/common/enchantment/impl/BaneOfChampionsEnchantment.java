@@ -39,10 +39,8 @@ public class BaneOfChampionsEnchantment extends AbstractHEEnchantment implements
 
     @Override
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (isSource) {
-            if (this.isValidSlot(slot) && target.getHealth() > 50.0F) {
-                return amount + ((float) lvl) * 2.5F;
-            }
+        if (isSource && target.getHealth() > 50.0F) {
+            return amount + ((float) lvl) * 2.5F;
         }
         return amount;
     }

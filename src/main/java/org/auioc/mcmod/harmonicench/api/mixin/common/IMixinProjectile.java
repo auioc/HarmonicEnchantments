@@ -1,10 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.mixin.common;
 
-import org.auioc.mcmod.harmonicench.api.entity.IEnchantableEntity;
-import net.minecraft.world.phys.Vec3;
+import org.auioc.mcmod.arnicalib.api.game.enchantment.IEnchantmentAttachableObject;
 
-public interface IMixinProjectile extends IEnchantableEntity {
-
-    Vec3 getShootingPosition();
+public interface IMixinProjectile extends IEnchantmentAttachableObject {
 
 }

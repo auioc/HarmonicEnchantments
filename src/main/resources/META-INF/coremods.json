@@ -1,5 +1,3 @@
 {
-    "he.ItemStack": "coremods/ItemStack.js",
-    "he.FishingRodItem": "coremods/FishingRodItem.js",
-    "he.LivingEntity": "coremods/LivingEntity.js"
+    "harmonicench.living_entity": "coremods/living_entity.js"
 }

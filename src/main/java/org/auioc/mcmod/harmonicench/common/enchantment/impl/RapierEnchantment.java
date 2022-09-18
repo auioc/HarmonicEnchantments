@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
@@ -45,13 +46,13 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
 
     @Override
     public Map<Attribute, AttributeModifier> getAttributeModifiers(int lvl) {
-        return Map.of(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_UUID, this.descriptionId, getAttackSpeedBonus(lvl), AttributeModifier.Operation.ADDITION));
-    }
-
-    private static double getAttackSpeedBonus(int lvl) {
-        double r = 0.0D;
-        for (int k = 0, n = lvl + 1; k < n; k++) r += 1 / (((double) k) + 9.0D);
-        return r;
+        return Map.of(
+            Attributes.ATTACK_SPEED,
+            new AttributeModifier(
+                ATTACK_SPEED_UUID, this.descriptionId,
+                MathUtil.sigma(lvl, 0, (double i) -> 1 / (i + 9.0D)), AttributeModifier.Operation.ADDITION
+            )
+        );
     }
 
 }

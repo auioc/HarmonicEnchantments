@@ -1,11 +1,11 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
-import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinEnchantment;
+import org.auioc.mcmod.arnicalib.api.game.enchantment.IValidSlotsVisibleEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public abstract class AbstractHEEnchantment extends Enchantment implements IMixinEnchantment {
+public abstract class AbstractHEEnchantment extends Enchantment implements IValidSlotsVisibleEnchantment {
 
     protected final int maxLevel;
 

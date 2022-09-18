@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinAbstractArrow;
@@ -41,8 +42,7 @@ public class SnipingEnchantment extends AbstractHEEnchantment implements IProjec
     public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 shootingPosition, float amount) {
         double distance = shootingPosition.distanceTo(target.position());
         if (distance > 20.0D) {
-            double m = 0.0D;
-            for (int k = 1, n = lvl + 1; k < n; k++) m += (1.0D / (double) k) * ((distance - 20.0D) / 40.0D);
+            double m = MathUtil.sigma(lvl, 1, (double i) -> (1.0D / i) * ((distance - 20.0D) / 40.0D));
             return (float) (amount * (m + 1));
         }
         return amount;

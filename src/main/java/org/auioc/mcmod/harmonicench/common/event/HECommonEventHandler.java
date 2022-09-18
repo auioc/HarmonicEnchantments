@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
+import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinProjectile;
 import org.auioc.mcmod.arnicalib.common.event.impl.ItemInventoryTickEvent;
-import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinProjectile;
-import org.auioc.mcmod.harmonicench.common.event.impl.LivingEatEvent;
+import org.auioc.mcmod.arnicalib.common.event.impl.LivingEatEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerPlayer;
