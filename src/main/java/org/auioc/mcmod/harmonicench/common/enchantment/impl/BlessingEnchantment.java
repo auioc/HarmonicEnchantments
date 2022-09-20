@@ -7,6 +7,8 @@ import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -14,10 +16,29 @@ import net.minecraft.world.item.enchantment.Enchantments;
 
 public class BlessingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Protection {
 
+    private static final EnchantmentCategory BLESSABLE_ARMOR = EnchantmentCategory.create(
+        "BLESSABLE_ARMOR",
+        (item) -> {
+            if (item instanceof ArmorItem arrow && arrow.getMaterial() instanceof ArmorMaterials material) {
+                switch (material) {
+                    case LEATHER:
+                    case GOLD:
+                    case NETHERITE: {
+                        return true;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+            return false;
+        }
+    );
+
     public BlessingEnchantment() {
         super(
             Enchantment.Rarity.RARE,
-            EnchantmentCategory.ARMOR,
+            BLESSABLE_ARMOR,
             new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET},
             (o) -> o != Enchantments.MENDING && o != HEEnchantments.FORGING.get()
         );
