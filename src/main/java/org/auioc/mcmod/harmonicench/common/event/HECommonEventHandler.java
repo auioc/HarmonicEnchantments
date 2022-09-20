@@ -61,7 +61,7 @@ public class HECommonEventHandler {
             var r = EnchantmentHelper.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
             int nutrition = r.getLeft();
             float saturationModifier = r.getRight();
-            if (nutrition == 0 && saturationModifier == 0.0F) {
+            if (nutrition == 0) {
                 event.setCanceled(true);
                 player.connection.send(new ClientboundSetHealthPacket(player.getHealth(), player.getFoodData().getFoodLevel(), player.getFoodData().getSaturationLevel()));
             } else {

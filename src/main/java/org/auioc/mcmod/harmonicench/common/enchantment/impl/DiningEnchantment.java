@@ -43,12 +43,14 @@ public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerE
     public Pair<Integer, Float> onPlayerEat(int lvl, ItemStack itemStack, EquipmentSlot slot, ServerPlayer player, ItemStack foodItemStack, int nutrition, float saturationModifier) {
         if (itemStack.isDamaged() && nutrition > 0) {
             int damage = itemStack.getDamageValue();
-            if (nutrition >= damage) {
-                nutrition -= damage;
+            int c = (int) Math.ceil(damage / 20.0D);
+            if (nutrition >= c) {
+                saturationModifier *= ((float) c) / ((float) nutrition);
+                nutrition -= c;
                 damage = 0;
             } else {
-                damage -= nutrition;
-                saturationModifier = 0;
+                damage -= nutrition * 20;
+                saturationModifier = 0.0F;
                 nutrition = 0;
             }
             itemStack.setDamageValue(damage);
