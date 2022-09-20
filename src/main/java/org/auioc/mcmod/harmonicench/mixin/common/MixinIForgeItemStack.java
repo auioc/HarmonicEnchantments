@@ -11,7 +11,10 @@ import net.minecraftforge.common.extensions.IForgeItemStack;
 @Mixin(value = IForgeItemStack.class, remap = false)
 public interface MixinIForgeItemStack {
 
-    // @org.spongepowered.asm.mixin.Debug(export = true, print = true)
+    /**
+     * @author WakelessSloth56
+     * @reason {@link org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment#canPerformAction}
+     */
     @Overwrite
     default boolean canPerformAction(ToolAction toolAction) {
         if (!EnchantmentHelper.canPerformAction(self(), toolAction)) {
