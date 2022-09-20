@@ -18,7 +18,12 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt {
 
     public CurseOfRebellingEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BREAKABLE, EquipmentSlot.values());
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.BREAKABLE,
+            EquipmentSlot.values(),
+            (o) -> o != HEEnchantments.FREE_RIDING.get()
+        );
     }
 
     @Override
@@ -39,11 +44,6 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     @Override
     public boolean isCurse() {
         return true;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != HEEnchantments.FREE_RIDING.get();
     }
 
     @Override

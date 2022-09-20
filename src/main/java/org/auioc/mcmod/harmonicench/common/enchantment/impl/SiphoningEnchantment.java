@@ -16,7 +16,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class SiphoningEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Death {
 
     public SiphoningEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND, 3);
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.WEAPON,
+            EquipmentSlot.MAINHAND,
+            3,
+            (o) -> o != Enchantments.MOB_LOOTING
+        );
     }
 
     @Override
@@ -27,11 +33,6 @@ public class SiphoningEnchantment extends AbstractHEEnchantment implements ILivi
     @Override
     public int getMaxCost(int lvl) {
         return super.getMinCost(lvl) + 50;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.MOB_LOOTING;
     }
 
     @Override

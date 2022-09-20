@@ -21,7 +21,13 @@ import net.minecraft.world.level.Level;
 public class ElectrificationEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Selected, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.TRIDENT, new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND}, 5);
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.TRIDENT,
+            new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND},
+            5,
+            (o) -> o != Enchantments.RIPTIDE && o != Enchantments.IMPALING
+        );
     }
 
     @Override
@@ -32,13 +38,6 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
     @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 20;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other)
-            && other != Enchantments.RIPTIDE
-            && other != Enchantments.IMPALING;
     }
 
     @Override

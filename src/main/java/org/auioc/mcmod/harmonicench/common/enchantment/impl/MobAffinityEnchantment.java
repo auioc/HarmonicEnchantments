@@ -19,7 +19,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
     public MobAffinityEnchantment() {
-        super(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.WEARABLE, new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}, 1);
+        super(
+            Enchantment.Rarity.VERY_RARE,
+            EnchantmentCategory.WEARABLE,
+            new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET},
+            1,
+            (o) -> o != Enchantments.AQUA_AFFINITY
+        );
     }
 
     @Override
@@ -30,11 +36,6 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     @Override
     public int getMaxCost(int lvl) {
         return 41;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.AQUA_AFFINITY;
     }
 
     @Override

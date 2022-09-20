@@ -14,7 +14,12 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class BlessingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Protection {
 
     public BlessingEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.ARMOR, new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.ARMOR,
+            new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET},
+            (o) -> o != Enchantments.MENDING
+        );
     }
 
     @Override
@@ -25,11 +30,6 @@ public class BlessingEnchantment extends AbstractHEEnchantment implements IItemE
     @Override
     public int getMaxCost(int lvl) {
         return 51;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.MENDING;
     }
 
     @Override

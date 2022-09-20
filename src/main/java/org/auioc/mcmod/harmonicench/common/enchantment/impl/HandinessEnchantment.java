@@ -16,7 +16,13 @@ import net.minecraft.world.phys.Vec3;
 public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND, 2);
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.BOW,
+            EquipmentSlot.MAINHAND,
+            2,
+            (o) -> o != Enchantments.PUNCH_ARROWS
+        );
     }
 
     @Override
@@ -27,11 +33,6 @@ public class HandinessEnchantment extends AbstractHEEnchantment implements IProj
     @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 25;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.PUNCH_ARROWS;
     }
 
     @Override

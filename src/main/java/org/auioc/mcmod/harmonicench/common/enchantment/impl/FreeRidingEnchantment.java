@@ -16,7 +16,12 @@ public class FreeRidingEnchantment extends AbstractHEEnchantment implements IIte
     private static final EnchantmentCategory FOOD_ON_A_STACK = EnchantmentCategory.create("FOOD_ON_A_STACK", (item) -> item instanceof FoodOnAStickItem);
 
     public FreeRidingEnchantment() {
-        super(Enchantment.Rarity.VERY_RARE, FOOD_ON_A_STACK, EquipmentSlot.MAINHAND);
+        super(
+            Enchantment.Rarity.VERY_RARE,
+            FOOD_ON_A_STACK,
+            EquipmentSlot.MAINHAND,
+            (o) -> o != Enchantments.MENDING && o != Enchantments.UNBREAKING
+        );
     }
 
     @Override
@@ -32,13 +37,6 @@ public class FreeRidingEnchantment extends AbstractHEEnchantment implements IIte
     @Override
     public boolean isTreasureOnly() {
         return true;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other)
-            && other != Enchantments.MENDING
-            && other != Enchantments.UNBREAKING;
     }
 
     @Override

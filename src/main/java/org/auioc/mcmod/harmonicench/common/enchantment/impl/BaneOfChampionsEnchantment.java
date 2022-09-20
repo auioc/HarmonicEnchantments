@@ -14,7 +14,13 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 public class BaneOfChampionsEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Hurt {
 
     public BaneOfChampionsEnchantment() {
-        super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND, 5);
+        super(
+            Enchantment.Rarity.UNCOMMON,
+            EnchantmentCategory.WEAPON,
+            EquipmentSlot.MAINHAND,
+            5,
+            (o) -> !(o instanceof DamageEnchantment)
+        );
     }
 
     @Override
@@ -25,11 +31,6 @@ public class BaneOfChampionsEnchantment extends AbstractHEEnchantment implements
     @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 20;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && !(other instanceof DamageEnchantment);
     }
 
     @Override

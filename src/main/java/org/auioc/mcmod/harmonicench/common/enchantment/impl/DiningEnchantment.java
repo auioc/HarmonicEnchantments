@@ -14,7 +14,14 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerEnchantment.Eat {
 
     public DiningEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BREAKABLE, EquipmentSlot.values());
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.BREAKABLE,
+            EquipmentSlot.values(),
+            (o) -> o != Enchantments.MENDING
+                && o != Enchantments.INFINITY_ARROWS
+                && o != HEEnchantments.BLESSING.get()
+        );
     }
 
     @Override
@@ -28,16 +35,8 @@ public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerE
     }
 
     @Override
-    public boolean isTradeable() {
+    public boolean isTreasureOnly() {
         return true;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other)
-            && other != Enchantments.MENDING
-            && other != Enchantments.INFINITY_ARROWS
-            && other != HEEnchantments.BLESSING.get();
     }
 
     @Override

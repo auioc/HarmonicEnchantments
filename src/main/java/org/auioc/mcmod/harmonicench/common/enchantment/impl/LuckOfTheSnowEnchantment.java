@@ -15,7 +15,13 @@ import net.minecraft.world.level.Level;
 public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements IItemEnchantment.FishingRod {
 
     public LuckOfTheSnowEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.FISHING_ROD, EquipmentSlot.values(), 3);
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.FISHING_ROD,
+            EquipmentSlot.values(),
+            3,
+            (o) -> o != Enchantments.FISHING_LUCK
+        );
     }
 
     @Override
@@ -26,11 +32,6 @@ public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements I
     @Override
     public int getMaxCost(int lvl) {
         return super.getMinCost(lvl) + 50;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.FISHING_LUCK;
     }
 
     @Override

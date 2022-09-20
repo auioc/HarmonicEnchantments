@@ -20,7 +20,16 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow {
 
     public EfficacyEnchantment() {
-        super(Enchantment.Rarity.RARE, EnchantmentCategory.BOW, EquipmentSlot.MAINHAND, 4);
+        super(
+            Enchantment.Rarity.RARE,
+            EnchantmentCategory.BOW,
+            EquipmentSlot.MAINHAND,
+            4,
+            (o) -> o != Enchantments.POWER_ARROWS
+                && o != Enchantments.FLAMING_ARROWS
+                && o != Enchantments.MULTISHOT
+                && o != Enchantments.PIERCING
+        );
     }
 
     @Override
@@ -31,15 +40,6 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
     @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 25;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other)
-            && other != Enchantments.POWER_ARROWS
-            && other != Enchantments.FLAMING_ARROWS
-            && other != Enchantments.MULTISHOT
-            && other != Enchantments.PIERCING;
     }
 
     @Override

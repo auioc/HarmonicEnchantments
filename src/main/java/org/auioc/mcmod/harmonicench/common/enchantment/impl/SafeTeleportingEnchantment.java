@@ -17,7 +17,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
 
     public SafeTeleportingEnchantment() {
-        super(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.ARMOR_FEET, EquipmentSlot.FEET, 4);
+        super(
+            Enchantment.Rarity.UNCOMMON,
+            EnchantmentCategory.ARMOR_FEET,
+            EquipmentSlot.FEET,
+            4,
+            (o) -> o != Enchantments.FALL_PROTECTION
+        );
     }
 
     @Override
@@ -28,11 +34,6 @@ public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
     @Override
     public int getMaxCost(int lvl) {
         return this.getMinCost(lvl) + 6;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment other) {
-        return super.checkCompatibility(other) && other != Enchantments.FALL_PROTECTION;
     }
 
     public static void handleLivingTravelToDimension(int lvl, LivingEntity living) {
