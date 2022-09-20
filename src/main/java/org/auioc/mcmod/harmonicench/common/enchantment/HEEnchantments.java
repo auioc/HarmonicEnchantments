@@ -31,5 +31,9 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> DINING = register("dining", DiningEnchantment::new);
     public static final RegistryObject<Enchantment> ICE_ASPECT = register("ice_aspect", IceAspectEnchantment::new);
     public static final RegistryObject<Enchantment> MOB_AFFINITY = register("mob_affinity", MobAffinityEnchantment::new);
+    public static final RegistryObject<Enchantment> DEEP_STUDY = register("deep_study", DeepStudyEnchantment::new);
+    public static final RegistryObject<Enchantment> FORGING = register("forging", ForgingEnchantment::new);
+    public static final RegistryObject<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::new);
+    public static final RegistryObject<Enchantment> SUN_AFFINITY = register("sun_affinity", SunAffinityEnchantment::new);
 
 }

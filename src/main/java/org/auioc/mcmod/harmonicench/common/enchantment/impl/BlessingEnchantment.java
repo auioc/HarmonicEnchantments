@@ -3,6 +3,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,7 +19,7 @@ public class BlessingEnchantment extends AbstractHEEnchantment implements IItemE
             Enchantment.Rarity.RARE,
             EnchantmentCategory.ARMOR,
             new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET},
-            (o) -> o != Enchantments.MENDING
+            (o) -> o != Enchantments.MENDING && o != HEEnchantments.FORGING.get()
         );
     }
 

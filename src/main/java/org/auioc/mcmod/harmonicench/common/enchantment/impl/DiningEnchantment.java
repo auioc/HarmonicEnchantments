@@ -21,6 +21,7 @@ public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerE
             (o) -> o != Enchantments.MENDING
                 && o != Enchantments.INFINITY_ARROWS
                 && o != HEEnchantments.BLESSING.get()
+                && o != HEEnchantments.FORGING.get()
         );
     }
 
