@@ -22,6 +22,7 @@ import org.auioc.mcmod.arnicalib.utils.game.EnchUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
@@ -44,6 +45,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
 
@@ -269,6 +271,19 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             ownerPlayer
         );
         return chance.doubleValue();
+    }
+
+    public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int originalEnchantmentLevel) {
+        var enchantmentLevel = new MutableInt(originalEnchantmentLevel);
+        EnchUtils.runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof ILootBonusEnchantment.ApplyBonusCountFunction _ench) {
+                    enchantmentLevel.setValue(_ench.onApplyLootEnchantmentBonusCount(lvl, lootContext, itemStack, enchantment, enchantmentLevel.intValue()));
+                }
+            },
+            itemStack
+        );
+        return enchantmentLevel.intValue();
     }
 
 }

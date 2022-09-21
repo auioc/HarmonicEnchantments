@@ -6,6 +6,7 @@ import org.auioc.mcmod.arnicalib.server.event.impl.ItemHurtEvent;
 import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
+import org.auioc.mcmod.harmonicench.server.event.impl.ApplyLootEnchantmentBonusCountEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
@@ -62,6 +63,12 @@ public final class HEServerEventHandler {
     public static void onSetCatMorningGiftChance(final CatMorningGiftChanceEvent event) {
         var r = EnchantmentHelper.onSetCatMorningGiftChance(event.getCat(), event.getOwnerPlayer(), event.getChance());
         event.setChance(r);
+    }
+
+    @SubscribeEvent
+    public static void onApplyLootEnchantmentBonusCount(final ApplyLootEnchantmentBonusCountEvent event) {
+        var r = EnchantmentHelper.onApplyLootEnchantmentBonusCount(event.getLootContext(), event.getItemStack(), event.getEnchantment(), event.getEnchantmentLevel());
+        event.setEnchantmentLevel(r);
     }
 
 }
