@@ -1,3 +1,4 @@
 {
-    "harmonicench.living_entity": "coremods/living_entity.js"
+    "harmonicench.living_entity": "coremods/living_entity.js",
+    "harmonicench.apply_bonus_count": "coremods/apply_bonus_count.js"
 }
