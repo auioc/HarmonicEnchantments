@@ -3,6 +3,7 @@ package org.auioc.mcmod.harmonicench;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.event.HECommonEventHandler;
 import org.auioc.mcmod.harmonicench.common.itemgroup.HECreativeModeTabs;
+import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import org.auioc.mcmod.harmonicench.server.event.HEServerEventHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,6 +46,7 @@ public final class Initialization {
 
         private void modSetup() {
             HEEnchantments.ENCHANTMENTS.register(modEventBus);
+            HEMobEffects.MOB_EFFECTS.register(modEventBus);
         }
 
         private void forgeSetup() {
