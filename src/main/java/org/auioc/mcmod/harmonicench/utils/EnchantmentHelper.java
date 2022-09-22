@@ -286,4 +286,15 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return enchantmentLevel.intValue();
     }
 
+    public static void onPlayerServerTick(ServerPlayer player) {
+        EnchUtils.runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof IPlayerEnchantment.Tick.Server _ench) {
+                    _ench.onPlayerServerTick(lvl, itemStack, slot, player);
+                }
+            },
+            player
+        );
+    }
+
 }
