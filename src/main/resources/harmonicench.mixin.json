@@ -8,7 +8,8 @@
         "common.MixinCrossbowItem",
         "common.MixinIForgeItemStack",
         "common.MixinProjectile",
-        "common.MixinSpectralArrow"
+        "common.MixinSpectralArrow",
+        "common.MixinElytraItem"
     ],
     "client": [],
     "server": [],

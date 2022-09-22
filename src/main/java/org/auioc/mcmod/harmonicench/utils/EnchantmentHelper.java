@@ -297,4 +297,17 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         );
     }
 
+    public static boolean canElytraFly(ItemStack itemStack, LivingEntity living) {
+        var bool = new MutableBoolean(true);
+        EnchUtils.runIterationOnItem(
+            (ench, lvl) -> {
+                if (ench instanceof IItemEnchantment.Elytra _ench) {
+                    bool.setValue(bool.booleanValue() & _ench.canElytraFly(lvl, itemStack, living));
+                }
+            },
+            itemStack
+        );
+        return bool.booleanValue();
+    }
+
 }
