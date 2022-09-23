@@ -62,7 +62,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         EnchUtils.runIterationOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IAttributeModifierEnchantment _ench) {
-                    _ench.getAttributeModifiers(lvl, slotType).ifPresent((m) -> modifiers.add(m));
+                    _ench.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent((m) -> modifiers.add(m));
                 }
             },
             itemStack

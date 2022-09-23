@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -46,7 +47,7 @@ public class RapierEnchantment extends AbstractHEEnchantment implements IAttribu
     }
 
     @Override
-    public Map<Attribute, AttributeModifier> getAttributeModifiers(int lvl) {
+    public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
         return Map.of(
             Attributes.ATTACK_SPEED,
             new AttributeModifier(
