@@ -42,18 +42,22 @@ public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBl
 
     @Override
     public void onBlockBreak(int lvl, ItemStack itemStack, Player player, BlockState blockState, BlockPos blockPos) {
-        if (player.getRandom().nextDouble() < (MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i) / 200.0)) {
-            var nbt = itemStack.getOrCreateTag();
-            int proficiency = nbt.getInt("Proficiency") + 1;
-            nbt.putInt("Proficiency", proficiency);
+        if (itemStack.isCorrectToolForDrops(blockState)) {
+            if (player.getRandom().nextDouble() < (MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i) / 200.0)) {
+                var nbt = itemStack.getOrCreateTag();
+                int proficiency = nbt.getInt("Proficiency") + 1;
+                nbt.putInt("Proficiency", proficiency);
+            }
         }
     }
 
     @Override
     public float getBreakSpeed(int lvl, ItemStack itemStack, Player player, BlockState blockState, BlockPos blockPos, float speed) {
-        if (itemStack.hasTag()) {
-            int proficiency = itemStack.getTag().getInt("Proficiency");
-            if (proficiency > 0) return speed + proficiency;
+        if (itemStack.isCorrectToolForDrops(blockState)) {
+            if (itemStack.hasTag()) {
+                int proficiency = itemStack.getTag().getInt("Proficiency");
+                if (proficiency > 0) return speed + proficiency;
+            }
         }
         return speed;
     }
