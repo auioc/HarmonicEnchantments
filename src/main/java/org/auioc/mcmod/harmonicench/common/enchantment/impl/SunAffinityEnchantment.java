@@ -45,7 +45,7 @@ public class SunAffinityEnchantment extends AbstractHEEnchantment implements IIt
         int dayTime = (int) (level.getDayTime() % 24000L);
         if (!(dayTime >= 0 && dayTime < 12000)) return false;
 
-        if (level.isRaining()) return false;
+        if (living.isInWaterOrRain()) return false;
 
         return true;
     }

@@ -49,10 +49,14 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
         var serverLevel = (ServerLevel) level;
 
         int chance;
-        if (serverLevel.isThundering()) {
-            chance = 5;
-        } else if (serverLevel.isRaining()) {
-            chance = 1;
+        if (player.isInWaterOrRain() && !player.isInWater()) {
+            if (serverLevel.isThundering()) {
+                chance = 5;
+            } else if (serverLevel.isRaining()) {
+                chance = 1;
+            } else {
+                return;
+            }
         } else {
             return;
         }
