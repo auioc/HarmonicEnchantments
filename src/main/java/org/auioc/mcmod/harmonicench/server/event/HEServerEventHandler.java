@@ -14,6 +14,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.PotionEvent.PotionAddedEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -79,6 +80,11 @@ public final class HEServerEventHandler {
         if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
             EnchantmentHelper.onPlayerServerTick((ServerPlayer) event.player);
         }
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(final BlockEvent.BreakEvent event) {
+        EnchantmentHelper.onBlockBreak(event.getPlayer(), event.getState(), event.getPos());
     }
 
 }

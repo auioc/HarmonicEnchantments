@@ -20,12 +20,14 @@ import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinArrow;
 import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
 import org.auioc.mcmod.arnicalib.utils.game.EnchUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -45,6 +47,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
@@ -308,6 +311,30 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             itemStack
         );
         return bool.booleanValue();
+    }
+
+    public static float getBreakSpeed(Player player, BlockState blockState, BlockPos blockPos, float originalSpeed) {
+        var speed = new MutableFloat(originalSpeed);
+        EnchUtils.runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof IBlockEnchantment.BreakSpeed _ench) {
+                    speed.setValue(_ench.getBreakSpeed(lvl, itemStack, player, blockState, blockPos, speed.floatValue()));
+                }
+            },
+            player
+        );
+        return speed.floatValue();
+    }
+
+    public static void onBlockBreak(Player player, BlockState blockState, BlockPos blockPos) {
+        EnchUtils.runIterationOnLiving(
+            (slot, itemStack, ench, lvl) -> {
+                if (ench instanceof IBlockEnchantment.Break _ench) {
+                    _ench.onBlockBreak(lvl, itemStack, player, blockState, blockPos);
+                }
+            },
+            player
+        );
     }
 
 }

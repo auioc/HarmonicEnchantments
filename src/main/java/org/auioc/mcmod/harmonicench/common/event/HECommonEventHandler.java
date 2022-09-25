@@ -11,6 +11,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HECommonEventHandler {
@@ -69,6 +70,12 @@ public class HECommonEventHandler {
                 event.setSaturationModifier(saturationModifier);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerGetBreakSpeed(final PlayerEvent.BreakSpeed event) {
+        float r = EnchantmentHelper.getBreakSpeed(event.getPlayer(), event.getState(), event.getPos(), event.getOriginalSpeed());
+        event.setNewSpeed(r);
     }
 
 }
