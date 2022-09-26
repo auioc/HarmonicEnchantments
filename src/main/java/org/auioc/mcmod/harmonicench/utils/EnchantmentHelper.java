@@ -40,6 +40,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
@@ -97,6 +98,10 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         }
     }
 
+    public static void copyItemEnchantmentsToEntity(ItemStack itemStack, Entity entity) {
+        copyItemEnchantmentsToEntity(itemStack, entity, (ench, lvl) -> true);
+    }
+
     public static float onProjectileHurtLiving(LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 shootingPosition, float originalAmount) {
         var enchMap = ((IEnchantmentAttachableObject) projectile).getEnchantments();
         if (enchMap == null) return originalAmount;
@@ -113,20 +118,26 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return amount.floatValue();
     }
 
-    public static void handleArrow(ItemStack weapon, AbstractArrow abstractArrow) {
+    public static void handleProjectile(ItemStack weapon, Projectile projectile) {
         EnchUtils.runIterationOnItem(
             (ench, lvl) -> {
-                if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
-                    _ench.handleAbstractArrow(lvl, abstractArrow);
-                }
-                if (ench instanceof IProjectileEnchantment.TippedArrow _ench && abstractArrow instanceof Arrow arrow) {
-                    var potionArrow = (IMixinArrow) arrow;
-                    if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
-                        _ench.handleTippedArrow(lvl, arrow, potionArrow);
+                if (projectile instanceof AbstractArrow abstractArrow) {
+                    if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
+                        _ench.handleAbstractArrow(lvl, abstractArrow);
                     }
-                }
-                if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {
-                    _ench.handleSpectralArrow(lvl, spectralArrow);
+                    if (ench instanceof IProjectileEnchantment.TippedArrow _ench && abstractArrow instanceof Arrow arrow) {
+                        var potionArrow = (IMixinArrow) arrow;
+                        if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
+                            _ench.handleTippedArrow(lvl, arrow, potionArrow);
+                        }
+                    }
+                    if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {
+                        _ench.handleSpectralArrow(lvl, spectralArrow);
+                    }
+                } else {
+                    if (ench instanceof IProjectileEnchantment.FireworkRocket _ench && projectile instanceof FireworkRocketEntity fireworkRocket) {
+                        _ench.handleFireworkRocket(lvl, fireworkRocket);
+                    }
                 }
             },
             weapon

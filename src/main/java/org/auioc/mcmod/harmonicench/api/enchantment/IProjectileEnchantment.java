@@ -31,4 +31,10 @@ public class IProjectileEnchantment {
 
     }
 
+    public static interface FireworkRocket {
+
+        void handleFireworkRocket(int lvl, net.minecraft.world.entity.projectile.FireworkRocketEntity fireworkRocket);
+
+    }
+
 }
