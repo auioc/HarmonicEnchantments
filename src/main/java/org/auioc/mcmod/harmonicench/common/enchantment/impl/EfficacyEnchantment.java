@@ -3,12 +3,16 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.api.game.entity.ITippedArrow;
 import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinMobEffectInstance;
+import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +21,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow {
+public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
     public EfficacyEnchantment() {
         super(
@@ -93,6 +97,18 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
 
     private static int addDurationBonus(int lvl, int duration) {
         return (int) (duration * (1 + ((lvl + 1.0D) * 0.1D)));
+    }
+
+    @Override
+    public void handleFireworkRocket(int lvl, FireworkRocketEntity fireworkRocket) {}
+
+    @Override
+    public float onFireworkRocketExplode(int lvl, LivingEntity target, FireworkRocketEntity projectile, LivingEntity owner, float amount) {
+        double ynn = MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i);
+        int luckAmplifier = ((int) ynn) - 1;
+        int luckDuration = ((int) (((10.0D + ((double) lvl)) / 10.0D) * 37.5D)) * 20;
+        owner.addEffect(new MobEffectInstance(MobEffects.LUCK, luckDuration, luckAmplifier));
+        return amount * (1.0F + ((float) ynn));
     }
 
 }
