@@ -1,6 +1,5 @@
 package org.auioc.mcmod.harmonicench.mixin.common;
 
-import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,8 +33,8 @@ public class MixinBowItem {
         CallbackInfo ci,
         Player player, boolean flag, ItemStack itemstack, int i, float f, boolean flag1, ArrowItem arrowitem, AbstractArrow abstractarrow, int j, int k
     ) {
-        EnchantmentHelper.copyItemEnchantmentsToEntity(p_40667_, abstractarrow, (ench, lvl) -> ench instanceof IProjectileEnchantment.HurtLiving);
-        EnchantmentHelper.handleArrow(p_40667_, abstractarrow);
+        EnchantmentHelper.copyItemEnchantmentsToEntity(p_40667_, abstractarrow);
+        EnchantmentHelper.handleProjectile(p_40667_, abstractarrow);
     }
 
 }

@@ -1,4 +1,5 @@
 {
     "harmonicench.living_entity": "coremods/living_entity.js",
+    "harmonicench.cross_bow_item.js": "coremods/cross_bow_item.js",
     "harmonicench.apply_bonus_count": "coremods/apply_bonus_count.js"
 }
