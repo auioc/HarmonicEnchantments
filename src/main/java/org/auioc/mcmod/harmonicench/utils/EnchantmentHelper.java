@@ -118,6 +118,22 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return amount.floatValue();
     }
 
+    public static float onFireworkRocketExplode(LivingEntity target, FireworkRocketEntity fireworkRocket, LivingEntity owner, float originalAmount) {
+        var enchMap = ((IEnchantmentAttachableObject) fireworkRocket).getEnchantments();
+        if (enchMap == null) return originalAmount;
+
+        var amount = new MutableFloat(originalAmount);
+        EnchUtils.runIteration(
+            (ench, lvl) -> {
+                if (ench instanceof IProjectileEnchantment.FireworkRocket _ench) {
+                    amount.setValue(_ench.onFireworkRocketExplode(lvl, target, fireworkRocket, owner, amount.floatValue()));
+                }
+            },
+            enchMap
+        );
+        return amount.floatValue();
+    }
+
     public static void handleProjectile(ItemStack weapon, Projectile projectile) {
         EnchUtils.runIterationOnItem(
             (ench, lvl) -> {

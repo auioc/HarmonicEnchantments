@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import org.auioc.mcmod.arnicalib.api.game.entity.ITippedArrow;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
 
@@ -33,7 +34,9 @@ public class IProjectileEnchantment {
 
     public static interface FireworkRocket {
 
-        void handleFireworkRocket(int lvl, net.minecraft.world.entity.projectile.FireworkRocketEntity fireworkRocket);
+        void handleFireworkRocket(int lvl, FireworkRocketEntity fireworkRocket);
+
+        float onFireworkRocketExplode(int lvl, LivingEntity target, FireworkRocketEntity projectile, LivingEntity owner, float amount);
 
     }
 

@@ -6,7 +6,9 @@ import org.auioc.mcmod.arnicalib.common.event.impl.LivingEatEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -34,16 +36,16 @@ public class HECommonEventHandler {
         var target = event.getEntityLiving();
         float amount = event.getAmount();
 
-        if (source.isProjectile()) {
-            if (
-                source.getDirectEntity() instanceof Projectile projectile
-                    && source.getEntity() instanceof LivingEntity owner
-            ) {
+        if (source instanceof IndirectEntityDamageSource indirectSource && indirectSource.getEntity() instanceof LivingEntity owner) {
+            if (indirectSource.isProjectile() && indirectSource.getDirectEntity() instanceof Projectile projectile) {
                 event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), amount));
             }
-        } else {
-            event.setAmount(EnchantmentHelper.onLivingHurt(target, source, amount));
+            if (indirectSource.isExplosion() && indirectSource.getDirectEntity() instanceof FireworkRocketEntity fireworkRocket) {
+                event.setAmount(EnchantmentHelper.onFireworkRocketExplode(target, fireworkRocket, owner, amount));
+            }
         }
+        event.setAmount(EnchantmentHelper.onLivingHurt(target, source, amount));
+
     }
 
     @SubscribeEvent
