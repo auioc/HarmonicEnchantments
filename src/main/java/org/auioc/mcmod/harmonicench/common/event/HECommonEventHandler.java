@@ -34,18 +34,18 @@ public class HECommonEventHandler {
     public static void onLivingHurt(final LivingHurtEvent event) {
         var source = event.getSource();
         var target = event.getEntityLiving();
-        float amount = event.getAmount();
 
         if (source instanceof IndirectEntityDamageSource indirectSource && indirectSource.getEntity() instanceof LivingEntity owner) {
             if (indirectSource.isProjectile() && indirectSource.getDirectEntity() instanceof Projectile projectile) {
-                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), amount));
+                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), event.getAmount()));
             }
             if (indirectSource.isExplosion() && indirectSource.getDirectEntity() instanceof FireworkRocketEntity fireworkRocket) {
-                event.setAmount(EnchantmentHelper.onFireworkRocketExplode(target, fireworkRocket, owner, amount));
+                event.setAmount(EnchantmentHelper.onFireworkRocketExplode(target, fireworkRocket, owner, event.getAmount()));
             }
         }
-        event.setAmount(EnchantmentHelper.onLivingHurt(target, source, amount));
-
+        event.setAmount(EnchantmentHelper.onLivingHurt(target, source, event.getAmount()));
+        System.err.println(event.getAmount());
+        return;
     }
 
     @SubscribeEvent
