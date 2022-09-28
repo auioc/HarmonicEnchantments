@@ -2,7 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
-import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;

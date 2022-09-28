@@ -3,7 +3,7 @@ package org.auioc.mcmod.harmonicench.api.enchantment;
 import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Nullable;
-import org.auioc.mcmod.arnicalib.api.game.enchantment.IValidSlotsVisibleEnchantment;
+import org.auioc.mcmod.arnicalib.game.enchantment.IValidSlotsVisibleEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

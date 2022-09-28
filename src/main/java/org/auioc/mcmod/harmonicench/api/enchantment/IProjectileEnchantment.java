@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
-import org.auioc.mcmod.arnicalib.api.game.entity.ITippedArrow;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;

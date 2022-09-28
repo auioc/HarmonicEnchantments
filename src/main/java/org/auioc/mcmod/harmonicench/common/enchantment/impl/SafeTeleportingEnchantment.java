@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

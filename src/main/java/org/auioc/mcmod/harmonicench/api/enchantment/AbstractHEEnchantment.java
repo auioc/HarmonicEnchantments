@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import java.util.function.Predicate;
-import org.auioc.mcmod.arnicalib.api.game.enchantment.IValidSlotsVisibleEnchantment;
+import org.auioc.mcmod.arnicalib.game.enchantment.IValidSlotsVisibleEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;

@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Random;
-import org.auioc.mcmod.arnicalib.utils.game.TextUtils;
-import org.auioc.mcmod.arnicalib.utils.java.RandomUtils;
+import org.auioc.mcmod.arnicalib.base.random.RandomUtils;
+import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;

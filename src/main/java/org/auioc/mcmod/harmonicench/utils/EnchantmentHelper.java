@@ -15,10 +15,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.auioc.mcmod.arnicalib.api.game.enchantment.IEnchantmentAttachableObject;
-import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinArrow;
-import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
-import org.auioc.mcmod.arnicalib.utils.game.EnchUtils;
+import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator;
+import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
+import org.auioc.mcmod.arnicalib.game.entity.MobStance;
+import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinArrow;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
@@ -63,7 +63,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static Optional<List<Map<Attribute, AttributeModifier>>> getAttributeModifiers(ItemStack itemStack, EquipmentSlot slotType) {
         if (NOT_ITEM.test(itemStack)) return Optional.empty();
         var modifiers = new ArrayList<Map<Attribute, AttributeModifier>>();
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IAttributeModifierEnchantment _ench) {
                     _ench.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent((m) -> modifiers.add(m));
@@ -77,7 +77,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static boolean canPerformAction(ItemStack itemStack, ToolAction toolAction) {
         if (NOT_ITEM.test(itemStack)) return true;
         var bool = new MutableBoolean(true);
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IToolActionControllerEnchantment _ench) {
                     bool.setValue(bool.booleanValue() & _ench.canPerformAction(toolAction));
@@ -107,7 +107,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         if (enchMap == null) return originalAmount;
 
         var amount = new MutableFloat(originalAmount);
-        EnchUtils.runIteration(
+        EnchantmentIterator.run(
             (ench, lvl) -> {
                 if (ench instanceof IProjectileEnchantment.HurtLiving _ench) {
                     amount.setValue(_ench.onHurtLiving(lvl, target, projectile, owner, shootingPosition, amount.floatValue()));
@@ -123,7 +123,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         if (enchMap == null) return originalAmount;
 
         var amount = new MutableFloat(originalAmount);
-        EnchUtils.runIteration(
+        EnchantmentIterator.run(
             (ench, lvl) -> {
                 if (ench instanceof IProjectileEnchantment.FireworkRocket _ench) {
                     amount.setValue(_ench.onFireworkRocketExplode(lvl, target, fireworkRocket, owner, amount.floatValue()));
@@ -135,7 +135,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static void handleProjectile(ItemStack weapon, Projectile projectile) {
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (projectile instanceof AbstractArrow abstractArrow) {
                     if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
@@ -162,7 +162,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static void onLivingDeath(LivingEntity target, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
-            EnchUtils.runIterationOnLiving(
+            EnchantmentIterator.runOnLiving(
                 (slot, itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Death _ench) {
                         _ench.onLivingDeath(lvl, target, source);
@@ -175,7 +175,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static float onLivingHurt(LivingEntity target, DamageSource source, float originalAmount) {
         var amount = new MutableFloat(originalAmount);
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof ILivingEnchantment.Hurt _ench) {
                     amount.setValue(_ench.onLivingHurt(lvl, false, slot, target, source, amount.floatValue()));
@@ -184,7 +184,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
             target
         );
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
-            EnchUtils.runIterationOnLiving(
+            EnchantmentIterator.runOnLiving(
                 (slot, itemStack, ench, lvl) -> {
                     if (ench instanceof ILivingEnchantment.Hurt _ench) {
                         amount.setValue(_ench.onLivingHurt(lvl, true, slot, target, source, amount.floatValue()));
@@ -199,7 +199,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
         if (NOT_ITEM.test(itemStack)) return originalDamage;
         var damage = new MutableInt(originalDamage);
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.Hurt _ench) {
                     damage.setValue(_ench.onItemHurt(lvl, itemStack, damage.intValue(), random, player));
@@ -212,7 +212,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static int getDamageProtectionWithItem(Iterable<ItemStack> items, DamageSource source) {
         MutableInt protection = new MutableInt();
-        EnchUtils.runIterationOnItems(
+        EnchantmentIterator.runOnItems(
             (itemStack, ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.Protection _ench) {
                     protection.add(_ench.getDamageProtection(lvl, itemStack, source));
@@ -225,7 +225,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static void onSelectedItemTick(ItemStack itemStack, Player player, Level level) {
         if (IS_ITEM.test(itemStack)) {
-            EnchUtils.runIterationOnItem(
+            EnchantmentIterator.runOnItem(
                 (ench, lvl) -> {
                     if (ench instanceof IItemEnchantment.Tick.Selected _ench) {
                         _ench.onSelectedTick(lvl, itemStack, player, level);
@@ -238,7 +238,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, Level level, int originalSpeedBonus, int originalLuckBonus) {
         var bonus = new MutablePair<Integer, Integer>(originalSpeedBonus, originalLuckBonus);
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.FishingRod _ench) {
                     var r = _ench.preFishingRodCast(lvl, fishingRod, player, level, bonus.getLeft(), bonus.getRight());
@@ -253,7 +253,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static Pair<Integer, Float> onPlayerEat(ServerPlayer player, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
         var foodValues = new MutablePair<Integer, Float>(originalNutrition, originalSaturationModifier);
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof IPlayerEnchantment.Eat _ench) {
                     var r = _ench.onPlayerEat(lvl, itemStack, slot, player, foodItemStack, foodValues.getLeft(), foodValues.getRight());
@@ -266,9 +266,9 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return foodValues;
     }
 
-    public static PiglinStanceEvent.Stance onPiglinChooseStance(LivingEntity target, PiglinStanceEvent.Stance originalStance) {
-        var stance = new MutableObject<PiglinStanceEvent.Stance>(originalStance);
-        EnchUtils.runIterationOnLiving(
+    public static MobStance onPiglinChooseStance(LivingEntity target, MobStance originalStance) {
+        var stance = new MutableObject<MobStance>(originalStance);
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof ILivingEnchantment.PiglinStance _ench) {
                     stance.setValue(_ench.onPiglinChooseStance(lvl, slot, target, stance.getValue()));
@@ -280,7 +280,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static void onPotionAdded(LivingEntity target, @Nullable Entity source, MobEffectInstance newEffect, @Nullable MobEffectInstance oldEffect) {
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof ILivingEnchantment.Potion _ench) {
                     _ench.onPotionAdded(lvl, slot, source, newEffect, oldEffect);
@@ -292,7 +292,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static double onSetCatMorningGiftChance(Cat cat, Player ownerPlayer, double originalChance) {
         var chance = new MutableDouble(originalChance);
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof ILivingEnchantment.Cat _ench) {
                     chance.setValue(_ench.onSetCatMorningGiftChance(lvl, slot, cat, ownerPlayer, chance.doubleValue()));
@@ -305,7 +305,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int originalEnchantmentLevel) {
         var enchantmentLevel = new MutableInt(originalEnchantmentLevel);
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof ILootBonusEnchantment.ApplyBonusCountFunction _ench) {
                     enchantmentLevel.setValue(_ench.onApplyLootEnchantmentBonusCount(lvl, lootContext, itemStack, enchantment, enchantmentLevel.intValue()));
@@ -317,7 +317,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static void onPlayerServerTick(ServerPlayer player) {
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof IPlayerEnchantment.Tick.Server _ench) {
                     _ench.onPlayerServerTick(lvl, itemStack, slot, player);
@@ -329,7 +329,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static boolean canElytraFly(ItemStack itemStack, LivingEntity living) {
         var bool = new MutableBoolean(true);
-        EnchUtils.runIterationOnItem(
+        EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.Elytra _ench) {
                     bool.setValue(bool.booleanValue() & _ench.canElytraFly(lvl, itemStack, living));
@@ -342,7 +342,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static float getBreakSpeed(Player player, BlockState blockState, BlockPos blockPos, float originalSpeed) {
         var speed = new MutableFloat(originalSpeed);
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof IBlockEnchantment.BreakSpeed _ench) {
                     speed.setValue(_ench.getBreakSpeed(lvl, itemStack, player, blockState, blockPos, speed.floatValue()));
@@ -354,7 +354,7 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     public static void onBlockBreak(Player player, BlockState blockState, BlockPos blockPos) {
-        EnchUtils.runIterationOnLiving(
+        EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
                 if (ench instanceof IBlockEnchantment.Break _ench) {
                     _ench.onBlockBreak(lvl, itemStack, player, blockState, blockPos);

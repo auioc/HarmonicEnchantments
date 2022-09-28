@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.world.damagesource.DamageSource;

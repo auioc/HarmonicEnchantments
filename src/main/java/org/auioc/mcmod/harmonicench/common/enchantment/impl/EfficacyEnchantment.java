@@ -1,9 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.HashSet;
-import org.auioc.mcmod.arnicalib.api.game.entity.ITippedArrow;
-import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinMobEffectInstance;
-import org.auioc.mcmod.arnicalib.utils.java.MathUtil;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
+import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;

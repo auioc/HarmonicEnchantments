@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
-import org.auioc.mcmod.arnicalib.utils.game.EffectUtils;
+import org.auioc.mcmod.arnicalib.game.effect.EffectUtils;
+import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,8 +39,8 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     }
 
     @Override
-    public PiglinStanceEvent.Stance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, PiglinStanceEvent.Stance stance) {
-        return PiglinStanceEvent.Stance.NEUTRAL;
+    public MobStance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance) {
+        return MobStance.NEUTRAL;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
-import org.auioc.mcmod.arnicalib.api.mixin.common.IMixinProjectile;
-import org.auioc.mcmod.arnicalib.common.event.impl.ItemInventoryTickEvent;
-import org.auioc.mcmod.arnicalib.common.event.impl.LivingEatEvent;
+import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinProjectile;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.auioc.mcmod.hulsealib.game.event.common.ItemInventoryTickEvent;
+import org.auioc.mcmod.hulsealib.game.event.common.LivingEatEvent;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
@@ -44,7 +44,6 @@ public class HECommonEventHandler {
             }
         }
         event.setAmount(EnchantmentHelper.onLivingHurt(target, source, event.getAmount()));
-        System.err.println(event.getAmount());
         return;
     }
 

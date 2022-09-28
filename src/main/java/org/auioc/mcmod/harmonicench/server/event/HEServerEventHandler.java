@@ -1,13 +1,13 @@
 package org.auioc.mcmod.harmonicench.server.event;
 
-import org.auioc.mcmod.arnicalib.server.event.impl.CatMorningGiftChanceEvent;
-import org.auioc.mcmod.arnicalib.server.event.impl.FishingRodCastEvent;
-import org.auioc.mcmod.arnicalib.server.event.impl.ItemHurtEvent;
-import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
 import org.auioc.mcmod.harmonicench.server.event.impl.ApplyLootEnchantmentBonusCountEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftChanceEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.FishingRodCastEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.ItemHurtEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.PiglinStanceEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;

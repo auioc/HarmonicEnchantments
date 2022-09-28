@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import javax.annotation.Nullable;
-import org.auioc.mcmod.arnicalib.server.event.impl.PiglinStanceEvent;
+import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +25,7 @@ public class ILivingEnchantment {
 
     public static interface PiglinStance {
 
-        PiglinStanceEvent.Stance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, PiglinStanceEvent.Stance stance);
+        MobStance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance);
 
     }
 
