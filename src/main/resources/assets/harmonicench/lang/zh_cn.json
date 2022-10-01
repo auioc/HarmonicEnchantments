@@ -43,5 +43,7 @@
     "enchantment.harmonicench.forging.desc": "根据物品在铁砧上的操作次数（重命名除外），增加护甲值和盔甲韧性。",
     "enchantment.harmonicench.sun_affinity.desc": "鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。",
 
-    "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛"
+    "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛",
+
+    "effect.harmonicench.weightlessness": "失重"
 }
