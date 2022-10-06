@@ -13,6 +13,7 @@ on:
 jobs:
     build:
         name: Build
+        if: "!startsWith(github.event.head_commit.message, 'release')"
         runs-on: ubuntu-latest
 
         steps:
@@ -25,16 +26,10 @@ jobs:
                   distribution: 'temurin'
                   architecture: x64
 
-            - name: Set up Gradle
+            - name: Build with Gradle
               run: |
                   chmod +x ./gradlew
-                  rm -rf tmp
-                  mkdir tmp
-
-            - name: Build with Gradle
-              env:
-                  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-              run: ./gradlew clean build outputProjectFullname
+                  ./gradlew build outputProjectFullname
 
             - name: Read project full name
               run: echo "PROJECT_FULL_NAME=`cat ./tmp/fullname.txt`" >> $GITHUB_ENV
