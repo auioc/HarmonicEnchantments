@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -77,6 +78,11 @@ public class HECommonEventHandler {
     public static void onPlayerGetBreakSpeed(final PlayerEvent.BreakSpeed event) {
         float r = EnchantmentHelper.getBreakSpeed(event.getPlayer(), event.getState(), event.getPos(), event.getOriginalSpeed());
         event.setNewSpeed(r);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
+        EnchantmentHelper.onPlayerTick(event.player, event.phase, event.side);
     }
 
 }

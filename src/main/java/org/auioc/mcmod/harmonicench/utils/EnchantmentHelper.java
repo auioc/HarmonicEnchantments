@@ -52,6 +52,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ToolAction;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
 
@@ -316,11 +318,11 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         return enchantmentLevel.intValue();
     }
 
-    public static void onPlayerServerTick(ServerPlayer player) {
+    public static void onPlayerTick(Player player, TickEvent.Phase phase, LogicalSide side) {
         EnchantmentIterator.runOnLiving(
             (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof IPlayerEnchantment.Tick.Server _ench) {
-                    _ench.onPlayerServerTick(lvl, itemStack, slot, player);
+                if (ench instanceof IPlayerEnchantment.Tick _ench) {
+                    _ench.onPlayerTick(lvl, itemStack, slot, player, phase, side);
                 }
             },
             player

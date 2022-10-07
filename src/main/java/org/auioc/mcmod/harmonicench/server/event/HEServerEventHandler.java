@@ -8,15 +8,12 @@ import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftChanceEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.FishingRodCastEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.ItemHurtEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.PiglinStanceEvent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.PotionEvent.PotionAddedEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 
 public final class HEServerEventHandler {
 
@@ -73,13 +70,6 @@ public final class HEServerEventHandler {
     public static void onApplyLootEnchantmentBonusCount(final ApplyLootEnchantmentBonusCountEvent event) {
         var r = EnchantmentHelper.onApplyLootEnchantmentBonusCount(event.getLootContext(), event.getItemStack(), event.getEnchantment(), event.getEnchantmentLevel());
         event.setEnchantmentLevel(r);
-    }
-
-    @SubscribeEvent
-    public static void onPlayerServerTick(final TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
-            EnchantmentHelper.onPlayerServerTick((ServerPlayer) event.player);
-        }
     }
 
     @SubscribeEvent
