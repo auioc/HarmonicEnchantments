@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -32,9 +31,7 @@ public class IItemEnchantment {
 
     public static interface FishingRod {
 
-        Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, Level level, int speedBonus, int luckBonus);
-
-        void postFishingRodCast(int lvl, ItemStack fishingRod, FishingHook fishingHook, ServerPlayer player, Level level);
+        Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus);
 
     }
 

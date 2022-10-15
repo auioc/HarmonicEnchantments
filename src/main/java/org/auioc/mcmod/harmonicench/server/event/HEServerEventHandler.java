@@ -5,9 +5,11 @@ import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEncha
 import org.auioc.mcmod.harmonicench.server.event.impl.ApplyLootEnchantmentBonusCountEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftChanceEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.FishingRodCastEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.ItemHurtEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.PiglinStanceEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.PreBowReleaseEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.PreCrossbowReleaseEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.PreFishingRodCastEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
@@ -43,10 +45,22 @@ public final class HEServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPreFishingRodCast(final FishingRodCastEvent.Pre event) {
-        var r = EnchantmentHelper.preFishingRodCast(event.getFishingRod(), event.getPlayer(), event.getLevel(), event.getSpeedBonus(), event.getLuckBonus());
+    public static void preFishingRodCast(final PreFishingRodCastEvent event) {
+        var r = EnchantmentHelper.preFishingRodCast(event.getFishingRod(), event.getPlayer(), event.getSpeedBonus(), event.getLuckBonus());
         event.setSpeedBonus(r.getLeft());
         event.setLuckBonus(r.getRight());
+    }
+
+    @SubscribeEvent
+    public static void preBowRelease(final PreBowReleaseEvent event) {
+        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getBow(), event.getArrow());
+        EnchantmentHelper.handleProjectile(event.getBow(), event.getArrow());
+    }
+
+    @SubscribeEvent
+    public static void preCrossbowRelease(final PreCrossbowReleaseEvent event) {
+        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getBow(), event.getProjectile());
+        EnchantmentHelper.handleProjectile(event.getBow(), event.getProjectile());
     }
 
     @SubscribeEvent

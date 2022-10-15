@@ -1,6 +1,5 @@
 {
     "harmonicench.living_entity.magic_absorb": "coremods/living_entity.magic_absorb.js",
     "harmonicench.living_entity.travel": "coremods/living_entity.travel.js",
-    "harmonicench.cross_bow_item": "coremods/cross_bow_item.js",
     "harmonicench.apply_bonus_count": "coremods/apply_bonus_count.js"
 }

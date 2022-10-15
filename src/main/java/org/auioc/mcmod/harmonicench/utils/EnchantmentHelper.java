@@ -238,12 +238,12 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
         }
     }
 
-    public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, Level level, int originalSpeedBonus, int originalLuckBonus) {
+    public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, int originalSpeedBonus, int originalLuckBonus) {
         var bonus = new MutablePair<Integer, Integer>(originalSpeedBonus, originalLuckBonus);
         EnchantmentIterator.runOnItem(
             (ench, lvl) -> {
                 if (ench instanceof IItemEnchantment.FishingRod _ench) {
-                    var r = _ench.preFishingRodCast(lvl, fishingRod, player, level, bonus.getLeft(), bonus.getRight());
+                    var r = _ench.preFishingRodCast(lvl, fishingRod, player, bonus.getLeft(), bonus.getRight());
                     bonus.setLeft(r.getLeft());
                     bonus.setRight(r.getRight());
                 }

@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.mobeffect.impl;
 
-import org.auioc.mcmod.arnicalib.game.effect.EffectUtils;
+import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
 import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,7 +14,7 @@ public class WeightlessnessMobEffect extends MobEffect {
     }
 
     public static Vec3 adjustFallFlySpeed(LivingEntity living, Vec3 vec3) {
-        int lvl = Math.min(EffectUtils.getEffectLevel(living, HEMobEffects.WEIGHTLESSNESS.get()), 100);
+        int lvl = Math.min(MobEffectUtils.getLevel(living, HEMobEffects.WEIGHTLESSNESS.get()), 100);
         if (lvl > 0) {
             double vY = vec3.y + Math.abs(vec3.y) * lvl * 0.01D;
             return new Vec3(vec3.x, vY, vec3.z);

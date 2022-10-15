@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.game.effect.EffectUtils;
+import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
@@ -51,12 +51,12 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     @Override
     public void onPotionAdded(int lvl, EquipmentSlot slot, Entity source, MobEffectInstance newEffect, MobEffectInstance oldEffect) {
         if (newEffect.getEffect() == MobEffects.BAD_OMEN) {
-            EffectUtils.setDuration(newEffect, 0);
+            MobEffectUtils.setDuration(newEffect, 0);
         } else if (source != null) {
             if (source.getType() == EntityType.AXOLOTL && newEffect.getEffect() == MobEffects.REGENERATION) {
-                EffectUtils.setAmplifier(newEffect, 1);
+                MobEffectUtils.setAmplifier(newEffect, 1);
             } else if (source.getType() == EntityType.DOLPHIN && newEffect.getEffect() == MobEffects.DOLPHINS_GRACE) {
-                EffectUtils.setDuration(newEffect, 10 * 20);
+                MobEffectUtils.setDuration(newEffect, 10 * 20);
             }
         }
     }

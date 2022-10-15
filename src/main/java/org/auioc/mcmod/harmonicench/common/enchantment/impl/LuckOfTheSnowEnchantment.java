@@ -5,12 +5,10 @@ import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
 
 public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements IItemEnchantment.FishingRod {
 
@@ -35,8 +33,8 @@ public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements I
     }
 
     @Override
-    public Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, Level level, int speedBonus, int luckBonus) {
-        float temperature = level.getBiome(player.blockPosition()).value().getBaseTemperature();
+    public Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus) {
+        float temperature = player.level.getBiome(player.blockPosition()).value().getBaseTemperature();
         if (temperature <= 0.0F) {
             luckBonus += lvl * 2;
         } else if (temperature <= 0.2F) {
@@ -44,8 +42,5 @@ public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements I
         }
         return Pair.of(speedBonus, luckBonus);
     }
-
-    @Override
-    public void postFishingRodCast(int lvl, ItemStack fishingRod, FishingHook fishingHook, ServerPlayer player, Level level) {}
 
 }
