@@ -15,7 +15,7 @@ public class WeightlessnessMobEffect extends MobEffect {
 
     public static Vec3 adjustFallFlySpeed(LivingEntity living, Vec3 vec3) {
         int lvl = Math.min(MobEffectUtils.getLevel(living, HEMobEffects.WEIGHTLESSNESS.get()), 100);
-        if (lvl > 0) {
+        if (lvl > 0 && vec3.y < 0.0D) {
             double vY = vec3.y + Math.abs(vec3.y) * lvl * 0.01D;
             return new Vec3(vec3.x, vY, vec3.z);
         }
