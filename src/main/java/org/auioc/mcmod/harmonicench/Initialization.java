@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench;
 
+import org.auioc.mcmod.harmonicench.common.config.HECommonConfig;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.event.HECommonEventHandler;
 import org.auioc.mcmod.harmonicench.common.itemgroup.HECreativeModeTabs;
@@ -9,6 +10,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @SuppressWarnings("unused")
@@ -26,9 +29,9 @@ public final class Initialization {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSideOnlySetup::forgeSetup);
 
         final CommonSetup CommonSetup = new CommonSetup(modEventBus, forgeEventBus);
-        CommonSetup.registerConfig();
         CommonSetup.modSetup();
         CommonSetup.forgeSetup();
+        CommonSetup.registerConfig();
     }
 
 
@@ -42,7 +45,9 @@ public final class Initialization {
             this.forgeEventBus = forgeEventBus;
         }
 
-        public void registerConfig() {}
+        public void registerConfig() {
+            ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HECommonConfig.CONFIG);
+        }
 
         private void modSetup() {
             HEEnchantments.ENCHANTMENTS.register(modEventBus);

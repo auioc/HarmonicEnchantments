@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break {
+public class ProficiencyEnchantment extends HEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break {
 
     public ProficiencyEnchantment() {
         super(

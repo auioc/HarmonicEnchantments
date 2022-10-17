@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
  * @see org.auioc.mcmod.harmonicench.server.event.HEServerEventHandler#onEnderPearlTeleport
  * @see org.auioc.mcmod.harmonicench.server.event.HEServerEventHandler#onEntityTravelToDimension
  */
-public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
+public class SafeTeleportingEnchantment extends HEEnchantment {
 
     public SafeTeleportingEnchantment() {
         super(
