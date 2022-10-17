@@ -36,7 +36,7 @@ function initializeCoreMod() {
                     toInject.add(
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'org/auioc/mcmod/harmonicench/utils/EnchantmentHelper',
+                            'org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer',
                             'getDamageProtectionWithItem',
                             '(Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I',
                             false
@@ -122,7 +122,7 @@ function initializeCoreMod() {
             return 0.0F;
         } else {
             int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), p_21193_);
-+           k += int org.auioc.mcmod.harmonicench.utils.EnchantmentHelper.getDamageProtectionWithItem(this.getArmorSlots(), p_21193_);
++           k += int org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer.getDamageProtectionWithItem(this.getArmorSlots(), p_21193_);
             if (k > 0) {
                 p_21194_ = CombatRules.getDamageAfterMagicAbsorb(p_21194_, (float)k);
             }
@@ -144,7 +144,7 @@ function initializeCoreMod() {
 +       ALOAD 0
 +       INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.getArmorSlots ()Ljava/lang/Iterable;
 +       ALOAD 1
-+       INVOKESTATIC org/auioc/mcmod/harmonicench/utils/EnchantmentHelper.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
++       INVOKESTATIC org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
 +       IADD
 +       ISTORE 3
     L17

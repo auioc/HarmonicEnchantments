@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.mixin.common;
 
-import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +16,7 @@ public class MixinElytraItem {
      */
     @Overwrite(remap = false)
     public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
-        return EnchantmentHelper.canElytraFly(stack, entity) && ElytraItem.isFlyEnabled(stack);
+        return EnchantmentPerformer.canElytraFly(stack, entity) && ElytraItem.isFlyEnabled(stack);
     }
 
 }

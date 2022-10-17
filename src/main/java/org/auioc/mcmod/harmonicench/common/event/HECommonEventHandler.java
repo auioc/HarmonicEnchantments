@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
 import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinProjectile;
-import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
 import org.auioc.mcmod.hulsealib.game.event.common.ItemInventoryTickEvent;
 import org.auioc.mcmod.hulsealib.game.event.common.LivingEatEvent;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
@@ -21,7 +21,7 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onGetItemAttributeModifier(final ItemAttributeModifierEvent event) {
-        EnchantmentHelper.getAttributeModifiers(event.getItemStack(), event.getSlotType())
+        EnchantmentPerformer.getAttributeModifiers(event.getItemStack(), event.getSlotType())
             .ifPresent((modifierList) -> {
                 modifierList.forEach((modifiers) -> {
                     modifiers.forEach((attribute, modifier) -> {
@@ -38,30 +38,30 @@ public class HECommonEventHandler {
 
         if (source instanceof IndirectEntityDamageSource indirectSource && indirectSource.getEntity() instanceof LivingEntity owner) {
             if (indirectSource.isProjectile() && indirectSource.getDirectEntity() instanceof Projectile projectile) {
-                event.setAmount(EnchantmentHelper.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), event.getAmount()));
+                event.setAmount(EnchantmentPerformer.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), event.getAmount()));
             }
             if (indirectSource.isExplosion() && indirectSource.getDirectEntity() instanceof FireworkRocketEntity fireworkRocket) {
-                event.setAmount(EnchantmentHelper.onFireworkRocketExplode(target, fireworkRocket, owner, event.getAmount()));
+                event.setAmount(EnchantmentPerformer.onFireworkRocketExplode(target, fireworkRocket, owner, event.getAmount()));
             }
         }
-        event.setAmount(EnchantmentHelper.onLivingHurt(target, source, event.getAmount()));
+        event.setAmount(EnchantmentPerformer.onLivingHurt(target, source, event.getAmount()));
         return;
     }
 
     @SubscribeEvent
     public static void onLivingDeath(final LivingDeathEvent event) {
-        EnchantmentHelper.onLivingDeath(event.getEntityLiving(), event.getSource());
+        EnchantmentPerformer.onLivingDeath(event.getEntityLiving(), event.getSource());
     }
 
     @SubscribeEvent
     public static void onSelectedItemTick(final ItemInventoryTickEvent.Selected event) {
-        EnchantmentHelper.onSelectedItemTick(event.getItemStack(), event.getPlayer(), event.getLevel());
+        EnchantmentPerformer.onSelectedItemTick(event.getItemStack(), event.getPlayer(), event.getLevel());
     }
 
     @SubscribeEvent
     public static void onLivingEat(final LivingEatEvent event) {
         if (event.getEntityLiving() instanceof ServerPlayer player) {
-            var r = EnchantmentHelper.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
+            var r = EnchantmentPerformer.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
             int nutrition = r.getLeft();
             float saturationModifier = r.getRight();
             if (nutrition == 0) {
@@ -76,13 +76,13 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerGetBreakSpeed(final PlayerEvent.BreakSpeed event) {
-        float r = EnchantmentHelper.getBreakSpeed(event.getPlayer(), event.getState(), event.getPos(), event.getOriginalSpeed());
+        float r = EnchantmentPerformer.getBreakSpeed(event.getPlayer(), event.getState(), event.getPos(), event.getOriginalSpeed());
         event.setNewSpeed(r);
     }
 
     @SubscribeEvent
     public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
-        EnchantmentHelper.onPlayerTick(event.player, event.phase, event.side);
+        EnchantmentPerformer.onPlayerTick(event.player, event.phase, event.side);
     }
 
 }

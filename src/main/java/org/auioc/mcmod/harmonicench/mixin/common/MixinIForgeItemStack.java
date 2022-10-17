@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.mixin.common;
 
-import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,7 @@ public interface MixinIForgeItemStack {
      */
     @Overwrite
     default boolean canPerformAction(ToolAction toolAction) {
-        if (!EnchantmentHelper.canPerformAction(self(), toolAction)) {
+        if (!EnchantmentPerformer.canPerformAction(self(), toolAction)) {
             return false;
         }
         return self().getItem().canPerformAction(self(), toolAction);
