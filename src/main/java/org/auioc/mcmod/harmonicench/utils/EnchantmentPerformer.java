@@ -21,9 +21,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinArrow;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IConfigurableEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
@@ -59,16 +59,16 @@ import net.minecraftforge.fml.LogicalSide;
 
 public class EnchantmentPerformer {
 
-    public static boolean isFunctional(Enchantment ench) {
-        if (ench instanceof AbstractHEEnchantment hench) {
-            return hench.isFunctional();
+    public static boolean isEnabled(Enchantment ench) {
+        if (ench instanceof IConfigurableEnchantment hench) {
+            return hench.isEnabled();
         }
         return true;
     }
 
     public static <T> boolean perform(Enchantment ench, Class<T> clazz, Consumer<T> action) {
         if (clazz.isInstance(ench)) {
-            if (isFunctional(ench)) {
+            if (isEnabled(ench)) {
                 action.accept(clazz.cast(ench));
                 return true;
             }
@@ -137,17 +137,17 @@ public class EnchantmentPerformer {
             (ench, lvl) -> {
                 if (projectile instanceof AbstractArrow abstractArrow) {
                     perform(ench, IProjectileEnchantment.AbstractArrow.class, (e) -> e.handleAbstractArrow(lvl, abstractArrow));
-                    if (ench instanceof IProjectileEnchantment.TippedArrow _ench && isFunctional(ench) && abstractArrow instanceof Arrow arrow) {
+                    if (ench instanceof IProjectileEnchantment.TippedArrow _ench && isEnabled(ench) && abstractArrow instanceof Arrow arrow) {
                         var potionArrow = (IMixinArrow) arrow;
                         if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
                             _ench.handleTippedArrow(lvl, arrow, potionArrow);
                         }
                     }
-                    if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && isFunctional(ench) && abstractArrow instanceof SpectralArrow spectralArrow) {
+                    if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && isEnabled(ench) && abstractArrow instanceof SpectralArrow spectralArrow) {
                         _ench.handleSpectralArrow(lvl, spectralArrow);
                     }
                 } else {
-                    if (ench instanceof IProjectileEnchantment.FireworkRocket _ench && isFunctional(ench) && projectile instanceof FireworkRocketEntity fireworkRocket) {
+                    if (ench instanceof IProjectileEnchantment.FireworkRocket _ench && isEnabled(ench) && projectile instanceof FireworkRocketEntity fireworkRocket) {
                         _ench.handleFireworkRocket(lvl, fireworkRocket);
                     }
                 }
