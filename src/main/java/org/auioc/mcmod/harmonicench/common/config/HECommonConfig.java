@@ -12,17 +12,19 @@ public class HECommonConfig {
     public static final ForgeConfigSpec CONFIG;
 
     public static final HashMap<ResourceLocation, BooleanValue> ACQUIRABILITY = new HashMap<>();
+    public static final HashMap<ResourceLocation, BooleanValue> FUNCTIONALITY = new HashMap<>();
 
     static {
         final ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
 
+        var ids = HEEnchantments.ENCHANTMENTS.getEntries().stream().map(RegistryObject::getId).toList();
+
         b.push("acquirability");
-        HEEnchantments.ENCHANTMENTS.getEntries()
-            .stream()
-            .map(RegistryObject::getId)
-            .forEach((e) -> {
-                ACQUIRABILITY.put(e, b.define(e.toString().replace(":", "."), true));
-            });
+        ids.forEach((e) -> ACQUIRABILITY.put(e, b.define(e.getPath(), true)));
+        b.pop();
+
+        b.push("functionality");
+        ids.forEach((e) -> FUNCTIONALITY.put(e, b.define(e.getPath(), true)));
         b.pop();
 
         CONFIG = b.build();

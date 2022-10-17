@@ -37,4 +37,9 @@ public class HEEnchantment extends AbstractHEEnchantment {
         return HECommonConfig.ACQUIRABILITY;
     }
 
+    @Override
+    protected HashMap<ResourceLocation, BooleanValue> getFunctionalityMap() {
+        return HECommonConfig.FUNCTIONALITY;
+    }
+
 }

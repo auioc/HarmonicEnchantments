@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableDouble;
@@ -17,10 +18,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator;
 import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinArrow;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
@@ -58,15 +59,31 @@ import net.minecraftforge.fml.LogicalSide;
 
 public class EnchantmentPerformer {
 
+    public static boolean isFunctional(Enchantment ench) {
+        if (ench instanceof AbstractHEEnchantment hench) {
+            return hench.isFunctional();
+        }
+        return true;
+    }
+
+    public static <T> boolean perform(Enchantment ench, Class<T> clazz, Consumer<T> action) {
+        if (clazz.isInstance(ench)) {
+            if (isFunctional(ench)) {
+                action.accept(clazz.cast(ench));
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Optional<List<Map<Attribute, AttributeModifier>>> getAttributeModifiers(ItemStack itemStack, EquipmentSlot slotType) {
         if (EnchantmentHelper.NOT_ITEM.test(itemStack)) return Optional.empty();
         var modifiers = new ArrayList<Map<Attribute, AttributeModifier>>();
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IAttributeModifierEnchantment _ench) {
-                    _ench.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent((m) -> modifiers.add(m));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, IAttributeModifierEnchantment.class,
+                (e) -> e.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent((m) -> modifiers.add(m))
+            ),
             itemStack
         );
         return Optional.of(modifiers);
@@ -76,11 +93,10 @@ public class EnchantmentPerformer {
         if (EnchantmentHelper.NOT_ITEM.test(itemStack)) return true;
         var bool = new MutableBoolean(true);
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IToolActionControllerEnchantment _ench) {
-                    bool.setValue(bool.booleanValue() & _ench.canPerformAction(toolAction));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, IToolActionControllerEnchantment.class,
+                (e) -> bool.setValue(bool.booleanValue() & e.canPerformAction(toolAction))
+            ),
             itemStack
         );
         return bool.booleanValue();
@@ -92,11 +108,10 @@ public class EnchantmentPerformer {
 
         var amount = new MutableFloat(originalAmount);
         run(
-            (ench, lvl) -> {
-                if (ench instanceof IProjectileEnchantment.HurtLiving _ench) {
-                    amount.setValue(_ench.onHurtLiving(lvl, target, projectile, owner, shootingPosition, amount.floatValue()));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, IProjectileEnchantment.HurtLiving.class,
+                (e) -> amount.setValue(e.onHurtLiving(lvl, target, projectile, owner, shootingPosition, amount.floatValue()))
+            ),
             enchMap
         );
         return amount.floatValue();
@@ -107,12 +122,11 @@ public class EnchantmentPerformer {
         if (enchMap == null) return originalAmount;
 
         var amount = new MutableFloat(originalAmount);
-        EnchantmentIterator.run(
-            (ench, lvl) -> {
-                if (ench instanceof IProjectileEnchantment.FireworkRocket _ench) {
-                    amount.setValue(_ench.onFireworkRocketExplode(lvl, target, fireworkRocket, owner, amount.floatValue()));
-                }
-            },
+        run(
+            (ench, lvl) -> perform(
+                ench, IProjectileEnchantment.FireworkRocket.class,
+                (e) -> amount.setValue(e.onFireworkRocketExplode(lvl, target, fireworkRocket, owner, amount.floatValue()))
+            ),
             enchMap
         );
         return amount.floatValue();
@@ -122,20 +136,18 @@ public class EnchantmentPerformer {
         runOnItem(
             (ench, lvl) -> {
                 if (projectile instanceof AbstractArrow abstractArrow) {
-                    if (ench instanceof IProjectileEnchantment.AbstractArrow _ench) {
-                        _ench.handleAbstractArrow(lvl, abstractArrow);
-                    }
-                    if (ench instanceof IProjectileEnchantment.TippedArrow _ench && abstractArrow instanceof Arrow arrow) {
+                    perform(ench, IProjectileEnchantment.AbstractArrow.class, (e) -> e.handleAbstractArrow(lvl, abstractArrow));
+                    if (ench instanceof IProjectileEnchantment.TippedArrow _ench && isFunctional(ench) && abstractArrow instanceof Arrow arrow) {
                         var potionArrow = (IMixinArrow) arrow;
                         if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
                             _ench.handleTippedArrow(lvl, arrow, potionArrow);
                         }
                     }
-                    if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && abstractArrow instanceof SpectralArrow spectralArrow) {
+                    if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && isFunctional(ench) && abstractArrow instanceof SpectralArrow spectralArrow) {
                         _ench.handleSpectralArrow(lvl, spectralArrow);
                     }
                 } else {
-                    if (ench instanceof IProjectileEnchantment.FireworkRocket _ench && projectile instanceof FireworkRocketEntity fireworkRocket) {
+                    if (ench instanceof IProjectileEnchantment.FireworkRocket _ench && isFunctional(ench) && projectile instanceof FireworkRocketEntity fireworkRocket) {
                         _ench.handleFireworkRocket(lvl, fireworkRocket);
                     }
                 }
@@ -147,20 +159,18 @@ public class EnchantmentPerformer {
     public static float onLivingHurt(LivingEntity target, DamageSource source, float originalAmount) {
         var amount = new MutableFloat(originalAmount);
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof ILivingEnchantment.Hurt _ench) {
-                    amount.setValue(_ench.onLivingHurt(lvl, false, slot, target, source, amount.floatValue()));
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, ILivingEnchantment.Hurt.class,
+                (e) -> amount.setValue(e.onLivingHurt(lvl, false, slot, target, source, amount.floatValue()))
+            ),
             target
         );
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             runOnLiving(
-                (slot, itemStack, ench, lvl) -> {
-                    if (ench instanceof ILivingEnchantment.Hurt _ench) {
-                        amount.setValue(_ench.onLivingHurt(lvl, true, slot, target, source, amount.floatValue()));
-                    }
-                },
+                (slot, itemStack, ench, lvl) -> perform(
+                    ench, ILivingEnchantment.Hurt.class,
+                    (e) -> amount.setValue(e.onLivingHurt(lvl, true, slot, target, source, amount.floatValue()))
+                ),
                 sourceLiving
             );
         }
@@ -171,11 +181,10 @@ public class EnchantmentPerformer {
         if (EnchantmentHelper.NOT_ITEM.test(itemStack)) return originalDamage;
         var damage = new MutableInt(originalDamage);
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IItemEnchantment.Hurt _ench) {
-                    damage.setValue(_ench.onItemHurt(lvl, itemStack, damage.intValue(), random, player));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, IItemEnchantment.Hurt.class,
+                (e) -> damage.setValue(e.onItemHurt(lvl, itemStack, damage.intValue(), random, player))
+            ),
             itemStack
         );
         return damage.intValue();
@@ -184,11 +193,10 @@ public class EnchantmentPerformer {
     public static int getDamageProtectionWithItem(Iterable<ItemStack> items, DamageSource source) {
         MutableInt protection = new MutableInt();
         runOnItems(
-            (itemStack, ench, lvl) -> {
-                if (ench instanceof IItemEnchantment.Protection _ench) {
-                    protection.add(_ench.getDamageProtection(lvl, itemStack, source));
-                }
-            },
+            (itemStack, ench, lvl) -> perform(
+                ench, IItemEnchantment.Protection.class,
+                (e) -> protection.add(e.getDamageProtection(lvl, itemStack, source))
+            ),
             items, EnchantmentHelper.NOT_BOOK
         );
         return protection.intValue();
@@ -197,11 +205,10 @@ public class EnchantmentPerformer {
     public static void onSelectedItemTick(ItemStack itemStack, Player player, Level level) {
         if (EnchantmentHelper.IS_ITEM.test(itemStack)) {
             runOnItem(
-                (ench, lvl) -> {
-                    if (ench instanceof IItemEnchantment.Tick.Selected _ench) {
-                        _ench.onSelectedTick(lvl, itemStack, player, level);
-                    }
-                },
+                (ench, lvl) -> perform(
+                    ench, IItemEnchantment.Tick.Selected.class,
+                    (e) -> e.onSelectedTick(lvl, itemStack, player, level)
+                ),
                 itemStack
             );
         }
@@ -210,13 +217,14 @@ public class EnchantmentPerformer {
     public static Pair<Integer, Integer> preFishingRodCast(ItemStack fishingRod, ServerPlayer player, int originalSpeedBonus, int originalLuckBonus) {
         var bonus = new MutablePair<Integer, Integer>(originalSpeedBonus, originalLuckBonus);
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IItemEnchantment.FishingRod _ench) {
-                    var r = _ench.preFishingRodCast(lvl, fishingRod, player, bonus.getLeft(), bonus.getRight());
+            (ench, lvl) -> perform(
+                ench, IItemEnchantment.FishingRod.class,
+                (e) -> {
+                    var r = e.preFishingRodCast(lvl, fishingRod, player, bonus.getLeft(), bonus.getRight());
                     bonus.setLeft(r.getLeft());
                     bonus.setRight(r.getRight());
                 }
-            },
+            ),
             fishingRod
         );
         return bonus;
@@ -225,13 +233,14 @@ public class EnchantmentPerformer {
     public static Pair<Integer, Float> onPlayerEat(ServerPlayer player, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
         var foodValues = new MutablePair<Integer, Float>(originalNutrition, originalSaturationModifier);
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof IPlayerEnchantment.Eat _ench) {
-                    var r = _ench.onPlayerEat(lvl, itemStack, slot, player, foodItemStack, foodValues.getLeft(), foodValues.getRight());
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IPlayerEnchantment.Eat.class,
+                (e) -> {
+                    var r = e.onPlayerEat(lvl, itemStack, slot, player, foodItemStack, foodValues.getLeft(), foodValues.getRight());
                     foodValues.setLeft(r.getLeft());
                     foodValues.setRight(r.getRight());
                 }
-            },
+            ),
             player
         );
         return foodValues;
@@ -240,11 +249,10 @@ public class EnchantmentPerformer {
     public static MobStance onPiglinChooseStance(LivingEntity target, MobStance originalStance) {
         var stance = new MutableObject<MobStance>(originalStance);
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof ILivingEnchantment.PiglinStance _ench) {
-                    stance.setValue(_ench.onPiglinChooseStance(lvl, slot, target, stance.getValue()));
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, ILivingEnchantment.PiglinStance.class,
+                (e) -> stance.setValue(e.onPiglinChooseStance(lvl, slot, target, stance.getValue()))
+            ),
             target
         );
         return stance.getValue();
@@ -252,11 +260,10 @@ public class EnchantmentPerformer {
 
     public static void onPotionAdded(LivingEntity target, @Nullable Entity source, MobEffectInstance newEffect, @Nullable MobEffectInstance oldEffect) {
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof ILivingEnchantment.Potion _ench) {
-                    _ench.onPotionAdded(lvl, slot, source, newEffect, oldEffect);
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, ILivingEnchantment.Potion.class,
+                (e) -> e.onPotionAdded(lvl, slot, source, newEffect, oldEffect)
+            ),
             target
         );
     }
@@ -264,11 +271,10 @@ public class EnchantmentPerformer {
     public static double onSetCatMorningGiftChance(Cat cat, Player ownerPlayer, double originalChance) {
         var chance = new MutableDouble(originalChance);
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof ILivingEnchantment.Cat _ench) {
-                    chance.setValue(_ench.onSetCatMorningGiftChance(lvl, slot, cat, ownerPlayer, chance.doubleValue()));
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, ILivingEnchantment.Cat.class,
+                (e) -> chance.setValue(e.onSetCatMorningGiftChance(lvl, slot, cat, ownerPlayer, chance.doubleValue()))
+            ),
             ownerPlayer
         );
         return chance.doubleValue();
@@ -277,11 +283,10 @@ public class EnchantmentPerformer {
     public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int originalEnchantmentLevel) {
         var enchantmentLevel = new MutableInt(originalEnchantmentLevel);
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof ILootBonusEnchantment.ApplyBonusCountFunction _ench) {
-                    enchantmentLevel.setValue(_ench.onApplyLootEnchantmentBonusCount(lvl, lootContext, itemStack, enchantment, enchantmentLevel.intValue()));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, ILootBonusEnchantment.ApplyBonusCountFunction.class,
+                (e) -> enchantmentLevel.setValue(e.onApplyLootEnchantmentBonusCount(lvl, lootContext, itemStack, enchantment, enchantmentLevel.intValue()))
+            ),
             itemStack
         );
         return enchantmentLevel.intValue();
@@ -289,11 +294,10 @@ public class EnchantmentPerformer {
 
     public static void onPlayerTick(Player player, TickEvent.Phase phase, LogicalSide side) {
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof IPlayerEnchantment.Tick _ench) {
-                    _ench.onPlayerTick(lvl, itemStack, slot, player, phase, side);
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IPlayerEnchantment.Tick.class,
+                (e) -> e.onPlayerTick(lvl, itemStack, slot, player, phase, side)
+            ),
             player
         );
     }
@@ -301,11 +305,10 @@ public class EnchantmentPerformer {
     public static boolean canElytraFly(ItemStack itemStack, LivingEntity living) {
         var bool = new MutableBoolean(true);
         runOnItem(
-            (ench, lvl) -> {
-                if (ench instanceof IItemEnchantment.Elytra _ench) {
-                    bool.setValue(bool.booleanValue() & _ench.canElytraFly(lvl, itemStack, living));
-                }
-            },
+            (ench, lvl) -> perform(
+                ench, IItemEnchantment.Elytra.class,
+                (e) -> bool.setValue(bool.booleanValue() & e.canElytraFly(lvl, itemStack, living))
+            ),
             itemStack
         );
         return bool.booleanValue();
@@ -314,11 +317,10 @@ public class EnchantmentPerformer {
     public static float getBreakSpeed(Player player, BlockState blockState, BlockPos blockPos, float originalSpeed) {
         var speed = new MutableFloat(originalSpeed);
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof IBlockEnchantment.BreakSpeed _ench) {
-                    speed.setValue(_ench.getBreakSpeed(lvl, itemStack, player, blockState, blockPos, speed.floatValue()));
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IBlockEnchantment.BreakSpeed.class,
+                (e) -> speed.setValue(e.getBreakSpeed(lvl, itemStack, player, blockState, blockPos, speed.floatValue()))
+            ),
             player
         );
         return speed.floatValue();
@@ -326,11 +328,10 @@ public class EnchantmentPerformer {
 
     public static void onBlockBreak(Player player, BlockState blockState, BlockPos blockPos) {
         runOnLiving(
-            (slot, itemStack, ench, lvl) -> {
-                if (ench instanceof IBlockEnchantment.Break _ench) {
-                    _ench.onBlockBreak(lvl, itemStack, player, blockState, blockPos);
-                }
-            },
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IBlockEnchantment.Break.class,
+                (e) -> e.onBlockBreak(lvl, itemStack, player, blockState, blockPos)
+            ),
             player
         );
     }
@@ -338,11 +339,10 @@ public class EnchantmentPerformer {
     public static void onLivingDeath(LivingEntity target, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity sourceLiving) {
             runOnLiving(
-                (slot, itemStack, ench, lvl) -> {
-                    if (ench instanceof ILivingEnchantment.Death _ench) {
-                        _ench.onLivingDeath(lvl, target, source);
-                    }
-                },
+                (slot, itemStack, ench, lvl) -> perform(
+                    ench, ILivingEnchantment.Death.class,
+                    (e) -> e.onLivingDeath(lvl, target, source)
+                ),
                 sourceLiving
             );
         }

@@ -17,6 +17,8 @@ public abstract class AbstractHEEnchantment extends Enchantment implements IVali
     protected final Predicate<Enchantment> compatibility;
     @Nullable
     protected BooleanValue acquirability;
+    @Nullable
+    protected BooleanValue functionality;
 
     public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel, Predicate<Enchantment> compatibility) {
         super(rarity, category, validSlots);
@@ -69,14 +71,22 @@ public abstract class AbstractHEEnchantment extends Enchantment implements IVali
 
     protected abstract HashMap<ResourceLocation, BooleanValue> getAcquirabilityMap();
 
+    protected abstract HashMap<ResourceLocation, BooleanValue> getFunctionalityMap();
+
     public boolean isAcquirable() {
         if (this.acquirability == null) {
             this.acquirability = getAcquirabilityMap().get(getRegistryName());
-            if (this.acquirability == null) {
-                return true;
-            }
+            if (this.acquirability == null) return true;
         }
         return this.acquirability.get();
+    }
+
+    public boolean isFunctional() {
+        if (this.functionality == null) {
+            this.functionality = getFunctionalityMap().get(getRegistryName());
+            if (this.functionality == null) return true;
+        }
+        return this.functionality.get();
     }
 
 }
