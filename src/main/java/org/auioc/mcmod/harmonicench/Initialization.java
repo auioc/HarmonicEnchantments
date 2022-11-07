@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench;
 
+import org.auioc.mcmod.harmonicench.client.event.HEClientEventHandler;
 import org.auioc.mcmod.harmonicench.common.config.HECommonConfig;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.event.HECommonEventHandler;
@@ -77,7 +78,9 @@ public final class Initialization {
 
         public void modSetup() {}
 
-        public void forgeSetup() {}
+        public void forgeSetup() {
+            forgeEventBus.register(HEClientEventHandler.class);
+        }
 
     }
 
