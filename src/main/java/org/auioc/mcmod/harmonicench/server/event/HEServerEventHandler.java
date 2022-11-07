@@ -22,7 +22,7 @@ public final class HEServerEventHandler {
 
     @SubscribeEvent
     public static void onItemHurt(final ItemHurtEvent event) {
-        var player = event.getPlayer();
+        var player = event.getServerPlayer();
         if (player == null) return;
 
         event.setDamage(EnchantmentPerformer.onItemHurt(event.getItemStack(), event.getDamage(), event.getRandom(), player));
@@ -47,7 +47,7 @@ public final class HEServerEventHandler {
 
     @SubscribeEvent
     public static void preFishingRodCast(final PreFishingRodCastEvent event) {
-        var r = EnchantmentPerformer.preFishingRodCast(event.getFishingRod(), event.getPlayer(), event.getSpeedBonus(), event.getLuckBonus());
+        var r = EnchantmentPerformer.preFishingRodCast(event.getFishingRod(), event.getServerPlayer(), event.getSpeedBonus(), event.getLuckBonus());
         event.setSpeedBonus(r.getLeft());
         event.setLuckBonus(r.getRight());
     }
