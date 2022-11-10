@@ -43,6 +43,8 @@
     "enchantment.harmonicench.forging.desc": "Improve armor and armor toughness based on the operation times of the item on anvil (excluding rename).",
     "enchantment.harmonicench.sun_affinity.desc": "Become lighter when flying with an elytra, only in a sunny daylight.",
 
+    "enchantment.harmonicench.proficiency.proficiency": "(Proficiency: %s)",
+
     "death.attack.curseOfRebelling": "%1$s was betrayed by %2$s",
 
     "effect.harmonicench.weightlessness": "Weightlessness"

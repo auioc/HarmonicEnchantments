@@ -1,12 +1,19 @@
 package org.auioc.mcmod.harmonicench.utils;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import org.auioc.mcmod.arnicalib.base.collection.ListUtils;
 import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EnchantmentHelper extends net.minecraft.world.item.enchantment.EnchantmentHelper {
 
@@ -26,6 +33,12 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
 
     public static void copyItemEnchantmentsToEntity(ItemStack itemStack, Entity entity) {
         copyItemEnchantmentsToEntity(itemStack, entity, (ench, lvl) -> true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static Optional<TranslatableComponent> getEnchantmentTooltip(List<Component> tooltip, String key) {
+        int i = ListUtils.indexOf(tooltip, (l) -> (l instanceof TranslatableComponent c) ? (c.getKey().equals(key) ? true : false) : false);
+        return (i >= 0) ? Optional.of((TranslatableComponent) tooltip.get(i)) : Optional.empty();
     }
 
 }
