@@ -38,12 +38,12 @@ public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnc
 
     @Override
     public int getMinCost(int lvl) {
-        return 12 + (lvl - 1) * 20;
+        return 1 + (lvl - 1) * 10;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 25;
+        return this.getMinCost(lvl) + 15;
     }
 
     @Override
