@@ -346,7 +346,7 @@ public class EnchantmentPerformer {
             runOnLiving(
                 (slot, itemStack, ench, lvl) -> perform(
                     ench, ILivingEnchantment.Death.class,
-                    (e) -> e.onLivingDeath(lvl, target, source)
+                    (e) -> e.onLivingDeath(lvl, itemStack, target, source)
                 ),
                 sourceLiving
             );

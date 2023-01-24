@@ -41,7 +41,7 @@ public class SiphoningEnchantment extends HEEnchantment implements ILivingEnchan
     }
 
     @Override
-    public void onLivingDeath(int lvl, LivingEntity target, DamageSource source) {
+    public void onLivingDeath(int lvl, ItemStack itemStack, LivingEntity target, DamageSource source) {
         if (!(source.getEntity() instanceof Player)) return;
         var player = (Player) source.getEntity();
 

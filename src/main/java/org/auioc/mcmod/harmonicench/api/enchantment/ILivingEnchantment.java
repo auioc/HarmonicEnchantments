@@ -8,12 +8,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class ILivingEnchantment {
 
     public static interface Death {
 
-        void onLivingDeath(int lvl, LivingEntity target, DamageSource source);
+        void onLivingDeath(int lvl, ItemStack itemStack, LivingEntity target, DamageSource source);
 
     }
 
