@@ -18,7 +18,7 @@ public class IPlayerEnchantment {
 
     public static interface Tick {
 
-        void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, TickEvent.Phase phase, LogicalSide side);
+        void onPlayerTick(int lvl, ItemStack itemStack, Player player, TickEvent.Phase phase, LogicalSide side);
 
     }
 
