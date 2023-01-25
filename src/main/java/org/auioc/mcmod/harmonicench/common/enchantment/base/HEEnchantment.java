@@ -28,4 +28,8 @@ public class HEEnchantment extends AbstractHEEnchantment {
         super(rarity, category, validSlot, maxLevel, (o) -> true);
     }
 
+    public HEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel) {
+        super(rarity, category, validSlots, maxLevel, (o) -> true);
+    }
+
 }

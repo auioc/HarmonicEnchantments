@@ -22,6 +22,7 @@
     "enchantment.harmonicench.deep_study": "Deep Study",
     "enchantment.harmonicench.forging": "Forging",
     "enchantment.harmonicench.sun_affinity": "Sun affinity",
+    "enchantment.harmonicench.curse_of_sacrificing": "Curse of Sacrificing",
 
     "enchantment.harmonicench.rapier.desc": "Increase your attack speed, but sweeping attack is no longer available.",
     "enchantment.harmonicench.handiness.desc": "Increase user's speed temporarily when shooting a target.",
@@ -44,6 +45,7 @@
     "enchantment.harmonicench.sun_affinity.desc": "Become lighter when flying with an elytra, only in a sunny daylight.",
 
     "enchantment.harmonicench.proficiency.proficiency": "(Proficiency: %s)",
+    "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s thirsty for sacrifice, then vanished after sucking the life out of %2$s",
 
     "death.attack.curseOfRebelling": "%1$s was betrayed by %2$s",
 

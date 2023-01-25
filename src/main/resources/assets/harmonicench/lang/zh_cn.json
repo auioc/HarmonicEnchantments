@@ -22,6 +22,7 @@
     "enchantment.harmonicench.deep_study": "深层研究",
     "enchantment.harmonicench.forging": "锻打",
     "enchantment.harmonicench.sun_affinity": "领航",
+    "enchantment.harmonicench.curse_of_sacrificing": "献祭诅咒",
 
     "enchantment.harmonicench.rapier.desc": "增加攻击速度，但无法再使出横扫攻击。",
     "enchantment.harmonicench.handiness.desc": "射出的箭命中实体后会短暂提高使用者移动速度。",
@@ -44,6 +45,7 @@
     "enchantment.harmonicench.sun_affinity.desc": "鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。",
 
     "enchantment.harmonicench.proficiency.proficiency": "（熟练度：%s）",
+    "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s渴求祭品，在抽取了%2$s的生命之后消失了",
 
     "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛",
 

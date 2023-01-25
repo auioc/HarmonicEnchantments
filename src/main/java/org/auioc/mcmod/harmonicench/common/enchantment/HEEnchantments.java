@@ -35,5 +35,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> FORGING = register("forging", ForgingEnchantment::new);
     public static final RegistryObject<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::new);
     public static final RegistryObject<Enchantment> SUN_AFFINITY = register("sun_affinity", SunAffinityEnchantment::new);
+    public static final RegistryObject<Enchantment> CURSE_OF_SACRIFICING = register("curse_of_sacrificing", CurseOfSacrificingEnchantment::new);
 
 }
