@@ -24,6 +24,7 @@
     "enchantment.harmonicench.sun_affinity": "Sun affinity",
     "enchantment.harmonicench.curse_of_sacrificing": "Curse of Sacrificing",
     "enchantment.harmonicench.long": "Long",
+    "enchantment.harmonicench.aim": "Aim",
 
     "enchantment.harmonicench.rapier.desc": "Increase your attack speed, but sweeping attack is no longer available.",
     "enchantment.harmonicench.handiness.desc": "Increase user's speed temporarily when shooting a target.",
@@ -47,6 +48,7 @@
 
     "enchantment.harmonicench.proficiency.proficiency": "(Proficiency: %s)",
     "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s thirsty for sacrifice, then vanished after sucking the life out of %2$s",
+    "enchantment.harmonicench.aim.looking_at": "Found monster %1$s, %3$s m from player %2$s",
 
     "death.attack.curseOfRebelling": "%1$s was betrayed by %2$s",
 
