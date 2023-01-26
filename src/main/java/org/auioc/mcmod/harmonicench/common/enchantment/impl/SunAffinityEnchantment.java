@@ -53,7 +53,7 @@ public class SunAffinityEnchantment extends HEEnchantment implements IItemEnchan
     }
 
     @Override
-    public void onPlayerTick(int lvl, ItemStack itemStack, Player player, Phase phase, LogicalSide side) {
+    public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, Phase phase, LogicalSide side) {
         if (phase == Phase.END && side == LogicalSide.SERVER) {
             if (player.isFallFlying()) {
                 player.addEffect(new MobEffectInstance(HEMobEffects.WEIGHTLESSNESS.get(), 5, (Math.min(lvl, this.getMaxLevel()) * 20) - 1, false, true, false));

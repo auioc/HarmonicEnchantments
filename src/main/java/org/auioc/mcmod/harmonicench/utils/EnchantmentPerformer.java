@@ -298,16 +298,13 @@ public class EnchantmentPerformer {
     }
 
     public static void onPlayerTick(Player player, TickEvent.Phase phase, LogicalSide side) {
-        var inventory = player.getInventory();
-        for (var items : List.of(inventory.items, inventory.armor, inventory.offhand)) {
-            runOnItems(
-                (itemStack, ench, lvl) -> perform(
-                    ench, IPlayerEnchantment.Tick.class,
-                    (e) -> e.onPlayerTick(lvl, itemStack, player, phase, side)
-                ),
-                items
-            );
-        }
+        runOnLiving(
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IPlayerEnchantment.Tick.class,
+                (e) -> e.onPlayerTick(lvl, itemStack, slot, player, phase, side)
+            ),
+            player
+        );
     }
 
     public static boolean canElytraFly(ItemStack itemStack, LivingEntity living) {
