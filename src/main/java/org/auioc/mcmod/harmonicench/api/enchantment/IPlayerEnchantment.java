@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +20,12 @@ public class IPlayerEnchantment {
     public static interface Tick {
 
         void onPlayerTick(int lvl, ItemStack itemStack, Player player, TickEvent.Phase phase, LogicalSide side);
+
+    }
+
+    public static interface CriticalHit {
+
+        float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier);
 
     }
 

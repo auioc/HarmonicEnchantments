@@ -356,6 +356,18 @@ public class EnchantmentPerformer {
         }
     }
 
+    public static float onCriticalHit(Player player, Entity target, float originalDamageModifier) {
+        var damageModifier = new MutableFloat(originalDamageModifier);
+        runOnLiving(
+            (slot, itemStack, ench, lvl) -> perform(
+                ench, IPlayerEnchantment.CriticalHit.class,
+                (e) -> damageModifier.setValue(e.onCriticalHit(lvl, itemStack, player, target, damageModifier.floatValue()))
+            ),
+            player
+        );
+        return damageModifier.floatValue();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static void onItemTooltip(@Nonnull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
         runOnItem((ench, lvl) -> perform(ench, IItemEnchantment.Tooltip.class, (e) -> e.onItemTooltip(lvl, itemStack, player, lines, flags)), itemStack);

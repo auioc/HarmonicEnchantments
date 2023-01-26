@@ -14,6 +14,7 @@ import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -23,11 +24,15 @@ public class HECommonEventHandler {
     public static void onGetItemAttributeModifier(final ItemAttributeModifierEvent event) {
         EnchantmentPerformer.getAttributeModifiers(event.getItemStack(), event.getSlotType())
             .ifPresent((modifierList) -> {
-                modifierList.forEach((modifiers) -> {
-                    modifiers.forEach((attribute, modifier) -> {
-                        event.addModifier(attribute, modifier);
-                    });
-                });
+                modifierList.forEach(
+                    (modifiers) -> {
+                        modifiers.forEach(
+                            (attribute, modifier) -> {
+                                event.addModifier(attribute, modifier);
+                            }
+                        );
+                    }
+                );
             });
     }
 
@@ -83,6 +88,11 @@ public class HECommonEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(final TickEvent.PlayerTickEvent event) {
         EnchantmentPerformer.onPlayerTick(event.player, event.phase, event.side);
+    }
+
+    @SubscribeEvent
+    public static void onCriticalHit(final CriticalHitEvent event) {
+        event.setDamageModifier(EnchantmentPerformer.onCriticalHit(event.getPlayer(), event.getTarget(), event.getDamageModifier()));
     }
 
 }
