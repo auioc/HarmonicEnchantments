@@ -18,7 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-public class ElectrificationEnchantment extends HEEnchantment implements IItemEnchantment.Tick.Selected, ILivingEnchantment.Hurt {
+public class ElectrificationEnchantment extends HEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {
         super(
@@ -41,7 +41,8 @@ public class ElectrificationEnchantment extends HEEnchantment implements IItemEn
     }
 
     @Override
-    public void onSelectedTick(int lvl, ItemStack itemStack, Player player, Level level) {
+    public void onInventoryTick(int lvl, ItemStack itemStack, Player player, Level level, int index, boolean selected) {
+        if (!selected) return;
         if (level.isClientSide) return;
 
         if (player.tickCount % 20 != 0) return;

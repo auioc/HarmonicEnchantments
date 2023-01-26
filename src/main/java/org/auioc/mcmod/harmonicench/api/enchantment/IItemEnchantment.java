@@ -44,9 +44,9 @@ public class IItemEnchantment {
 
     public static class Tick {
 
-        public static interface Selected {
+        public static interface Inventory {
 
-            void onSelectedTick(int lvl, ItemStack itemStack, Player player, Level level);
+            void onInventoryTick(int lvl, ItemStack itemStack, Player player, Level level, int index, boolean selected);
 
         }
 

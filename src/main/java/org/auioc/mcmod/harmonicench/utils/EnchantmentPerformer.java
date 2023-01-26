@@ -21,7 +21,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
-import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinArrow;
+import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IConfigurableEnchantment;
@@ -143,9 +143,10 @@ public class EnchantmentPerformer {
                 if (projectile instanceof AbstractArrow abstractArrow) {
                     perform(ench, IProjectileEnchantment.AbstractArrow.class, (e) -> e.handleAbstractArrow(lvl, abstractArrow));
                     if (ench instanceof IProjectileEnchantment.TippedArrow _ench && isEnabled(ench) && abstractArrow instanceof Arrow arrow) {
-                        var potionArrow = (IMixinArrow) arrow;
+                        var potionArrow = (MixinAccessorArrow) arrow;
                         if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
                             _ench.handleTippedArrow(lvl, arrow, potionArrow);
+                            // TODO fix-arnicalib MixinAccessorArrow impl ITippedArrow
                         }
                     }
                     if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && isEnabled(ench) && abstractArrow instanceof SpectralArrow spectralArrow) {
@@ -207,12 +208,12 @@ public class EnchantmentPerformer {
         return protection.intValue();
     }
 
-    public static void onSelectedItemTick(ItemStack itemStack, Player player, Level level) {
+    public static void onItemInventoryTick(ItemStack itemStack, Player player, Level level, int index, boolean selected) {
         if (EnchantmentHelper.IS_ITEM.test(itemStack)) {
             runOnItem(
                 (ench, lvl) -> perform(
-                    ench, IItemEnchantment.Tick.Selected.class,
-                    (e) -> e.onSelectedTick(lvl, itemStack, player, level)
+                    ench, IItemEnchantment.Tick.Inventory.class,
+                    (e) -> e.onInventoryTick(lvl, itemStack, player, level, index, selected)
                 ),
                 itemStack
             );

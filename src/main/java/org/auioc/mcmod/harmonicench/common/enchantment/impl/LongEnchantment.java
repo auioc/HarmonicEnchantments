@@ -46,7 +46,6 @@ public class LongEnchantment extends HEEnchantment implements IAttributeModifier
             new AttributeModifier(
                 REACH_DISTANCE_UUID, this.descriptionId,
                 MathUtil.sigma(lvl, 1, (double i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION
-                // TODO arnicalib sigma double n,m
             )
         );
     }

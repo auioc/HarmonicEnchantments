@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
@@ -12,25 +13,19 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class BluntEnchantment extends HEEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
-
-    private static final EnchantmentCategory AXE = EnchantmentCategory.create(
-        "AXE", (item) -> (item instanceof AxeItem) ? true : false
-    );
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("F839F42C-4B26-6F66-7025-1EF3294EED97");
 
     public BluntEnchantment() {
         super(
             Enchantment.Rarity.UNCOMMON,
-            AXE,
+            HEnchantmentCategory.AXE,
             EquipmentSlot.MAINHAND,
             5,
             (o) -> o != Enchantments.SHARPNESS

@@ -1,6 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.world.phys.RayTraceUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
@@ -15,22 +16,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SpyglassItem;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
 public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick {
 
-    private static final EnchantmentCategory SPYGLASS = EnchantmentCategory.create(
-        "SPYGLASS", (item) -> (item instanceof SpyglassItem) ? true : false
-    );
-
     public AimEnchantment() {
         super(
             Enchantment.Rarity.RARE,
-            SPYGLASS,
+            HEnchantmentCategory.SPYGLASS,
             new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND},
             2
         );
@@ -64,7 +59,7 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
     }
 
     @Override
-    public void onPlayerTick(int lvl, ItemStack itemStack, Player player, Phase phase, LogicalSide side) {
+    public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, Phase phase, LogicalSide side) {
         if (phase == Phase.END && side == LogicalSide.SERVER && player.tickCount % 33 == 0 && player.isScoping()) {
             var hit = RayTraceUtils.getEntityHitResult(player, 100.0D);
             if (hit != null) {

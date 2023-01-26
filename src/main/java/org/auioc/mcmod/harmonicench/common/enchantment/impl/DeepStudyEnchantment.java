@@ -1,12 +1,11 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.material.MaterialColor;
@@ -15,12 +14,10 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class DeepStudyEnchantment extends HEEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
 
-    private static final EnchantmentCategory PICKAXE = EnchantmentCategory.create("PICKAXE", (item) -> item instanceof PickaxeItem);
-
     public DeepStudyEnchantment() {
         super(
             Enchantment.Rarity.RARE,
-            PICKAXE,
+            HEnchantmentCategory.PICKAXE,
             EquipmentSlot.MAINHAND,
             3,
             (o) -> o != Enchantments.BLOCK_FORTUNE

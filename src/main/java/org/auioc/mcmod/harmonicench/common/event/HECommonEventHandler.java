@@ -59,8 +59,8 @@ public class HECommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onSelectedItemTick(final ItemInventoryTickEvent.Selected event) {
-        EnchantmentPerformer.onSelectedItemTick(event.getItemStack(), event.getPlayer(), event.getLevel());
+    public static void onItemInventoryTick(final ItemInventoryTickEvent event) {
+        EnchantmentPerformer.onItemInventoryTick(event.getItemStack(), event.getPlayer(), event.getLevel(), event.getIndex(), event.isSelected());
     }
 
     @SubscribeEvent

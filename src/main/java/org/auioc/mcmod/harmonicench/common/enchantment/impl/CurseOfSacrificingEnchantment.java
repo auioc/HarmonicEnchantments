@@ -3,14 +3,12 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.mutable.MutableInt;
+import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentTagUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.StringUtil;
@@ -24,12 +22,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.fml.LogicalSide;
 
-public class CurseOfSacrificingEnchantment extends HEEnchantment implements IPlayerEnchantment.Tick, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
+public class CurseOfSacrificingEnchantment extends HEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
 
     private static final String NBT_TIME = "SacrificingProcess";
     private static final int MAX_TIME = 20 * 60;
@@ -60,15 +57,13 @@ public class CurseOfSacrificingEnchantment extends HEEnchantment implements IPla
     public boolean isCurse() { return true; }
 
     @Override
-    public void onPlayerTick(int lvl, ItemStack itemStack, Player player, Phase phase, LogicalSide side) {
-        if (phase == Phase.END && player.tickCount % 5 == 0 && !player.getAbilities().instabuild && !player.isSpectator()) {
+    public void onInventoryTick(int lvl, ItemStack itemStack, Player player, Level level, int index, boolean selected) {
+        if (player.tickCount % 5 == 0 && !player.getAbilities().instabuild && !player.isSpectator()) {
             var nbt = itemStack.getOrCreateTag();
             int time = nbt.getInt(NBT_TIME);
-            if (time >= MAX_TIME && side == LogicalSide.SERVER) {
+            if (time >= MAX_TIME && !level.isClientSide) {
                 var enchTag = itemStack.getEnchantmentTags();
-                var lvlTotal = new MutableInt(0);
-                enchTag.forEach((ench) -> lvlTotal.add(((CompoundTag) ench).getInt("lvl"))); // TODO arnicalib
-                player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 20 * (60 * lvlTotal.intValue()), (-1 * enchTag.size()) - 1));
+                player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (EnchantmentTagUtils.calcTotalLevel(enchTag) * 60) * 20, (-1 * enchTag.size()) - 1));
                 player.hurt(DamageSource.GENERIC, 0.1F);
                 player.sendMessage(new TranslatableComponent(getDescriptionId() + ".vanished", itemStack.getDisplayName(), player.getDisplayName()), Util.NIL_UUID);
                 itemStack.setCount(0);

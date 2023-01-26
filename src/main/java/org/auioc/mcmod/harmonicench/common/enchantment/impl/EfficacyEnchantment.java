@@ -2,7 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
+import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
 import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
@@ -52,7 +52,7 @@ public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnc
     }
 
     @Override
-    public void handleTippedArrow(int lvl, Arrow arrow, ITippedArrow potionArrow) {
+    public void handleTippedArrow(int lvl, Arrow arrow, MixinAccessorArrow potionArrow) {
         var effects = potionArrow.getEffects();
 
         for (var effectI : potionArrow.getPotion().getEffects()) {

@@ -38,5 +38,6 @@ public final class HEEnchantments {
     public static final RegistryObject<Enchantment> CURSE_OF_SACRIFICING = register("curse_of_sacrificing", CurseOfSacrificingEnchantment::new);
     public static final RegistryObject<Enchantment> LONG = register("long", LongEnchantment::new);
     public static final RegistryObject<Enchantment> AIM = register("aim", AimEnchantment::new);
+    public static final RegistryObject<Enchantment> BLUNT = register("blunt", BluntEnchantment::new);
 
 }

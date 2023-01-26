@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ProficiencyEnchantment extends HEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
-    private static final String TAG_PROFICIENCY = "Proficiency";
+    private static final String NBT_PROFICIENCY = "Proficiency";
 
     public ProficiencyEnchantment() {
         super(
@@ -53,7 +53,7 @@ public class ProficiencyEnchantment extends HEEnchantment implements IBlockEncha
     }
 
     private static int getProficiency(ItemStack itemStack) {
-        return (itemStack.hasTag()) ? itemStack.getTag().getInt(TAG_PROFICIENCY) : 0;
+        return (itemStack.hasTag()) ? itemStack.getTag().getInt(NBT_PROFICIENCY) : 0;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class ProficiencyEnchantment extends HEEnchantment implements IBlockEncha
         if (itemStack.isCorrectToolForDrops(blockState)) {
             if (player.getRandom().nextDouble() < (MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i) / 200.0)) {
                 var nbt = itemStack.getOrCreateTag();
-                int proficiency = nbt.getInt(TAG_PROFICIENCY) + 1;
-                nbt.putInt(TAG_PROFICIENCY, proficiency);
+                int proficiency = nbt.getInt(NBT_PROFICIENCY) + 1;
+                nbt.putInt(NBT_PROFICIENCY, proficiency);
             }
         }
     }
