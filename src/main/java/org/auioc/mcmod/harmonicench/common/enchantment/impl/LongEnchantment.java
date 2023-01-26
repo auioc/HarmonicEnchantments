@@ -17,7 +17,7 @@ import net.minecraftforge.common.ForgeMod;
 
 public class LongEnchantment extends HEEnchantment implements IAttributeModifierEnchantment {
 
-    private static final UUID REACH_DISTANCE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");
+    private static final UUID ATTACK_RANGE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");
 
     public LongEnchantment() {
         super(
@@ -42,9 +42,9 @@ public class LongEnchantment extends HEEnchantment implements IAttributeModifier
     @Override
     public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
         return Map.of(
-            ForgeMod.REACH_DISTANCE.get(),
+            ForgeMod.ATTACK_RANGE.get(),
             new AttributeModifier(
-                REACH_DISTANCE_UUID, this.descriptionId,
+                ATTACK_RANGE_UUID, this.descriptionId,
                 MathUtil.sigma(lvl, 1, (double i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION
             )
         );

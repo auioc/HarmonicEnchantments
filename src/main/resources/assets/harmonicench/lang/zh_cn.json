@@ -23,7 +23,7 @@
     "enchantment.harmonicench.forging": "锻打",
     "enchantment.harmonicench.sun_affinity": "领航",
     "enchantment.harmonicench.curse_of_sacrificing": "献祭诅咒",
-    "enchantment.harmonicench.long": "延展之刃（NYI）",
+    "enchantment.harmonicench.long": "延展之刃",
     "enchantment.harmonicench.aim": "瞄准",
     "enchantment.harmonicench.blunt": "钝重",
 
@@ -48,7 +48,7 @@
     "enchantment.harmonicench.sun_affinity.desc": "鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。",
 
     "enchantment.harmonicench.proficiency.proficiency": "（熟练度：%s）",
-    "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s渴求祭品，在抽取了%1$s的生命之后消失了",
+    "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s渴求祭品，在抽取了%2$s的生命之后消失了",
     "enchantment.harmonicench.aim.looking_at": "发现%1$s，距离%2$s %3$s 米",
 
     "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛",
