@@ -3,7 +3,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
-import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinMobEffectInstance;
+import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
@@ -79,7 +79,7 @@ public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnc
                 _old.getEffect(),
                 newDuration, newAmplifier,
                 _old.isAmbient(), _old.isVisible(), _old.showIcon(),
-                ((IMixinMobEffectInstance) _old).getHiddenEffect()
+                ((MixinAccessorMobEffectInstance) _old).getHiddenEffect()
             );
             _new.setCurativeItems(_old.getCurativeItems());
             newEffects.add(_new);

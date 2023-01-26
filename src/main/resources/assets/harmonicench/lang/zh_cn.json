@@ -23,8 +23,9 @@
     "enchantment.harmonicench.forging": "锻打",
     "enchantment.harmonicench.sun_affinity": "领航",
     "enchantment.harmonicench.curse_of_sacrificing": "献祭诅咒",
-    "enchantment.harmonicench.long": "延展之刃",
+    "enchantment.harmonicench.long": "延展之刃（NYI）",
     "enchantment.harmonicench.aim": "瞄准",
+    "enchantment.harmonicench.blunt": "钝重",
 
     "enchantment.harmonicench.rapier.desc": "增加攻击速度，但无法再使出横扫攻击。",
     "enchantment.harmonicench.handiness.desc": "射出的箭命中实体后会短暂提高使用者移动速度。",
