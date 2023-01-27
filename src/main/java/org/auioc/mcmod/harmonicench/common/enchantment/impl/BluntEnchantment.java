@@ -7,6 +7,8 @@ import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantmen
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
+import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -49,7 +52,8 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof SwordItem ? true : super.canEnchant(itemStack);
+        var item = itemStack.getItem();
+        return (item instanceof SwordItem || itemStack.is(Items.BRICK)) ? true : super.canEnchant(itemStack);
     }
 
     @Override
@@ -58,13 +62,17 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
             Attributes.ATTACK_SPEED,
             new AttributeModifier(
                 ATTACK_SPEED_UUID, this.descriptionId,
-                -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL
+                itemStack.is(Items.BRICK) ? -0.95D : -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL
             )
         );
     }
 
     @Override
     public float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier) {
+        if (itemStack.is(Items.BRICK) && target instanceof Player targetPlayer) {
+            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), 1 * 60 * 20));
+            return damageModifier;
+        }
         return damageModifier + (0.5F * lvl);
     }
 
