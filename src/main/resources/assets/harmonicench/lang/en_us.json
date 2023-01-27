@@ -53,5 +53,6 @@
 
     "death.attack.curseOfRebelling": "%1$s was betrayed by %2$s",
 
-    "effect.harmonicench.weightlessness": "Weightlessness"
+    "effect.harmonicench.weightlessness": "Weightlessness",
+    "effect.harmonicench.collapse": "Collapse"
 }

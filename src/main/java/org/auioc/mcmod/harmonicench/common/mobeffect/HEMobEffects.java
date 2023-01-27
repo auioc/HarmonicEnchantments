@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.mobeffect;
 
 import java.util.function.Supplier;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.common.mobeffect.impl.CollapseMobEffect;
 import org.auioc.mcmod.harmonicench.common.mobeffect.impl.WeightlessnessMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,6 +17,7 @@ public final class HEMobEffects {
         return MOB_EFFECTS.register(id, sup);
     }
 
-    public static final RegistryObject<MobEffect> WEIGHTLESSNESS = register("weightlessness", () -> new WeightlessnessMobEffect());
+    public static final RegistryObject<MobEffect> WEIGHTLESSNESS = register("weightlessness", WeightlessnessMobEffect::new);
+    public static final RegistryObject<MobEffect> COLLAPSE = register("collapse", CollapseMobEffect::new);
 
 }
