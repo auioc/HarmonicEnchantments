@@ -51,6 +51,7 @@ jobs:
                   AUIOC_MAVEN_TOKEN: ${{secrets.AUIOC_MAVEN_TOKEN}}
               run: |
                   chmod +x ./gradlew
+                  ./gradlew runData
                   ./gradlew build publish genUpdateJson
 
             - name: Update update JSON

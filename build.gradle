@@ -17,7 +17,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 apply from: 'gradle/a.gradle'
 
 repositories {
-    maven { 
+    maven {
         url 'https://repo.auioc.com/maven/releases'
         content { includeGroup "org.auioc.mcmod" }
     }
