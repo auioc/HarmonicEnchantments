@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
@@ -53,7 +54,7 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
     @Override
     public boolean canEnchant(ItemStack itemStack) {
         var item = itemStack.getItem();
-        return (item instanceof SwordItem || itemStack.is(Items.BRICK)) ? true : super.canEnchant(itemStack);
+        return (item instanceof SwordItem || isBrick(itemStack)) ? true : super.canEnchant(itemStack);
     }
 
     @Override
@@ -62,18 +63,23 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
             Attributes.ATTACK_SPEED,
             new AttributeModifier(
                 ATTACK_SPEED_UUID, this.descriptionId,
-                itemStack.is(Items.BRICK) ? -0.95D : -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL
+                isBrick(itemStack) ? -0.95D : -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL
             )
         );
     }
 
     @Override
     public float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier) {
-        if (itemStack.is(Items.BRICK) && target instanceof Player targetPlayer) {
-            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), 1 * 60 * 20));
-            return damageModifier;
+        if (isBrick(itemStack) && target instanceof Player targetPlayer) {
+            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), (int) MathUtil.sigma(lvl, 1, (double i) -> 5.0D / i) * 20));
         }
         return damageModifier + (0.5F * lvl);
+    }
+
+    // ====================================================================== //
+
+    private static boolean isBrick(ItemStack itemStack) {
+        return itemStack.is(Items.BRICK) || itemStack.is(Items.NETHER_BRICK);
     }
 
 }
