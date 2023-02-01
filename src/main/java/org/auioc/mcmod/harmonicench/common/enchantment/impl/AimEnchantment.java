@@ -62,8 +62,7 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
     public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, Phase phase, LogicalSide side) {
         if (phase == Phase.END && side == LogicalSide.SERVER && player.tickCount % 33 == 0 && player.isScoping()) {
             var hit = RayTraceUtils.getEntityHitResult(player, 100.0D);
-            if (hit != null) {
-                var living = (LivingEntity) hit.getEntity();
+            if (hit != null && hit.getEntity() instanceof LivingEntity living) {
                 if (!living.hasEffect(MobEffects.GLOWING)) {
                     living.addEffect(new MobEffectInstance(MobEffects.GLOWING, MathUtil.sigma(lvl, 1, (int i) -> (20 / i)) * 20, 1));
                     player.sendMessage(
