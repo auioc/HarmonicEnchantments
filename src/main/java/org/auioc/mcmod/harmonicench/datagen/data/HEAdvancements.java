@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.datagen.data;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
@@ -10,6 +11,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.DistancePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -19,19 +21,21 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 
 public class HEAdvancements {
 
     private static final ResourceLocation PARENT = new ResourceLocation("minecraft:story/enchant_item");
 
-    // ====================================================================== //
+    // ============================================================================================================== //
 
     public static final DataGenAdvancementEntry HEADSHOT = create(
         "divergence/headshot", (b) -> b
@@ -60,8 +64,12 @@ public class HEAdvancements {
             )
     );
 
+    // ====================================================================== //
+
+    private static final List<ResourceKey<Biome>> JUNGLES = List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE);
+
     public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = create(
-        "divergence/guerrilla_in_the_jungle", (b) -> b
+        "divergence/guerrilla_in_the_jungle", (b) -> killIllagerInJungle(b)
             .display(
                 glintIcon(Items.BOW),
                 TextUtils.translatable("advancements.harmonicench.divergence.guerrilla_in_the_jungle"),
@@ -70,13 +78,17 @@ public class HEAdvancements {
                 true, true, true // TODO arnicalib displayinfo builder
             )
             .parent(PARENT)
-            .addCriterion(
-                "kill_illager_in_jungle",
-                new KilledTrigger.TriggerInstance(
+            .requirements(RequirementsStrategy.OR)
+    );
+
+    private static Builder killIllagerInJungle(Builder b) {
+        for (var biome : JUNGLES) {
+            b.addCriterion(
+                "kill_illager_in_" + biome.location().getPath(), new KilledTrigger.TriggerInstance(
                     CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
                     EntityPredicate.Composite.wrap(
                         EntityPredicate.Builder.entity()
-                            .located(LocationPredicate.inBiome(Biomes.JUNGLE))
+                            .located(LocationPredicate.inBiome(biome))
                             .build()
                     ),
                     EntityPredicate.Composite.wrap(
@@ -92,8 +104,10 @@ public class HEAdvancements {
                                 .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
                         ).build()
                 )
-            )
-    );
+            );
+        }
+        return b;
+    }
 
     // ============================================================================================================== //
 
