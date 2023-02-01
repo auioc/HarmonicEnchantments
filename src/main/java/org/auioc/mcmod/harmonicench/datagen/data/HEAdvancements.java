@@ -3,15 +3,18 @@ package org.auioc.mcmod.harmonicench.datagen.data;
 import java.util.function.UnaryOperator;
 import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
+import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEAdvancementProvider.DataGenAdvancementEntry;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.DistancePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.KilledTrigger;
+import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +25,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.biome.Biomes;
 
 public class HEAdvancements {
 
@@ -52,6 +56,41 @@ public class HEAdvancements {
                                 .of(EntityTypeTags.ARROWS)
                                 .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:sniping\"}]}")))
                         )
+                )
+            )
+    );
+
+    public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = create(
+        "divergence/guerrilla_in_the_jungle", (b) -> b
+            .display(
+                glintIcon(Items.BOW),
+                TextUtils.translatable("advancements.harmonicench.divergence.guerrilla_in_the_jungle"),
+                TextUtils.translatable("advancements.harmonicench.divergence.guerrilla_in_the_jungle.description"),
+                null, FrameType.GOAL,
+                true, true, true // TODO arnicalib displayinfo builder
+            )
+            .parent(PARENT)
+            .addCriterion(
+                "kill_illager_in_jungle",
+                new KilledTrigger.TriggerInstance(
+                    CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
+                    EntityPredicate.Composite.wrap(
+                        EntityPredicate.Builder.entity()
+                            .located(LocationPredicate.inBiome(Biomes.JUNGLE))
+                            .build()
+                    ),
+                    EntityPredicate.Composite.wrap(
+                        EntityPredicate.Builder.entity()
+                            .of(HEntityTypeTags.ILLAGERS)
+                            .build()
+                    ),
+                    DamageSourcePredicate.Builder.damageType()
+                        .isProjectile(true)
+                        .direct(
+                            EntityPredicate.Builder.entity()
+                                .of(EntityTypeTags.ARROWS)
+                                .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
+                        ).build()
                 )
             )
     );
