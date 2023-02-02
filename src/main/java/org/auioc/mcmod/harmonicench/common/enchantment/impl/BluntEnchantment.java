@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.arnicalib.game.tag.HItemTags;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -72,7 +72,7 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
     @Override
     public float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier) {
         if (isBrick(itemStack) && target instanceof Player targetPlayer) {
-            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), (int) MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 5.0D / i) * 20));
+            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.CONFUSION.get(), (int) MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 5.0D / i) * 20));
         }
         return damageModifier + (0.5F * lvl);
     }
@@ -80,7 +80,7 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
     // ====================================================================== //
 
     private static boolean isBrick(ItemStack itemStack) {
-        return itemStack.is(Items.BRICK) || itemStack.is(Items.NETHER_BRICK);
+        return itemStack.is(HItemTags.BRICKS);
     }
 
 }

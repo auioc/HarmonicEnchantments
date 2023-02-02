@@ -7,9 +7,9 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 
-public class CollapseMobEffect extends MobEffect implements IMovementInputMobEffect {
+public class ConfusionMobEffect extends MobEffect implements IMovementInputMobEffect {
 
-    public CollapseMobEffect() {
+    public ConfusionMobEffect() {
         super(MobEffectCategory.HARMFUL, 0xFF800080);
     }
 
