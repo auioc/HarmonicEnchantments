@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
@@ -45,7 +46,7 @@ public class LongEnchantment extends HEEnchantment implements IAttributeModifier
             ForgeMod.ATTACK_RANGE.get(),
             new AttributeModifier(
                 ATTACK_RANGE_UUID, this.descriptionId,
-                MathUtil.sigma(lvl, 1, (double i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION
+                MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION
             )
         );
     }

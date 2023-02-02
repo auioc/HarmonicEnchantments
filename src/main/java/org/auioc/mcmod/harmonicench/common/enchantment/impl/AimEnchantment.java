@@ -1,5 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.IntUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.world.phys.RayTraceUtils;
@@ -53,7 +55,7 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
                 && source.getEntity() instanceof Player player
                 && (player.isScoping() || player.getOffhandItem().is(Items.SPYGLASS) || player.getMainHandItem().is(Items.SPYGLASS))
         ) {
-            return amount + (float) MathUtil.sigma(lvl, 1, (double i) -> (1.0D / (3.0D * i)));
+            return amount + (float) MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> (1.0D / (3.0D * i)));
         }
         return amount;
     }
@@ -64,7 +66,7 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
             var hit = RayTraceUtils.getEntityHitResult(player, 100.0D);
             if (hit != null && hit.getEntity() instanceof LivingEntity living) {
                 if (!living.hasEffect(MobEffects.GLOWING)) {
-                    living.addEffect(new MobEffectInstance(MobEffects.GLOWING, MathUtil.sigma(lvl, 1, (int i) -> (20 / i)) * 20, 1));
+                    living.addEffect(new MobEffectInstance(MobEffects.GLOWING, MathUtil.sigma(lvl, 1, (IntUnaryOperator) (i) -> (20 / i)) * 20, 1));
                     player.sendMessage(
                         new TranslatableComponent(
                             getDescriptionId() + ".looking_at",

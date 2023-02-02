@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
@@ -46,7 +47,7 @@ public class SiphoningEnchantment extends HEEnchantment implements ILivingEnchan
         var player = (Player) source.getEntity();
 
         double x = target.getMaxHealth();
-        double r = MathUtil.sigma(lvl, 1, (double i) -> (x / 15.0D) * (1.0D / i));
+        double r = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> (x / 15.0D) * (1.0D / i));
 
         var food = player.getFoodData();
         if (food.needsFood()) {

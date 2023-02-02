@@ -146,7 +146,6 @@ public class EnchantmentPerformer {
                         var potionArrow = (MixinAccessorArrow) arrow;
                         if (potionArrow.getPotion() != Potions.EMPTY || !potionArrow.getEffects().isEmpty()) {
                             _ench.handleTippedArrow(lvl, arrow, potionArrow);
-                            // TODO fix-arnicalib MixinAccessorArrow impl ITippedArrow
                         }
                     }
                     if (ench instanceof IProjectileEnchantment.SpectralArrow _ench && isEnabled(ench) && abstractArrow instanceof SpectralArrow spectralArrow) {

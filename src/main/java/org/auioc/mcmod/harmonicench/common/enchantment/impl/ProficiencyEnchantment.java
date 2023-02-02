@@ -1,6 +1,7 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.List;
+import java.util.function.DoubleUnaryOperator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
@@ -59,7 +60,7 @@ public class ProficiencyEnchantment extends HEEnchantment implements IBlockEncha
     @Override
     public void onBlockBreak(int lvl, ItemStack itemStack, Player player, BlockState blockState, BlockPos blockPos) {
         if (itemStack.isCorrectToolForDrops(blockState)) {
-            if (player.getRandom().nextDouble() < (MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i) / 200.0)) {
+            if (player.getRandom().nextDouble() < (MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1.0D / i) / 200.0)) {
                 var nbt = itemStack.getOrCreateTag();
                 int proficiency = nbt.getInt(NBT_PROFICIENCY) + 1;
                 nbt.putInt(NBT_PROFICIENCY, proficiency);

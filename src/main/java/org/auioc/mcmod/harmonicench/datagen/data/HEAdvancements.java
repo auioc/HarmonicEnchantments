@@ -2,15 +2,14 @@ package org.auioc.mcmod.harmonicench.datagen.data;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
-import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
+import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
+import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
 import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
 import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.datagen.provider.HEAdvancementProvider.DataGenAdvancementEntry;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.DistancePredicate;
@@ -40,11 +39,11 @@ public class HEAdvancements {
     public static final DataGenAdvancementEntry HEADSHOT = create(
         "divergence/headshot", (b) -> b
             .display(
-                glintIcon(Items.CROSSBOW),
-                TextUtils.translatable("advancements.harmonicench.divergence.headshot"),
-                TextUtils.translatable("advancements.harmonicench.divergence.headshot.description"),
-                null, FrameType.GOAL,
-                true, true, true // TODO arnicalib displayinfo builder
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.CROSSBOW))
+                    .titleAndDescription(titleKey("divergence/guerrilla_in_the_jungle"))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
             )
             .parent(PARENT)
             .addCriterion(
@@ -71,11 +70,11 @@ public class HEAdvancements {
     public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = create(
         "divergence/guerrilla_in_the_jungle", (b) -> killIllagerInJungle(b)
             .display(
-                glintIcon(Items.BOW),
-                TextUtils.translatable("advancements.harmonicench.divergence.guerrilla_in_the_jungle"),
-                TextUtils.translatable("advancements.harmonicench.divergence.guerrilla_in_the_jungle.description"),
-                null, FrameType.GOAL,
-                true, true, true // TODO arnicalib displayinfo builder
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.BOW))
+                    .titleAndDescription(titleKey("divergence/guerrilla_in_the_jungle"))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
             )
             .parent(PARENT)
             .requirements(RequirementsStrategy.OR)
@@ -115,6 +114,10 @@ public class HEAdvancements {
 
     private static DataGenAdvancementEntry create(String _id, UnaryOperator<Builder> _builder) {
         return new DataGenAdvancementEntry(HarmonicEnchantments.id(_id), _builder);
+    }
+
+    private static String titleKey(String id) {
+        return "advancements." + HarmonicEnchantments.MOD_ID + "." + id.replace("/", ".");
     }
 
     private static CompoundTag parseTag(String nbt) {

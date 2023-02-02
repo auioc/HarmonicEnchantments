@@ -1,8 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.HashSet;
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
 import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
@@ -52,7 +53,7 @@ public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnc
     }
 
     @Override
-    public void handleTippedArrow(int lvl, Arrow arrow, MixinAccessorArrow potionArrow) {
+    public void handleTippedArrow(int lvl, Arrow arrow, ITippedArrow potionArrow) {
         var effects = potionArrow.getEffects();
 
         for (var effectI : potionArrow.getPotion().getEffects()) {
@@ -104,7 +105,7 @@ public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnc
 
     @Override
     public float onFireworkRocketExplode(int lvl, LivingEntity target, FireworkRocketEntity projectile, LivingEntity owner, float amount) {
-        double ynn = MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i);
+        double ynn = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1.0D / i);
         int luckAmplifier = ((int) ynn) - 1;
         int luckDuration = ((int) (((10.0D + ((double) lvl)) / 10.0D) * 37.5D)) * 20;
         owner.addEffect(new MobEffectInstance(MobEffects.LUCK, luckDuration, luckAmplifier));

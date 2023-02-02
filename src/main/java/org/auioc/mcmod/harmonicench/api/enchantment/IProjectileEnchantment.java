@@ -1,6 +1,6 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
-import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -22,7 +22,7 @@ public class IProjectileEnchantment {
 
     public static interface TippedArrow {
 
-        void handleTippedArrow(int lvl, net.minecraft.world.entity.projectile.Arrow arrow, MixinAccessorArrow potionArrow);
+        void handleTippedArrow(int lvl, net.minecraft.world.entity.projectile.Arrow arrow, ITippedArrow potionArrow);
 
     }
 

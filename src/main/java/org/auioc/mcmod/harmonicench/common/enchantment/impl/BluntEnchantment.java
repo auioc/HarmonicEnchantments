@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
@@ -71,7 +72,7 @@ public class BluntEnchantment extends HEEnchantment implements IAttributeModifie
     @Override
     public float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier) {
         if (isBrick(itemStack) && target instanceof Player targetPlayer) {
-            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), (int) MathUtil.sigma(lvl, 1, (double i) -> 5.0D / i) * 20));
+            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.COLLAPSE.get(), (int) MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 5.0D / i) * 20));
         }
         return damageModifier + (0.5F * lvl);
     }

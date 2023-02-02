@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.DoubleUnaryOperator;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
@@ -70,7 +71,7 @@ public class ForgingEnchantment extends HEEnchantment implements IAttributeModif
         if (itemStack.canEquip(slot, null)) {
             double x = (Math.log((double) itemStack.getBaseRepairCost() + 1) / Math.log(2.0D));
             if (x > 0.0D) {
-                double bonus = x * MathUtil.sigma(lvl, 1, (double i) -> 1 / (3 * i));
+                double bonus = x * MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1 / (3 * i));
                 return Map.of(
                     Attributes.ARMOR,
                     new AttributeModifier(ARMOR_MODIFIER_UUID, this.descriptionId, bonus, AttributeModifier.Operation.ADDITION),

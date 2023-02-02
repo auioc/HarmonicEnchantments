@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.mobeffect.impl;
 
+import org.auioc.mcmod.arnicalib.game.input.InputUtils;
 import org.auioc.mcmod.harmonicench.api.effect.IMovementInputMobEffect;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,7 +22,7 @@ public class CollapseMobEffect extends MobEffect implements IMovementInputMobEff
         input.down = !input.down;
         input.left = !input.left;
         input.right = !input.right;
-        IMovementInputMobEffect.calculateImpulse(input, player.isMovingSlowly());
+        InputUtils.calculateImpulse(input, player.isMovingSlowly());
     }
 
 }

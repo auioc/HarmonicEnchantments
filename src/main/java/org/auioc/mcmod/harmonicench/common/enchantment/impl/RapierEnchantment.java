@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
@@ -53,7 +54,7 @@ public class RapierEnchantment extends HEEnchantment implements IAttributeModifi
             Attributes.ATTACK_SPEED,
             new AttributeModifier(
                 ATTACK_SPEED_UUID, this.descriptionId,
-                MathUtil.sigma(lvl, 1, (double i) -> 1 / (i + 9.0D)), AttributeModifier.Operation.ADDITION
+                MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1 / (i + 9.0D)), AttributeModifier.Operation.ADDITION
             )
         );
     }

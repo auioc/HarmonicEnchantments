@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
@@ -58,8 +59,8 @@ public class BlessingEnchantment extends HEEnchantment implements IItemEnchantme
     public int getDamageProtection(int lvl, ItemStack itemStack, DamageSource source) {
         if (source.isMagic()) {
             int N = EnchantmentHelper.getEnchantments(itemStack).values().stream().mapToInt((i) -> i).sum();
-            double l = MathUtil.sigma(N, 1, (double i) -> 3.0D / (2.0D * i - 1.0D));
-            double r = MathUtil.sigma(lvl, 1, (double i) -> 1.0D / (3.0D * i - 2.0D));
+            double l = MathUtil.sigma(N, 1, (DoubleUnaryOperator) (i) -> 3.0D / (2.0D * i - 1.0D));
+            double r = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1.0D / (3.0D * i - 2.0D));
             return (int) (l * r);
         }
         return 0;

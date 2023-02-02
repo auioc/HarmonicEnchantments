@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -37,7 +38,7 @@ public class SafeTeleportingEnchantment extends HEEnchantment {
     }
 
     public static void handleLivingTravelToDimension(int lvl, LivingEntity living) {
-        double duration = MathUtil.sigma(lvl, 1, (double i) -> 20.0D / i);
+        double duration = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 20.0D / i);
         living.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, (int) (duration * 20)));
     }
 
