@@ -19,6 +19,7 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
@@ -81,7 +82,8 @@ public class HEAdvancements {
     private static Builder killIllagerInJungle(Builder b) {
         for (var biome : JUNGLES) {
             b.addCriterion(
-                "kill_illager_in_" + biome.location().getPath(), new KilledTrigger.TriggerInstance(
+                "kill_illager_in_" + biome.location().getPath(),
+                new KilledTrigger.TriggerInstance(
                     CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
                     EntityPredicate.Composite.wrap(
                         EntityPredicate.Builder.entity()
@@ -149,6 +151,48 @@ public class HEAdvancements {
                 )
             )
     );
+
+    // ====================================================================== //
+
+    private static final List<ResourceKey<Biome>> COLD_BIOMES = List.of(
+        Biomes.TAIGA, Biomes.FROZEN_OCEAN, Biomes.FROZEN_RIVER, Biomes.SNOWY_PLAINS, Biomes.SNOWY_BEACH,
+        Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS,
+        Biomes.FROZEN_PEAKS, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.ICE_SPIKES,
+        Biomes.THE_VOID
+    );
+
+    public static final DataGenAdvancementEntry FISH_IN_THE_SNOW = create(
+        "divergence/fish_in_the_snow", (b) -> fishInColdBiomes(b)
+            .display(
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.FISHING_ROD))
+                    .titleAndDescription(titleKey("divergence/fish_in_the_snow"))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
+            )
+            .parent(PARENT)
+            .requirements(RequirementsStrategy.OR)
+    );
+
+    private static Builder fishInColdBiomes(Builder b) {
+        for (var biome : COLD_BIOMES) {
+            b.addCriterion(
+                "fish_in_" + biome.location().getPath(),
+                FishingRodHookedTrigger.TriggerInstance.fishedItem(
+                    ItemPredicate.Builder.item()
+                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.LUCK_OF_THE_SNOW.get(), MinMaxBounds.Ints.ANY))
+                        .build(),
+                    EntityPredicate.Builder.entity()
+                        .located(LocationPredicate.inBiome(biome))
+                        .build(),
+                    ItemPredicate.Builder.item()
+                        .of(ItemTags.FISHES)
+                        .build()
+                )
+            );
+        }
+        return b;
+    }
 
     // ============================================================================================================== //
 
