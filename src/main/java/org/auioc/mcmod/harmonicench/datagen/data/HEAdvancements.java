@@ -5,30 +5,28 @@ import java.util.function.UnaryOperator;
 import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
 import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
 import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
 import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.DamageSourcePredicate;
-import net.minecraft.advancements.critereon.DistancePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.KilledTrigger;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.NbtPredicate;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 public class HEAdvancements {
 
@@ -101,12 +99,56 @@ public class HEAdvancements {
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
                                 .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
-                        ).build()
+                        )
+                        .build()
                 )
             );
         }
         return b;
     }
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry SHOW_THE_BLADE = create(
+        "divergence/show_the_blade", (b) -> b
+            .display(
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.NETHERITE_SWORD))
+                    .titleAndDescription(titleKey("divergence/show_the_blade"))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
+            )
+            .parent(PARENT)
+            .addCriterion(
+                "kill_boss",
+                new KilledTrigger.TriggerInstance(
+                    CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
+                    EntityPredicate.Composite.ANY,
+                    EntityPredicate.Composite.create(
+                        new EntityAttributeCondition(
+                            Attributes.MAX_HEALTH,
+                            EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
+                            MinMaxBounds.Doubles.atLeast(80.0),
+                            LootContext.EntityTarget.THIS
+                        )
+                    ),
+                    DamageSourcePredicate.Builder.damageType()
+                        .source(
+                            EntityPredicate.Builder.entity()
+                                .equipment(
+                                    EntityEquipmentPredicate.Builder.equipment()
+                                        .mainhand(
+                                            ItemPredicate.Builder.item()
+                                                .hasEnchantment(new EnchantmentPredicate(HEEnchantments.BANE_OF_CHAMPIONS.get(), MinMaxBounds.Ints.ANY))
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                        )
+                        .build()
+                )
+            )
+    );
 
     // ============================================================================================================== //
 
