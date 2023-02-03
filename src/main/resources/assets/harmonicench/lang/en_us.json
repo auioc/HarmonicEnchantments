@@ -46,6 +46,10 @@
     "enchantment.harmonicench.deep_study.desc": "Your fortune level doubled when mining deepslate ore.",
     "enchantment.harmonicench.forging.desc": "Improve armor and armor toughness based on the operation times of the item on anvil (excluding rename).",
     "enchantment.harmonicench.sun_affinity.desc": "Become lighter when flying with an elytra, only in a sunny daylight.",
+    "enchantment.harmonicench.curse_of_sacrificing.desc": "Need to kill mobs at regular intervals.",
+    "enchantment.harmonicench.long.desc": "Increase the attack distance of the sword.",
+    "enchantment.harmonicench.aim.desc": "When using a telescope, mark enemy mobs and increase projectile damage.",
+    "enchantment.harmonicench.blunt.desc": "Reduce attack speed and significantly increase critical damage.",
 
     "enchantment.harmonicench.proficiency.proficiency": "(Proficiency: %s)",
     "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s thirsty for sacrifice, then vanished after sucking the life out of %2$s",

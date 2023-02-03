@@ -46,6 +46,10 @@
     "enchantment.harmonicench.deep_study.desc": "开采深层矿石时，获得两倍等级时运的效果。",
     "enchantment.harmonicench.forging.desc": "根据物品在铁砧上的操作次数（重命名除外），增加护甲值和盔甲韧性。",
     "enchantment.harmonicench.sun_affinity.desc": "鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。",
+    "enchantment.harmonicench.curse_of_sacrificing.desc": "需要定期杀死生物。",
+    "enchantment.harmonicench.long.desc": "提高剑的攻击距离。",
+    "enchantment.harmonicench.aim.desc": "使用望远镜时，标记敌对生物并提高弹射物伤害。",
+    "enchantment.harmonicench.blunt.desc": "降低攻击速度，大幅提高暴击伤害（跳劈）。",
 
     "enchantment.harmonicench.proficiency.proficiency": "（熟练度：%s）",
     "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s渴求祭品，在抽取了%2$s的生命之后消失了",
