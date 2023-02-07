@@ -6,6 +6,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinAbstractArrow;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -51,8 +52,7 @@ public class SnipingEnchantment extends HEEnchantment implements IProjectileEnch
 
     @Override
     public void handleAbstractArrow(int lvl, AbstractArrow arrow) {
-        var _arrow = ((IMixinAbstractArrow) arrow);
-        _arrow.setGravity(_arrow.getGravity() * (1.0D - (Math.min(lvl, this.getMaxLevel()) * 0.11D)));
+        ((IMixinAbstractArrow) arrow).setGravityOffset(0.05F * (1.0F - (Mth.clamp(this.getMaxLevel() - lvl + 1, 1, this.getMaxLevel()) * 0.15F)));
     }
 
 }

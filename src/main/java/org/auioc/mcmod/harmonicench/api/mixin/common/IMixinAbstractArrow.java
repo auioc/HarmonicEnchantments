@@ -2,8 +2,8 @@ package org.auioc.mcmod.harmonicench.api.mixin.common;
 
 public interface IMixinAbstractArrow {
 
-    double getGravity();
+    float getGravityOffset();
 
-    void setGravity(double gravity);
+    void setGravityOffset(float offset);
 
 }
