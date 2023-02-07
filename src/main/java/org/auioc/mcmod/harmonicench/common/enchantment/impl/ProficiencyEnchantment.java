@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ProficiencyEnchantment extends HEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
-    private static final String NBT_PROFICIENCY = "Proficiency";
+    public static final String NBT_PROFICIENCY = "Proficiency";
 
     public ProficiencyEnchantment() {
         super(

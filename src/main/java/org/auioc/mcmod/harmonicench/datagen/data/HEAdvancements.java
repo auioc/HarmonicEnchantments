@@ -9,6 +9,7 @@ import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
 import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -56,7 +57,7 @@ public class HEAdvancements {
                         .direct(
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
-                                .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:sniping\"}]}")))
+                                .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:sniping\"}]}")))
                         )
                 )
             )
@@ -100,7 +101,7 @@ public class HEAdvancements {
                         .direct(
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
-                                .nbt(new NbtPredicate(parseTag("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
+                                .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
                         )
                         .build()
                 )
@@ -147,6 +148,29 @@ public class HEAdvancements {
                                         .build()
                                 )
                         )
+                        .build()
+                )
+            )
+    );
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry COME_WITH_PRACTICE = create(
+        "divergence/come_with_practice", (b) -> b
+            .display(
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.NETHERITE_PICKAXE))
+                    .titleAndDescription(titleKey("divergence/come_with_practice"))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
+            )
+            .parent(PARENT)
+            .addCriterion(
+                "proficient",
+                InventoryChangeTrigger.TriggerInstance.hasItems(
+                    ItemPredicate.Builder.item()
+                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.PROFICIENCY.get(), MinMaxBounds.Ints.ANY))
+                        .hasNbt(parseNbt(String.format("{%s:%d}", ProficiencyEnchantment.NBT_PROFICIENCY, 26)))
                         .build()
                 )
             )
@@ -206,7 +230,7 @@ public class HEAdvancements {
         return "advancements." + HarmonicEnchantments.MOD_ID + "." + id.replace("/", ".");
     }
 
-    private static CompoundTag parseTag(String nbt) {
+    private static CompoundTag parseNbt(String nbt) {
         try {
             return TagParser.parseTag(nbt);
         } catch (CommandSyntaxException e) {
@@ -215,7 +239,7 @@ public class HEAdvancements {
     }
 
     private static ItemStack glintIcon(Item item) {
-        return ItemUtils.createItemStack(item, 1, parseTag("{Enchantments:[{}]}"));
+        return ItemUtils.createItemStack(item, 1, parseNbt("{Enchantments:[{}]}"));
     }
 
 }
