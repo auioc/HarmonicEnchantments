@@ -59,8 +59,8 @@ public class BlessingEnchantment extends HEEnchantment implements IItemEnchantme
     public int getDamageProtection(int lvl, ItemStack itemStack, DamageSource source) {
         if (source.isMagic()) {
             int N = EnchantmentHelper.getEnchantments(itemStack).values().stream().mapToInt((i) -> i).sum();
-            double l = MathUtil.sigma(N, 1, (DoubleUnaryOperator) (i) -> 3.0D / (2.0D * i - 1.0D));
-            double r = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> 1.0D / (3.0D * i - 2.0D));
+            double l = MathUtil.sigma(N, 1, (DoubleUnaryOperator) (i) -> 6.0D / i);
+            double r = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (j) -> 1.0D / (5.0D * j - 4.0D));
             return (int) (l * r);
         }
         return 0;
