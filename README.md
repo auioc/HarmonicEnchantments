@@ -32,5 +32,5 @@ Any type of contribution is welcome, here are some examples of how you may contr
 
 ## License
 
-ArnicaLib is licensed under the **GNU General Public License v3.0**.
+HarmonicEnchantments is licensed under the **GNU General Public License v3.0**.
 The full license is in the [LICENSE](/LICENSE) file.
