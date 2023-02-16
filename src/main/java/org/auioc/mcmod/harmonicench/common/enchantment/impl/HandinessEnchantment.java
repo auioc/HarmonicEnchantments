@@ -1,6 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
@@ -40,7 +39,7 @@ public class HandinessEnchantment extends HEEnchantment implements IProjectileEn
     public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float amount) {
         int amplifier = Math.min(lvl, this.getMaxLevel()) - 1;
         double duration = 6;
-        if (lvl > this.getMaxLevel()) duration += MathUtil.sigma(lvl, 3, (DoubleUnaryOperator) (i) -> (2 / (i - 2.0D)));
+        if (lvl > this.getMaxLevel()) duration += MathUtil.sigma(lvl, 3, (double i) -> (2 / (i - 2.0D)));
         owner.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, ((int) duration) * 20, amplifier));
         return amount;
     }

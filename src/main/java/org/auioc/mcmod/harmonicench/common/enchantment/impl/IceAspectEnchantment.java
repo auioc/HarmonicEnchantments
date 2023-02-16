@@ -1,6 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.function.DoubleUnaryOperator;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
@@ -38,7 +37,7 @@ public class IceAspectEnchantment extends HEEnchantment implements ILivingEnchan
         if (isSource && target.canFreeze()) {
             int ticksFrozen = target.getTicksFrozen();
             double f = (ticksFrozen == 0) ? 200.0D : 100.0D;
-            double r = MathUtil.sigma(lvl, 1, (DoubleUnaryOperator) (i) -> f / i);
+            double r = MathUtil.sigma(lvl, 1, (double i) -> f / i);
             target.setTicksFrozen(ticksFrozen + ((int) r));
         }
         return amount;
