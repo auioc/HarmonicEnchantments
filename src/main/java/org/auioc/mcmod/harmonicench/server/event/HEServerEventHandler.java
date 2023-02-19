@@ -60,8 +60,8 @@ public final class HEServerEventHandler {
 
     @SubscribeEvent
     public static void preCrossbowRelease(final PreCrossbowReleaseEvent event) {
-        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getBow(), event.getProjectile());
-        EnchantmentPerformer.handleProjectile(event.getBow(), event.getProjectile());
+        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getCrossbow(), event.getProjectile());
+        EnchantmentPerformer.handleProjectile(event.getCrossbow(), event.getProjectile());
     }
 
     @SubscribeEvent

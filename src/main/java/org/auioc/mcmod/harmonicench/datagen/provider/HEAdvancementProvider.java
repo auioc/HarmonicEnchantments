@@ -1,6 +1,7 @@
 package org.auioc.mcmod.harmonicench.datagen.provider;
 
 import java.util.function.Consumer;
+import org.auioc.mcmod.arnicalib.base.reflection.ReflectionUtils;
 import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
 import org.auioc.mcmod.harmonicench.datagen.data.HEAdvancements;
 import net.minecraft.advancements.Advancement;
@@ -22,17 +23,9 @@ public class HEAdvancementProvider extends AdvancementProvider {
     @Override
     protected void registerAdvancements(Consumer<Advancement> writer, ExistingFileHelper fileHelper) {
         HEAdvancements.init();
-        // TODO arnicalib ReflectionUtils
-        for (var f : HEAdvancements.class.getFields()) {
-            if (DataGenAdvancementEntry.class.isAssignableFrom(f.getType())) {
-                try {
-                    var hea = (DataGenAdvancementEntry) f.get(null);
-                    hea.accept(writer, fileHelper);
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        ReflectionUtils.getFieldValues(HEAdvancements.class, DataGenAdvancementEntry.class)
+            .values()
+            .forEach((entry) -> entry.accept(writer, fileHelper));
     }
 
 }

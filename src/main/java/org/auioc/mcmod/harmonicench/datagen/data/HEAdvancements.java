@@ -1,7 +1,7 @@
 package org.auioc.mcmod.harmonicench.datagen.data;
 
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.BiFunction;
 import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
 import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
 import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
@@ -37,11 +37,11 @@ public class HEAdvancements {
     // ============================================================================================================== //
 
     public static final DataGenAdvancementEntry HEADSHOT = create(
-        "divergence/headshot", (b) -> b
+        "divergence/headshot", (id, b) -> b
             .display(
                 new DisplayInfoBuilder()
                     .icon(glintIcon(Items.CROSSBOW))
-                    .titleAndDescription(titleKey("divergence/guerrilla_in_the_jungle"))
+                    .titleAndDescription(titleKey(id))
                     .goalFrame().announceChat().showToast().hidden()
                     .build()
             )
@@ -68,11 +68,11 @@ public class HEAdvancements {
     private static final List<ResourceKey<Biome>> JUNGLES = List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE);
 
     public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = create(
-        "divergence/guerrilla_in_the_jungle", (b) -> killIllagerInJungle(b)
+        "divergence/guerrilla_in_the_jungle", (id, b) -> killIllagerInJungle(b)
             .display(
                 new DisplayInfoBuilder()
                     .icon(glintIcon(Items.BOW))
-                    .titleAndDescription(titleKey("divergence/guerrilla_in_the_jungle"))
+                    .titleAndDescription(titleKey(id))
                     .goalFrame().announceChat().showToast().hidden()
                     .build()
             )
@@ -113,11 +113,11 @@ public class HEAdvancements {
     // ====================================================================== //
 
     public static final DataGenAdvancementEntry SHOW_THE_BLADE = create(
-        "divergence/show_the_blade", (b) -> b
+        "divergence/show_the_blade", (id, b) -> b
             .display(
                 new DisplayInfoBuilder()
                     .icon(glintIcon(Items.NETHERITE_SWORD))
-                    .titleAndDescription(titleKey("divergence/show_the_blade"))
+                    .titleAndDescription(titleKey(id))
                     .goalFrame().announceChat().showToast().hidden()
                     .build()
             )
@@ -156,11 +156,11 @@ public class HEAdvancements {
     // ====================================================================== //
 
     public static final DataGenAdvancementEntry COME_WITH_PRACTICE = create(
-        "divergence/come_with_practice", (b) -> b
+        "divergence/come_with_practice", (id, b) -> b
             .display(
                 new DisplayInfoBuilder()
                     .icon(glintIcon(Items.NETHERITE_PICKAXE))
-                    .titleAndDescription(titleKey("divergence/come_with_practice"))
+                    .titleAndDescription(titleKey(id))
                     .goalFrame().announceChat().showToast().hidden()
                     .build()
             )
@@ -186,11 +186,11 @@ public class HEAdvancements {
     );
 
     public static final DataGenAdvancementEntry FISH_IN_THE_SNOW = create(
-        "divergence/fish_in_the_snow", (b) -> fishInColdBiomes(b)
+        "divergence/fish_in_the_snow", (id, b) -> fishInColdBiomes(b)
             .display(
                 new DisplayInfoBuilder()
                     .icon(glintIcon(Items.FISHING_ROD))
-                    .titleAndDescription(titleKey("divergence/fish_in_the_snow"))
+                    .titleAndDescription(titleKey(id))
                     .goalFrame().announceChat().showToast().hidden()
                     .build()
             )
@@ -222,12 +222,12 @@ public class HEAdvancements {
 
     public static void init() {}
 
-    private static DataGenAdvancementEntry create(String _id, UnaryOperator<Builder> _builder) {
+    private static DataGenAdvancementEntry create(String _id, BiFunction<ResourceLocation, Builder, Builder> _builder) {
         return new DataGenAdvancementEntry(HarmonicEnchantments.id(_id), _builder);
     }
 
-    private static String titleKey(String id) {
-        return "advancements." + HarmonicEnchantments.MOD_ID + "." + id.replace("/", ".");
+    private static String titleKey(ResourceLocation id) {
+        return "advancements." + id.getNamespace() + "." + id.getPath().replace("/", ".");
     }
 
     private static CompoundTag parseNbt(String nbt) {
