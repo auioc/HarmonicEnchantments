@@ -10,6 +10,7 @@ import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
 import org.auioc.mcmod.harmonicench.server.advancement.criterion.EnchantmentPerformedTrigger;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -241,6 +242,30 @@ public class HEAdvancements {
                     new AimEnchantment.AimEnchantmentPerformancePredicate(
                         EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build(),
                         DistancePredicate.ANY
+                    )
+                )
+            )
+    );
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry BETRAYAL = create(
+        "divergence/betrayal", (id, b) -> b
+            .display(
+                new DisplayInfoBuilder()
+                    .icon(Items.GLASS)
+                    .titleAndDescription(titleKey(id))
+                    .challengeFrame().announceChat().showToast().hidden()
+                    .build()
+            )
+            .parent(PARENT)
+            .addCriterion(
+                "betrayal", new EnchantmentPerformedTrigger.TriggerInstance<>(
+                    EntityPredicate.Composite.ANY,
+                    HEEnchantments.CURSE_OF_REBELLING.get(),
+                    ItemPredicate.ANY,
+                    new CurseOfRebellingEnchantment.CurseOfRebellingEnchantmentPerformancePredicate(
+                        true
                     )
                 )
             )
