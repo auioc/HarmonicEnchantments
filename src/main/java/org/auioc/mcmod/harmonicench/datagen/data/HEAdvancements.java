@@ -9,7 +9,9 @@ import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
 import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
+import org.auioc.mcmod.harmonicench.server.advancement.criterion.EnchantmentPerformedTrigger;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -217,6 +219,32 @@ public class HEAdvancements {
         }
         return b;
     }
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry WHOS_THE_HAWK_EYE_NOW = create(
+        "divergence/whos_the_hawk_eye_now", (id, b) -> b
+            .display(
+                new DisplayInfoBuilder()
+                    .icon(glintIcon(Items.SPYGLASS))
+                    .titleAndDescription(titleKey(id))
+                    .goalFrame().announceChat().showToast().hidden()
+                    .build()
+            )
+            .parent(PARENT)
+            .addCriterion(
+                "aim_entity",
+                new EnchantmentPerformedTrigger.TriggerInstance<>(
+                    EntityPredicate.Composite.ANY,
+                    HEEnchantments.AIM.get(),
+                    ItemPredicate.ANY,
+                    new AimEnchantment.AimEnchantmentPerformancePredicate(
+                        EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build(),
+                        DistancePredicate.ANY
+                    )
+                )
+            )
+    );
 
     // ============================================================================================================== //
 

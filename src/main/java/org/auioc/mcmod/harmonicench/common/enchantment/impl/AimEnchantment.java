@@ -3,11 +3,20 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.world.phys.RayTraceUtils;
+import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
+import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
+import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
+import com.google.gson.JsonObject;
 import net.minecraft.Util;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.DistancePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -20,7 +29,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
-public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick {
+public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick, IAdvancementTriggerableEnchantment {
 
     public AimEnchantment() {
         super(
@@ -71,9 +80,62 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
                             living.getDisplayName(), player.getDisplayName(), Math.round(living.position().distanceTo(player.position()))
                         ), Util.NIL_UUID
                     );
+                    triggerAdvancement((ServerPlayer) player, itemStack, living);
                 }
             }
         }
     }
+
+    private void triggerAdvancement(ServerPlayer player, ItemStack itemStack, LivingEntity aimedEntity) {
+        HECriteriaTriggers.ENCHANTMENT_PERFORMED.trigger(
+            player, this, itemStack,
+            AimEnchantmentPerformancePredicate.class,
+            (p) -> p.matches(player, aimedEntity)
+        );
+    }
+
+    @Override
+    public AimEnchantmentPerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
+        if (json == null) return AimEnchantmentPerformancePredicate.ANY;
+        return new AimEnchantmentPerformancePredicate(
+            EntityPredicate.Composite.fromJson(json, "aimed_entity", conditionParser),
+            DistancePredicate.fromJson(json.get("distance"))
+        );
+    }
+
+    // ============================================================================================================== //
+
+    public static class AimEnchantmentPerformancePredicate implements IEnchantmentPerformancePredicate {
+
+        public static final AimEnchantmentPerformancePredicate ANY = new AimEnchantmentPerformancePredicate(EntityPredicate.Composite.ANY, DistancePredicate.ANY);
+
+        private final EntityPredicate.Composite aimedEntityPredicate;
+        private final DistancePredicate distancePredicate;
+
+        public AimEnchantmentPerformancePredicate(EntityPredicate.Composite aimedEntityPredicate, DistancePredicate distancePredicate) {
+            this.aimedEntityPredicate = aimedEntityPredicate;
+            this.distancePredicate = distancePredicate;
+        }
+
+        public AimEnchantmentPerformancePredicate(EntityPredicate aimedEntityPredicate, DistancePredicate distancePredicate) {
+            this(EntityPredicate.Composite.wrap(aimedEntityPredicate), distancePredicate);
+        }
+
+        public boolean matches(ServerPlayer player, LivingEntity living) {
+            if (this == ANY) return true;
+            return this.aimedEntityPredicate.matches(EntityPredicate.createContext(player, living))
+                && this.distancePredicate.matches(player.getX(), player.getY(), player.getZ(), living.getX(), living.getY(), living.getZ());
+        }
+
+        @Override
+        public JsonObject serializeToJson(SerializationContext conditionSerializer) {
+            var json = new JsonObject();
+            json.add("aimed_entity", this.aimedEntityPredicate.toJson(conditionSerializer));
+            json.add("distance", this.distancePredicate.serializeToJson());
+            return json;
+        }
+
+    }
+
 
 }
