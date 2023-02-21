@@ -33,7 +33,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
         var itemPredicate = ItemPredicate.fromJson(json.get("item"));
 
         IEnchantmentPerformancePredicate performancePredicate;
-        if (enchantment instanceof IAdvancementTriggerableEnchantment e) {
+        if (enchantment instanceof IAdvancementTriggerableEnchantment<?> e) {
             performancePredicate = e.deserializePerformancePredicate(json.getAsJsonObject("performance"), conditionParser);
         } else {
             throw new JsonSyntaxException("Not a advancement triggerable enchantment: " + enchantment.getRegistryName().toString());
@@ -42,30 +42,30 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEnchantmentPerformancePredicate> void trigger(ServerPlayer player, Enchantment enchantment, ItemStack itemStack, Class<T> clazz, Predicate<T> performancePredicate) {
-        this.trigger(player, (instance) -> ((TriggerInstance<T>) instance).matches(enchantment, itemStack, performancePredicate));
+    public <P extends IEnchantmentPerformancePredicate> void trigger(ServerPlayer player, Enchantment enchantment, ItemStack itemStack, Predicate<P> performancePredicate) {
+        this.trigger(player, (instance) -> ((TriggerInstance<P>) instance).matches(enchantment, itemStack, performancePredicate));
     }
 
     // ============================================================================================================== //
 
-    public static class TriggerInstance<T extends IEnchantmentPerformancePredicate> extends AbstractCriterionTriggerInstance {
+    public static class TriggerInstance<P extends IEnchantmentPerformancePredicate> extends AbstractCriterionTriggerInstance {
 
         private final Enchantment enchantment;
         private final ItemPredicate itemPredicate;
-        private final T performancePredicate;
+        private final P performancePredicate;
 
-        public TriggerInstance(EntityPredicate.Composite playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, T performancePredicate) {
+        public TriggerInstance(EntityPredicate.Composite playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, P performancePredicate) {
             super(EnchantmentPerformedTrigger.ID, playerPredicate);
             this.enchantment = enchantment;
             this.itemPredicate = itemPredicate;
             this.performancePredicate = performancePredicate;
         }
 
-        public TriggerInstance(EntityPredicate playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, T performancePredicate) {
+        public TriggerInstance(EntityPredicate playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, P performancePredicate) {
             this(EntityPredicate.Composite.wrap(playerPredicate), enchantment, itemPredicate, performancePredicate);
         }
 
-        public boolean matches(Enchantment enchantment, ItemStack itemStack, Predicate<T> performancePredicate) {
+        public boolean matches(Enchantment enchantment, ItemStack itemStack, Predicate<P> performancePredicate) {
             return this.enchantment.equals(enchantment)
                 && this.itemPredicate.matches(itemStack)
                 && performancePredicate.test(this.performancePredicate);

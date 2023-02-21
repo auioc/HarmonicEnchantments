@@ -239,7 +239,7 @@ public class HEAdvancements {
                     EntityPredicate.Composite.ANY,
                     HEEnchantments.AIM.get(),
                     ItemPredicate.ANY,
-                    new AimEnchantment.AimEnchantmentPerformancePredicate(
+                    new AimEnchantment.PerformancePredicate(
                         EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build(),
                         DistancePredicate.ANY
                     )
@@ -264,7 +264,7 @@ public class HEAdvancements {
                     EntityPredicate.Composite.ANY,
                     HEEnchantments.CURSE_OF_REBELLING.get(),
                     ItemPredicate.ANY,
-                    new CurseOfRebellingEnchantment.CurseOfRebellingEnchantmentPerformancePredicate(
+                    new CurseOfRebellingEnchantment.PerformancePredicate(
                         true
                     )
                 )

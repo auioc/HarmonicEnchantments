@@ -4,8 +4,8 @@ import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredi
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.DeserializationContext;
 
-public interface IAdvancementTriggerableEnchantment {
+public interface IAdvancementTriggerableEnchantment<P extends IEnchantmentPerformancePredicate> {
 
-    IEnchantmentPerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser);
+    P deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser);
 
 }

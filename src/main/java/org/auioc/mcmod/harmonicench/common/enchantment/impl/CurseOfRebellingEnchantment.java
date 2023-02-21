@@ -8,6 +8,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEncha
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment.PerformancePredicate;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.DeserializationContext;
@@ -15,14 +16,13 @@ import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemEnchantment.Hurt, IAdvancementTriggerableEnchantment {
+public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemEnchantment.Hurt, IAdvancementTriggerableEnchantment<PerformancePredicate> {
 
     public CurseOfRebellingEnchantment() {
         super(
@@ -60,7 +60,7 @@ public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemE
             for (int i = 0; i < damage; ++i) if (RandomUtils.percentageChance(1, player.getRandom())) d++;
             int value = d * 4;
             if (value > 0) {
-                player.hurt(new CurseOfRebellingDamageSource(itemStack), value);
+                player.hurt(new DamageSource(itemStack), value);
                 triggerAdvancement(player, itemStack, player.isDeadOrDying());
             }
         }
@@ -70,25 +70,24 @@ public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemE
     private void triggerAdvancement(ServerPlayer player, ItemStack itemStack, boolean isDead) {
         HECriteriaTriggers.ENCHANTMENT_PERFORMED.trigger(
             player, this, itemStack,
-            CurseOfRebellingEnchantmentPerformancePredicate.class,
-            (p) -> p.matches(isDead)
+            (PerformancePredicate p) -> p.matches(isDead)
         );
     }
 
     @Override
-    public CurseOfRebellingEnchantmentPerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
-        return new CurseOfRebellingEnchantmentPerformancePredicate(
+    public PerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
+        return new PerformancePredicate(
             GsonHelper.isBooleanValue(json, "dead") ? GsonHelper.getAsBoolean(json, "dead") : null
         );
     }
 
     // ============================================================================================================== //
 
-    public static class CurseOfRebellingDamageSource extends DamageSource {
+    private static class DamageSource extends net.minecraft.world.damagesource.DamageSource {
 
         private final ItemStack betrayedItem;
 
-        public CurseOfRebellingDamageSource(ItemStack itemStack) {
+        public DamageSource(ItemStack itemStack) {
             super("curseOfRebelling");
             this.bypassArmor().bypassMagic().setMagic();
             this.betrayedItem = itemStack;
@@ -103,13 +102,13 @@ public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemE
 
     // ============================================================================================================== //
 
-    public static class CurseOfRebellingEnchantmentPerformancePredicate implements IEnchantmentPerformancePredicate {
+    public static class PerformancePredicate implements IEnchantmentPerformancePredicate {
 
-        public static final CurseOfRebellingEnchantmentPerformancePredicate ANY = new CurseOfRebellingEnchantmentPerformancePredicate(null);
+        public static final PerformancePredicate ANY = new PerformancePredicate(null);
 
         private final Boolean isDead;
 
-        public CurseOfRebellingEnchantmentPerformancePredicate(Boolean isDead) {
+        public PerformancePredicate(Boolean isDead) {
             this.isDead = isDead;
         }
 

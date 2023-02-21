@@ -8,6 +8,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEncha
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment.PerformancePredicate;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import com.google.gson.JsonObject;
 import net.minecraft.Util;
@@ -29,7 +30,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
-public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick, IAdvancementTriggerableEnchantment {
+public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick, IAdvancementTriggerableEnchantment<PerformancePredicate> {
 
     public AimEnchantment() {
         super(
@@ -89,15 +90,14 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
     private void triggerAdvancement(ServerPlayer player, ItemStack itemStack, LivingEntity aimedEntity) {
         HECriteriaTriggers.ENCHANTMENT_PERFORMED.trigger(
             player, this, itemStack,
-            AimEnchantmentPerformancePredicate.class,
-            (p) -> p.matches(player, aimedEntity)
+            (PerformancePredicate p) -> p.matches(player, aimedEntity)
         );
     }
 
     @Override
-    public AimEnchantmentPerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
-        if (json == null) return AimEnchantmentPerformancePredicate.ANY;
-        return new AimEnchantmentPerformancePredicate(
+    public PerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
+        if (json == null) return PerformancePredicate.ANY;
+        return new PerformancePredicate(
             EntityPredicate.Composite.fromJson(json, "aimed_entity", conditionParser),
             DistancePredicate.fromJson(json.get("distance"))
         );
@@ -105,26 +105,26 @@ public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.
 
     // ============================================================================================================== //
 
-    public static class AimEnchantmentPerformancePredicate implements IEnchantmentPerformancePredicate {
+    public static class PerformancePredicate implements IEnchantmentPerformancePredicate {
 
-        public static final AimEnchantmentPerformancePredicate ANY = new AimEnchantmentPerformancePredicate(EntityPredicate.Composite.ANY, DistancePredicate.ANY);
+        public static final PerformancePredicate ANY = new PerformancePredicate(EntityPredicate.Composite.ANY, DistancePredicate.ANY);
 
         private final EntityPredicate.Composite aimedEntityPredicate;
         private final DistancePredicate distancePredicate;
 
-        public AimEnchantmentPerformancePredicate(EntityPredicate.Composite aimedEntityPredicate, DistancePredicate distancePredicate) {
+        public PerformancePredicate(EntityPredicate.Composite aimedEntityPredicate, DistancePredicate distancePredicate) {
             this.aimedEntityPredicate = aimedEntityPredicate;
             this.distancePredicate = distancePredicate;
         }
 
-        public AimEnchantmentPerformancePredicate(EntityPredicate aimedEntityPredicate, DistancePredicate distancePredicate) {
+        public PerformancePredicate(EntityPredicate aimedEntityPredicate, DistancePredicate distancePredicate) {
             this(EntityPredicate.Composite.wrap(aimedEntityPredicate), distancePredicate);
         }
 
-        public boolean matches(ServerPlayer player, LivingEntity living) {
+        public boolean matches(ServerPlayer player, LivingEntity aimedEntity) {
             if (this == ANY) return true;
-            return this.aimedEntityPredicate.matches(EntityPredicate.createContext(player, living))
-                && this.distancePredicate.matches(player.getX(), player.getY(), player.getZ(), living.getX(), living.getY(), living.getZ());
+            return this.aimedEntityPredicate.matches(EntityPredicate.createContext(player, aimedEntity))
+                && this.distancePredicate.matches(player.getX(), player.getY(), player.getZ(), aimedEntity.getX(), aimedEntity.getY(), aimedEntity.getZ());
         }
 
         @Override
