@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class LuckOfTheSnowEnchantment extends HEEnchantment implements IItemEnchantment.FishingRod {
+public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements IItemEnchantment.FishingRod {
 
     public LuckOfTheSnowEnchantment() {
         super(

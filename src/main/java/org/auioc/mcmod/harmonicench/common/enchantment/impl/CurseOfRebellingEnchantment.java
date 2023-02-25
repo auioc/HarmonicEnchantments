@@ -4,10 +4,10 @@ import java.util.Random;
 import org.auioc.mcmod.arnicalib.base.random.RandomUtils;
 import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment.PerformancePredicate;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import com.google.gson.JsonObject;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public class CurseOfRebellingEnchantment extends HEEnchantment implements IItemEnchantment.Hurt, IAdvancementTriggerableEnchantment<PerformancePredicate> {
+public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt, IAdvancementTriggerableEnchantment<PerformancePredicate> {
 
     public CurseOfRebellingEnchantment() {
         super(

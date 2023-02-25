@@ -3,10 +3,10 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import java.util.Map;
 import java.util.UUID;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
-public class RapierEnchantment extends HEEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
+public class RapierEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");
 

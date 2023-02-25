@@ -5,10 +5,10 @@ import java.util.UUID;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.tag.HItemTags;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class BluntEnchantment extends HEEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
+public class BluntEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("F839F42C-4B26-6F66-7025-1EF3294EED97");
 

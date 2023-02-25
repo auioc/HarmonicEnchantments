@@ -1,9 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
-public class SunAffinityEnchantment extends HEEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
+public class SunAffinityEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
 
     public SunAffinityEnchantment() {
         super(

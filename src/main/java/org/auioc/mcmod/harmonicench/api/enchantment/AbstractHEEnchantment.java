@@ -24,6 +24,22 @@ public abstract class AbstractHEEnchantment extends Enchantment implements IVali
         this(rarity, category, new EquipmentSlot[] {validSlot}, maxLevel, compatibility);
     }
 
+    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, Predicate<Enchantment> compatibility) {
+        this(rarity, category, validSlots, 1, compatibility);
+    }
+
+    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, Predicate<Enchantment> compatibility) {
+        this(rarity, category, validSlot, 1, compatibility);
+    }
+
+    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, int maxLevel) {
+        this(rarity, category, validSlot, maxLevel, (o) -> true);
+    }
+
+    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel) {
+        this(rarity, category, validSlots, maxLevel, (o) -> true);
+    }
+
     public AbstractHEEnchantment() {
         this(Rarity.COMMON, EnchantmentCategory.VANISHABLE, EquipmentSlot.MAINHAND, 1, (o) -> true);
     }

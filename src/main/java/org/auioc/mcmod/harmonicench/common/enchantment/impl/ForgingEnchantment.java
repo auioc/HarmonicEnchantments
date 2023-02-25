@@ -4,9 +4,9 @@ import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class ForgingEnchantment extends HEEnchantment implements IAttributeModifierEnchantment {
+public class ForgingEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment {
 
     private static final EnchantmentCategory METALLIC_ARMOR = EnchantmentCategory.create(
         "METALLIC_ARMOR",

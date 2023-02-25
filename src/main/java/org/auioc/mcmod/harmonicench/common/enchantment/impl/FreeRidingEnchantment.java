@@ -2,15 +2,15 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.Random;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class FreeRidingEnchantment extends HEEnchantment implements IItemEnchantment.Hurt {
+public class FreeRidingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt {
 
     public FreeRidingEnchantment() {
         super(

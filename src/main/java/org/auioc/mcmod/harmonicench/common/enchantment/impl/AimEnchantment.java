@@ -4,10 +4,10 @@ import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.world.phys.RayTraceUtils;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment.PerformancePredicate;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import com.google.gson.JsonObject;
@@ -30,7 +30,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
-public class AimEnchantment extends HEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick, IAdvancementTriggerableEnchantment<PerformancePredicate> {
+public class AimEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick, IAdvancementTriggerableEnchantment<PerformancePredicate> {
 
     public AimEnchantment() {
         super(

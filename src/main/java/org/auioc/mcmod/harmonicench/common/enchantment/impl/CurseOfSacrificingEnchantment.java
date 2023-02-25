@@ -4,9 +4,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentTagUtils;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class CurseOfSacrificingEnchantment extends HEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
+public class CurseOfSacrificingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
 
     private static final String NBT_TIME = "SacrificingProcess";
     private static final int MAX_TIME = 20 * 60;

@@ -3,9 +3,9 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 import java.util.Map;
 import java.util.UUID;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,7 +15,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.ForgeMod;
 
-public class LongEnchantment extends HEEnchantment implements IAttributeModifierEnchantment {
+public class LongEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment {
 
     private static final UUID ATTACK_RANGE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");
 

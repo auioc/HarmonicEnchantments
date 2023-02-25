@@ -1,9 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class DiningEnchantment extends HEEnchantment implements IPlayerEnchantment.Eat {
+public class DiningEnchantment extends AbstractHEEnchantment implements IPlayerEnchantment.Eat {
 
     public DiningEnchantment() {
         super(

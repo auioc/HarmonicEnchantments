@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class HandinessEnchantment extends HEEnchantment implements IProjectileEnchantment.HurtLiving {
+public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {
         super(

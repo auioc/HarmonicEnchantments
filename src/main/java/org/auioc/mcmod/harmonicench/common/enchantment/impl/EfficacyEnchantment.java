@@ -4,9 +4,9 @@ import java.util.HashSet;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
 import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +21,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class EfficacyEnchantment extends HEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
+public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
     public EfficacyEnchantment() {
         super(

@@ -2,8 +2,8 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class MobAffinityEnchantment extends HEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
+public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
     public MobAffinityEnchantment() {
         super(

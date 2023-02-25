@@ -5,9 +5,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ProficiencyEnchantment extends HEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
+public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
     public static final String NBT_PROFICIENCY = "Proficiency";
 

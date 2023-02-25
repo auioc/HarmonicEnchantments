@@ -1,8 +1,8 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class DeepStudyEnchantment extends HEEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
+public class DeepStudyEnchantment extends AbstractHEEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
 
     public DeepStudyEnchantment() {
         super(

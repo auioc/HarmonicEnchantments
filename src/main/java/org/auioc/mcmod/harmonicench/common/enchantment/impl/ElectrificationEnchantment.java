@@ -1,9 +1,9 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.random.RandomUtils;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.base.HEEnchantment;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-public class ElectrificationEnchantment extends HEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
+public class ElectrificationEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {
         super(
