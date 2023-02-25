@@ -195,6 +195,9 @@ public class EnchantmentPerformer {
         return damage.intValue();
     }
 
+    /**
+     * FMLCoreMod: harmonicench.living_entity.magic_absorb
+     */
     public static int getDamageProtectionWithItem(Iterable<ItemStack> items, DamageSource source) {
         MutableInt protection = new MutableInt();
         runOnItems(

@@ -13,6 +13,9 @@ public class WeightlessnessMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, 13565951);
     }
 
+    /**
+     * FMLCoreMod: harmonicench.living_entity.travel
+     */
     public static Vec3 adjustFallFlySpeed(LivingEntity living, Vec3 vec3) {
         int lvl = Math.min(MobEffectUtils.getLevel(living, HEMobEffects.WEIGHTLESSNESS.get()), 100);
         if (lvl > 0 && vec3.y < 0.0D) {
