@@ -2,7 +2,6 @@ package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.arnicalib.game.world.phys.RayTraceUtils;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
@@ -21,12 +20,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -70,8 +73,11 @@ public class AimEnchantment extends AbstractHEEnchantment implements ILivingEnch
 
     @Override
     public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, Phase phase, LogicalSide side) {
-        if (phase == Phase.END && side == LogicalSide.SERVER && player.tickCount % 33 == 0 && player.isScoping()) {
-            var hit = RayTraceUtils.getEntityHitResult(player, 100.0D);
+        if (phase == Phase.END && side == LogicalSide.SERVER && player.tickCount % 11 == 0 && player.isScoping()) {
+            Vec3 from = player.getEyePosition();
+            Vec3 view = player.getViewVector(1.0F);
+            Vec3 to = from.add(view.x * 100.0D, view.y * 100.0D, view.z * 100.0D);
+            var hit = ProjectileUtil.getEntityHitResult(player.level, player, from, to, (new AABB(from, to)).inflate(1.0D), EntitySelector.NO_SPECTATORS, 0.0F);
             if (hit != null && hit.getEntity() instanceof LivingEntity living) {
                 if (!living.hasEffect(MobEffects.GLOWING)) {
                     living.addEffect(new MobEffectInstance(MobEffects.GLOWING, MathUtil.sigma(lvl, 1, (int i) -> (20 / i)) * 20, 1));
