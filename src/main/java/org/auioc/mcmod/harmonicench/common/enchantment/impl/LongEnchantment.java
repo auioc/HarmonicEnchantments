@@ -42,7 +42,7 @@ public class LongEnchantment extends AbstractHEEnchantment implements IAttribute
     @Override
     public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
         return Map.of(
-            ForgeMod.ATTACK_RANGE.get(),
+            ForgeMod.ENTITY_REACH.get(),
             new AttributeModifier(
                 ATTACK_RANGE_UUID, this.descriptionId,
                 MathUtil.sigma(lvl, 1, (double i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION

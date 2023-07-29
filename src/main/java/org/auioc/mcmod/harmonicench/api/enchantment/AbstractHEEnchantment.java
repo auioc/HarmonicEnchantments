@@ -2,6 +2,7 @@ package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import java.util.function.Predicate;
 import org.auioc.mcmod.arnicalib.game.enchantment.IValidSlotsVisibleEnchantment;
+import org.auioc.mcmod.arnicalib.game.registry.RegistryUtils;
 import org.auioc.mcmod.harmonicench.api.config.NullableBooleanValue;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +13,7 @@ public abstract class AbstractHEEnchantment extends Enchantment implements IVali
 
     protected final int maxLevel;
     protected final Predicate<Enchantment> compatibility;
-    protected final NullableBooleanValue isEnabled = new NullableBooleanValue(() -> HEEnchantmentManager.getConfigEnabled(getRegistryName()));
+    protected final NullableBooleanValue isEnabled = new NullableBooleanValue(() -> HEEnchantmentManager.getConfigEnabled(RegistryUtils.id(this)));
 
     public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel, Predicate<Enchantment> compatibility) {
         super(rarity, category, validSlots);

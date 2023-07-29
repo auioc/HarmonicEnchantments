@@ -5,7 +5,7 @@ import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEncha
 import org.auioc.mcmod.harmonicench.server.event.impl.ApplyLootEnchantmentBonusCountEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
-import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftChanceEvent;
+import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.ItemHurtEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.PiglinStanceEvent;
 import org.auioc.mcmod.hulsealib.game.event.server.PreBowReleaseEvent;
@@ -14,8 +14,8 @@ import org.auioc.mcmod.hulsealib.game.event.server.PreFishingRodCastEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.event.entity.living.PotionEvent.PotionAddedEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class HEServerEventHandler {
@@ -71,14 +71,13 @@ public final class HEServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPotionAdded(final PotionAddedEvent event) {
-        EnchantmentPerformer.onPotionAdded(event.getEntityLiving(), event.getPotionSource(), event.getPotionEffect(), event.getOldPotionEffect());
+    public static void onMobEffectAdded(final MobEffectEvent.Added event) {
+        EnchantmentPerformer.onMobEffectAdded(event.getEntity(), event.getEffectSource(), event.getEffectInstance(), event.getOldEffectInstance());
     }
 
     @SubscribeEvent
-    public static void onSetCatMorningGiftChance(final CatMorningGiftChanceEvent event) {
-        var r = EnchantmentPerformer.onSetCatMorningGiftChance(event.getCat(), event.getOwnerPlayer(), event.getChance());
-        event.setChance(r);
+    public static void onCatMorningGiftConditionCheck(final CatMorningGiftEvent.Check event) {
+        EnchantmentPerformer.onCatMorningGiftConditionCheck(event.getCat(), event.getOwner(), event.getConditions());
     }
 
     @SubscribeEvent

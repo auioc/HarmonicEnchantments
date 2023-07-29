@@ -22,6 +22,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
@@ -56,7 +57,7 @@ public class HEAdvancements {
                         .of(EntityType.VEX)
                         .distance(DistancePredicate.horizontal(MinMaxBounds.Doubles.atLeast(30.0D))),
                     DamageSourcePredicate.Builder.damageType()
-                        .isProjectile(true)
+                        .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
                         .direct(
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
@@ -89,18 +90,18 @@ public class HEAdvancements {
                 "kill_illager_in_" + biome.location().getPath(),
                 new KilledTrigger.TriggerInstance(
                     CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
-                    EntityPredicate.Composite.wrap(
+                    EntityPredicate.wrap(
                         EntityPredicate.Builder.entity()
                             .located(LocationPredicate.inBiome(biome))
                             .build()
                     ),
-                    EntityPredicate.Composite.wrap(
+                    EntityPredicate.wrap(
                         EntityPredicate.Builder.entity()
                             .of(HEntityTypeTags.ILLAGERS)
                             .build()
                     ),
                     DamageSourcePredicate.Builder.damageType()
-                        .isProjectile(true)
+                        .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
                         .direct(
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
@@ -129,8 +130,8 @@ public class HEAdvancements {
                 "kill_boss",
                 new KilledTrigger.TriggerInstance(
                     CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
-                    EntityPredicate.Composite.ANY,
-                    EntityPredicate.Composite.create(
+                    ContextAwarePredicate.ANY,
+                    ContextAwarePredicate.create(
                         new EntityAttributeCondition(
                             Attributes.MAX_HEALTH,
                             EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
@@ -236,7 +237,7 @@ public class HEAdvancements {
             .addCriterion(
                 "aim_entity",
                 new EnchantmentPerformedTrigger.TriggerInstance<>(
-                    EntityPredicate.Composite.ANY,
+                    ContextAwarePredicate.ANY,
                     HEEnchantments.AIM.get(),
                     ItemPredicate.ANY,
                     new AimEnchantment.PerformancePredicate(
@@ -261,7 +262,7 @@ public class HEAdvancements {
             .parent(PARENT)
             .addCriterion(
                 "betrayal", new EnchantmentPerformedTrigger.TriggerInstance<>(
-                    EntityPredicate.Composite.ANY,
+                    ContextAwarePredicate.ANY,
                     HEEnchantments.CURSE_OF_REBELLING.get(),
                     ItemPredicate.ANY,
                     new CurseOfRebellingEnchantment.PerformancePredicate(

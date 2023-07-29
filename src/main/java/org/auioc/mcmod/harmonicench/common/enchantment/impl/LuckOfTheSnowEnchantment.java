@@ -34,7 +34,7 @@ public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements I
 
     @Override
     public Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus) {
-        float temperature = player.level.getBiome(player.blockPosition()).value().getBaseTemperature();
+        float temperature = player.level().getBiome(player.blockPosition()).value().getBaseTemperature();
         if (temperature <= 0.0F) {
             luckBonus += lvl * 2;
         } else if (temperature <= 0.2F) {

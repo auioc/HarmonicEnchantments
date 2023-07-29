@@ -5,6 +5,7 @@ import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
@@ -56,7 +57,7 @@ public class BlessingEnchantment extends AbstractHEEnchantment implements IItemE
 
     @Override
     public int getDamageProtection(int lvl, ItemStack itemStack, DamageSource source) {
-        if (source.isMagic()) {
+        if (source.is(DamageTypes.MAGIC)) {
             int N = EnchantmentHelper.getEnchantments(itemStack).values().stream().mapToInt((i) -> i).sum();
             double l = MathUtil.sigma(N, 1, (double i) -> 6.0D / i);
             double r = MathUtil.sigma(lvl, 1, (double j) -> 1.0D / (5.0D * j - 4.0D));

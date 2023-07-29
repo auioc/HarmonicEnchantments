@@ -3,12 +3,14 @@ package org.auioc.mcmod.harmonicench.server.advancement.criterion;
 import java.util.function.Predicate;
 import org.auioc.mcmod.arnicalib.game.data.GsonHelper;
 import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentRegistry;
+import org.auioc.mcmod.arnicalib.game.registry.RegistryUtils;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -27,8 +29,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
     public ResourceLocation getId() { return ID; }
 
     @Override
-
-    protected EnchantmentPerformedTrigger.TriggerInstance<? extends IEnchantmentPerformancePredicate> createInstance(JsonObject json, EntityPredicate.Composite playerPredicate, DeserializationContext conditionParser) {
+    protected EnchantmentPerformedTrigger.TriggerInstance<? extends IEnchantmentPerformancePredicate> createInstance(JsonObject json, ContextAwarePredicate playerPredicate, DeserializationContext conditionParser) {
         var enchantment = EnchantmentRegistry.getOrElseThrow(GsonHelper.getAsString(json, "enchantment"));
         var itemPredicate = ItemPredicate.fromJson(json.get("item"));
 
@@ -36,7 +37,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
         if (enchantment instanceof IAdvancementTriggerableEnchantment<?> e) {
             performancePredicate = e.deserializePerformancePredicate(json.getAsJsonObject("performance"), conditionParser);
         } else {
-            throw new JsonSyntaxException("Not a advancement triggerable enchantment: " + enchantment.getRegistryName().toString());
+            throw new JsonSyntaxException("Not a advancement triggerable enchantment: " + RegistryUtils.id(enchantment).toString());
         }
         return new TriggerInstance<>(playerPredicate, enchantment, itemPredicate, performancePredicate);
     }
@@ -54,7 +55,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
         private final ItemPredicate itemPredicate;
         private final P performancePredicate;
 
-        public TriggerInstance(EntityPredicate.Composite playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, P performancePredicate) {
+        public TriggerInstance(ContextAwarePredicate playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, P performancePredicate) {
             super(EnchantmentPerformedTrigger.ID, playerPredicate);
             this.enchantment = enchantment;
             this.itemPredicate = itemPredicate;
@@ -62,7 +63,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
         }
 
         public TriggerInstance(EntityPredicate playerPredicate, Enchantment enchantment, ItemPredicate itemPredicate, P performancePredicate) {
-            this(EntityPredicate.Composite.wrap(playerPredicate), enchantment, itemPredicate, performancePredicate);
+            this(EntityPredicate.wrap(playerPredicate), enchantment, itemPredicate, performancePredicate);
         }
 
         public boolean matches(Enchantment enchantment, ItemStack itemStack, Predicate<P> performancePredicate) {
@@ -74,7 +75,7 @@ public class EnchantmentPerformedTrigger extends SimpleCriterionTrigger<Enchantm
         @Override
         public JsonObject serializeToJson(SerializationContext conditionSerializer) {
             var json = super.serializeToJson(conditionSerializer);
-            json.addProperty("enchantment", this.enchantment.getRegistryName().toString());
+            json.addProperty("enchantment", RegistryUtils.id(this.enchantment).toString());
             json.add("item", this.itemPredicate.serializeToJson());
             json.add("performance", this.performancePredicate.serializeToJson(conditionSerializer));
             return json;

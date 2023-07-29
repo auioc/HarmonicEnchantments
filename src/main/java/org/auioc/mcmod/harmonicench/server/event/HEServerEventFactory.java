@@ -12,7 +12,7 @@ public final class HEServerEventFactory {
     private static final IEventBus BUS = MinecraftForge.EVENT_BUS;
 
     /**
-     * FMLCoreMod: harmonicench.apply_bonus_count
+     * FMLCoreMod: harmonicench.apply_bonus_count.run
      */
     public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int enchantmentLevel) {
         var event = new ApplyLootEnchantmentBonusCountEvent(lootContext, itemStack, enchantment, enchantmentLevel);

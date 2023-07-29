@@ -1,6 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.base.random.RandomUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
@@ -61,7 +60,10 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
         } else {
             return;
         }
-        if (RandomUtils.percentageChance(100 - chance, player.getRandom())) return;
+
+        if (player.getRandom().nextInt(100) < 100 - chance) {// TODO ArnicaLib: GameRandomUtils percentageChance
+            return;
+        }
 
         var lightning = EntityType.LIGHTNING_BOLT.create(serverLevel);
         lightning.setPos(player.position());
@@ -70,7 +72,7 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
 
     @Override
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (!isSource && source == DamageSource.LIGHTNING_BOLT) {
+        if (!isSource && source == target.damageSources().lightningBolt()) {
             double effectDuration = 0.0D;
             double effectLevel = 0.0D;
             for (int k = 1, n = lvl + 1; k < n; k++) {

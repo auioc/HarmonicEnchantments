@@ -14,13 +14,13 @@ public final class HEClientEventHandler {
 
     @SubscribeEvent
     public static void onItemTooltip(final ItemTooltipEvent event) {
-        EnchantmentPerformer.onItemTooltip(event.getItemStack(), event.getPlayer(), event.getToolTip(), event.getFlags());
+        EnchantmentPerformer.onItemTooltip(event.getItemStack(), event.getEntity(), event.getToolTip(), event.getFlags());
     }
 
     @SubscribeEvent
     public static void onMovementInputUpdate(MovementInputUpdateEvent event) {
         var input = event.getInput();
-        var player = (LocalPlayer) event.getPlayer();
+        var player = (LocalPlayer) event.getEntity();
         for (var entry : player.getActiveEffectsMap().entrySet()) {
             if (entry.getKey() instanceof IMovementInputMobEffect effect) {
                 effect.onMovementInputUpdate(entry.getValue().getAmplifier(), input, player);

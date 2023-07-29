@@ -37,7 +37,7 @@ public class SunAffinityEnchantment extends AbstractHEEnchantment implements IIt
 
     @Override
     public boolean canElytraFly(int lvl, ItemStack elytra, LivingEntity living) {
-        var level = living.getLevel();
+        var level = living.level();
 
         if (!level.dimensionType().natural()) return false;
 

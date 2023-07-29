@@ -7,10 +7,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.OreBlock;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraftforge.common.Tags;
 
 public class DeepStudyEnchantment extends AbstractHEEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
 
@@ -36,11 +35,11 @@ public class DeepStudyEnchantment extends AbstractHEEnchantment implements ILoot
 
     @Override
     public int onApplyLootEnchantmentBonusCount(int lvl, LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int enchantmentLevel) {
-        if (enchantment == Enchantments.BLOCK_FORTUNE) {
-            var block = lootContext.getParam(LootContextParams.BLOCK_STATE).getBlock();
-            if (block instanceof OreBlock && block.defaultMaterialColor() == MaterialColor.DEEPSLATE) {
-                return enchantmentLevel + (lvl * 2);
-            }
+        if (
+            enchantment == Enchantments.BLOCK_FORTUNE
+                && lootContext.getParam(LootContextParams.BLOCK_STATE).is(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE)
+        ) {
+            return enchantmentLevel + (lvl * 2);
         }
         return enchantmentLevel;
     }

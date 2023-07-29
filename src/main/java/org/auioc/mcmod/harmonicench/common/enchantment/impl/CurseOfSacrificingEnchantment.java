@@ -1,16 +1,15 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentTagUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
-import net.minecraft.Util;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -64,8 +63,8 @@ public class CurseOfSacrificingEnchantment extends AbstractHEEnchantment impleme
             if (time >= MAX_TIME && !level.isClientSide) {
                 var enchTag = itemStack.getEnchantmentTags();
                 player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (EnchantmentTagUtils.calcTotalLevel(enchTag) * 60) * 20, (-1 * enchTag.size()) - 1));
-                player.hurt(DamageSource.GENERIC, 0.1F);
-                player.sendMessage(new TranslatableComponent(getDescriptionId() + ".vanished", itemStack.getDisplayName(), player.getDisplayName()), Util.NIL_UUID);
+                player.hurt(player.damageSources().magic(), 0.1F);
+                player.sendSystemMessage(Component.translatable(getDescriptionId() + ".vanished", itemStack.getDisplayName(), player.getDisplayName()));
                 itemStack.setCount(0);
             } else if (player.tickCount % 20 == 0) {
                 nbt.putInt(NBT_TIME, time + lvl);
@@ -90,12 +89,12 @@ public class CurseOfSacrificingEnchantment extends AbstractHEEnchantment impleme
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onItemTooltip(int lvl, @Nonnull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
+    public void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
         EnchantmentHelper.getEnchantmentTooltip(lines, this.getDescriptionId()).ifPresent(
             (text) -> {
                 int time = getSacrificingProcess(itemStack);
                 if (time > 0 && time <= MAX_TIME) {
-                    text.append(String.format(" (%s)", StringUtil.formatTickDuration((MAX_TIME - time) * 20)));
+                    ((MutableComponent) text).append(String.format(" (%s)", StringUtil.formatTickDuration((MAX_TIME - time) * 20)));
                 }
             }
         );

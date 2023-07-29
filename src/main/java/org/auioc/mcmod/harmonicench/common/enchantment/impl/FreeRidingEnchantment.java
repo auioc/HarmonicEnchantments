@@ -1,10 +1,10 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.Random;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -37,7 +37,7 @@ public class FreeRidingEnchantment extends AbstractHEEnchantment implements IIte
     }
 
     @Override
-    public int onItemHurt(int lvl, ItemStack itemStack, int damage, Random random, ServerPlayer player) {
+    public int onItemHurt(int lvl, ItemStack itemStack, int damage, RandomSource random, ServerPlayer player) {
         return 0;
     }
 

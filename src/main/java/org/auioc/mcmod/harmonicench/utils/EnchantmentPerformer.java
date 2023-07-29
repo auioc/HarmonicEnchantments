@@ -5,15 +5,14 @@ import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.run
 import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnItems;
 import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnLiving;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -31,9 +30,12 @@ import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -182,7 +184,7 @@ public class EnchantmentPerformer {
         return amount.floatValue();
     }
 
-    public static int onItemHurt(ItemStack itemStack, int originalDamage, Random random, ServerPlayer player) {
+    public static int onItemHurt(ItemStack itemStack, int originalDamage, RandomSource random, ServerPlayer player) {
         if (EnchantmentHelper.NOT_ITEM.test(itemStack)) return originalDamage;
         var damage = new MutableInt(originalDamage);
         runOnItem(
@@ -266,7 +268,7 @@ public class EnchantmentPerformer {
         return stance.getValue();
     }
 
-    public static void onPotionAdded(LivingEntity target, @Nullable Entity source, MobEffectInstance newEffect, @Nullable MobEffectInstance oldEffect) {
+    public static void onMobEffectAdded(LivingEntity target, @Nullable Entity source, MobEffectInstance newEffect, @Nullable MobEffectInstance oldEffect) {
         runOnLiving(
             (slot, itemStack, ench, lvl) -> perform(
                 ench, ILivingEnchantment.Potion.class,
@@ -276,16 +278,14 @@ public class EnchantmentPerformer {
         );
     }
 
-    public static double onSetCatMorningGiftChance(Cat cat, Player ownerPlayer, double originalChance) {
-        var chance = new MutableDouble(originalChance);
+    public static void onCatMorningGiftConditionCheck(Cat cat, Player owner, LinkedHashMap<ResourceLocation, BiPredicate<Cat, Player>> conditions) {
         runOnLiving(
             (slot, itemStack, ench, lvl) -> perform(
                 ench, ILivingEnchantment.Cat.class,
-                (e) -> chance.setValue(e.onSetCatMorningGiftChance(lvl, slot, cat, ownerPlayer, chance.doubleValue()))
+                (e) -> e.onCatMorningGiftConditionCheck(lvl, slot, cat, owner, conditions)
             ),
-            ownerPlayer
+            owner
         );
-        return chance.doubleValue();
     }
 
     public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int originalEnchantmentLevel) {
@@ -322,7 +322,7 @@ public class EnchantmentPerformer {
         return bool.booleanValue();
     }
 
-    public static float getBreakSpeed(Player player, BlockState blockState, BlockPos blockPos, float originalSpeed) {
+    public static float getBreakSpeed(Player player, BlockState blockState, Optional<BlockPos> blockPos, float originalSpeed) {
         var speed = new MutableFloat(originalSpeed);
         runOnLiving(
             (slot, itemStack, ench, lvl) -> perform(
@@ -369,7 +369,7 @@ public class EnchantmentPerformer {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void onItemTooltip(@Nonnull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
+    public static void onItemTooltip(@NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
         runOnItem((ench, lvl) -> perform(ench, IItemEnchantment.Tooltip.class, (e) -> e.onItemTooltip(lvl, itemStack, player, lines, flags)), itemStack);
     }
 

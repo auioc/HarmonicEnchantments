@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import org.auioc.mcmod.arnicalib.base.collection.ListUtils;
 import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -36,9 +36,16 @@ public class EnchantmentHelper extends net.minecraft.world.item.enchantment.Ench
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static Optional<TranslatableComponent> getEnchantmentTooltip(List<Component> tooltip, String key) {
-        int i = ListUtils.indexOf(tooltip, (l) -> (l instanceof TranslatableComponent c) ? (c.getKey().equals(key) ? true : false) : false);
-        return (i >= 0) ? Optional.of((TranslatableComponent) tooltip.get(i)) : Optional.empty();
+    public static Optional<Component> getEnchantmentTooltip(List<Component> tooltip, String key) {
+        int i = ListUtils.indexOf(tooltip, (l) -> {
+            if (l.getContents() instanceof TranslatableContents t) {
+                if (t.getKey().equals(key)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        return (i >= 0) ? Optional.of(tooltip.get(i)) : Optional.empty();
     }
 
 }

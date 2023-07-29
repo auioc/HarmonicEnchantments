@@ -3,6 +3,7 @@ package org.auioc.mcmod.harmonicench.mixin.common;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
+import org.auioc.mcmod.arnicalib.game.registry.RegistryUtils;
 import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinProjectile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -53,7 +54,7 @@ public class MixinProjectile implements IMixinProjectile {
         if (this.enchantments != null && !this.enchantments.isEmpty()) {
             var enchList = new ListTag();
             for (var enchEntry : this.enchantments.entrySet()) {
-                enchList.add(EnchantmentHelper.storeEnchantment(enchEntry.getKey().getRegistryName(), enchEntry.getValue()));
+                enchList.add(EnchantmentHelper.storeEnchantment(RegistryUtils.id(enchEntry.getKey()), enchEntry.getValue()));
             }
             p_37265_.put("Enchantments", enchList);
         }

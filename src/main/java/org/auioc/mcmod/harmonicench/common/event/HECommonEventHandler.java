@@ -1,12 +1,12 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
-import org.auioc.mcmod.arnicalib.mod.mixinapi.common.IMixinProjectile;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.IHProjectile;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
 import org.auioc.mcmod.hulsealib.game.event.common.ItemInventoryTickEvent;
 import org.auioc.mcmod.hulsealib.game.event.common.LivingEatEvent;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -38,34 +38,35 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onLivingHurt(final LivingHurtEvent event) {
-        var source = event.getSource();
-        var target = event.getEntityLiving();
+        var damageSource = event.getSource();
+        var target = event.getEntity();
 
-        if (source instanceof IndirectEntityDamageSource indirectSource && indirectSource.getEntity() instanceof LivingEntity owner) {
-            if (indirectSource.isProjectile() && indirectSource.getDirectEntity() instanceof Projectile projectile) {
-                event.setAmount(EnchantmentPerformer.onProjectileHurtLiving(target, projectile, owner, ((IMixinProjectile) projectile).getShootingPosition(), event.getAmount()));
+        if (damageSource.getEntity() instanceof LivingEntity owner) {
+            if (damageSource.is(DamageTypeTags.IS_PROJECTILE) && damageSource.getDirectEntity() instanceof Projectile projectile) {
+                event.setAmount(EnchantmentPerformer.onProjectileHurtLiving(target, projectile, owner, ((IHProjectile) projectile).getShootingPosition(), event.getAmount()));
             }
-            if (indirectSource.isExplosion() && indirectSource.getDirectEntity() instanceof FireworkRocketEntity fireworkRocket) {
+            if (damageSource.is(DamageTypeTags.IS_EXPLOSION) && damageSource.getDirectEntity() instanceof FireworkRocketEntity fireworkRocket) {
                 event.setAmount(EnchantmentPerformer.onFireworkRocketExplode(target, fireworkRocket, owner, event.getAmount()));
             }
         }
-        event.setAmount(EnchantmentPerformer.onLivingHurt(target, source, event.getAmount()));
+
+        event.setAmount(EnchantmentPerformer.onLivingHurt(target, damageSource, event.getAmount()));
         return;
     }
 
     @SubscribeEvent
     public static void onLivingDeath(final LivingDeathEvent event) {
-        EnchantmentPerformer.onLivingDeath(event.getEntityLiving(), event.getSource());
+        EnchantmentPerformer.onLivingDeath(event.getEntity(), event.getSource());
     }
 
     @SubscribeEvent
     public static void onItemInventoryTick(final ItemInventoryTickEvent event) {
-        EnchantmentPerformer.onItemInventoryTick(event.getItemStack(), event.getPlayer(), event.getLevel(), event.getIndex(), event.isSelected());
+        EnchantmentPerformer.onItemInventoryTick(event.getItemStack(), event.getEntity(), event.getLevel(), event.getIndex(), event.isSelected());
     }
 
     @SubscribeEvent
     public static void onLivingEat(final LivingEatEvent event) {
-        if (event.getEntityLiving() instanceof ServerPlayer player) {
+        if (event.getEntity() instanceof ServerPlayer player) {
             var r = EnchantmentPerformer.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
             int nutrition = r.getLeft();
             float saturationModifier = r.getRight();
@@ -81,7 +82,7 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerGetBreakSpeed(final PlayerEvent.BreakSpeed event) {
-        float r = EnchantmentPerformer.getBreakSpeed(event.getPlayer(), event.getState(), event.getPos(), event.getOriginalSpeed());
+        float r = EnchantmentPerformer.getBreakSpeed(event.getEntity(), event.getState(), event.getPosition(), event.getOriginalSpeed());
         event.setNewSpeed(r);
     }
 
@@ -92,7 +93,7 @@ public class HECommonEventHandler {
 
     @SubscribeEvent
     public static void onCriticalHit(final CriticalHitEvent event) {
-        event.setDamageModifier(EnchantmentPerformer.onCriticalHit(event.getPlayer(), event.getTarget(), event.getDamageModifier()));
+        event.setDamageModifier(EnchantmentPerformer.onCriticalHit(event.getEntity(), event.getTarget(), event.getDamageModifier()));
     }
 
 }

@@ -79,7 +79,8 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
                 _old.getEffect(),
                 newDuration, newAmplifier,
                 _old.isAmbient(), _old.isVisible(), _old.showIcon(),
-                ((MixinAccessorMobEffectInstance) _old).getHiddenEffect()
+                ((MixinAccessorMobEffectInstance) _old).getHiddenEffect(),
+                _old.getFactorData()
             );
             _new.setCurativeItems(_old.getCurativeItems());
             newEffects.add(_new);

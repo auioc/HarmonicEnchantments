@@ -12,9 +12,9 @@ public final class HEEnchantments {
 
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, HarmonicEnchantments.MOD_ID);
 
-    private static RegistryObject<Enchantment> register(String id, Supplier<? extends Enchantment> sup) {
-        return ENCHANTMENTS.register(id, sup);
-    }
+    private static RegistryObject<Enchantment> register(String _id, Supplier<? extends Enchantment> _sup) { return ENCHANTMENTS.register(_id, _sup); }
+
+    // ============================================================================================================== //
 
     public static final RegistryObject<Enchantment> RAPIER = register("rapier", RapierEnchantment::new);
     public static final RegistryObject<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::new);

@@ -1,7 +1,10 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
+import java.util.LinkedHashMap;
+import java.util.function.BiPredicate;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -32,7 +35,9 @@ public class ILivingEnchantment {
 
     public static interface Cat {
 
-        double onSetCatMorningGiftChance(int lvl, EquipmentSlot slot, net.minecraft.world.entity.animal.Cat cat, Player ownerPlayer, double chance);
+        void onCatMorningGiftConditionCheck(
+            int lvl, EquipmentSlot slot, net.minecraft.world.entity.animal.Cat cat, Player owner, LinkedHashMap<ResourceLocation, BiPredicate<net.minecraft.world.entity.animal.Cat, Player>> conditions
+        );
 
     }
 

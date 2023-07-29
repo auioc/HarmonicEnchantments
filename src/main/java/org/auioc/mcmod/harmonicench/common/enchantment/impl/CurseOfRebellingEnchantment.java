@@ -1,23 +1,24 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.Random;
-import org.auioc.mcmod.arnicalib.base.random.RandomUtils;
-import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment.PerformancePredicate;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.SerializationContext;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -54,13 +55,17 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     }
 
     @Override
-    public int onItemHurt(int lvl, ItemStack itemStack, int damage, Random random, ServerPlayer player) {
+    public int onItemHurt(int lvl, ItemStack itemStack, int damage, RandomSource random, ServerPlayer player) {
         if (damage > 0) {
             int d = 0;
-            for (int i = 0; i < damage; ++i) if (RandomUtils.percentageChance(1, player.getRandom())) d++;
+            for (int i = 0; i < damage; ++i) {
+                if (random.nextInt(100) < 1) { // TODO ArnicaLib: GameRandomUtils percentageChance
+                    d++;
+                }
+            }
             int value = d * 4;
             if (value > 0) {
-                player.hurt(new DamageSource(itemStack), value);
+                player.hurt(new DamageSource(player, itemStack), value);
                 triggerAdvancement(player, itemStack, player.isDeadOrDying());
             }
         }
@@ -87,15 +92,17 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
 
         private final ItemStack betrayedItem;
 
-        public DamageSource(ItemStack itemStack) {
-            super("curseOfRebelling");
-            this.bypassArmor().bypassMagic().setMagic();
+        public DamageSource(Player player, ItemStack itemStack) {
+            super(
+                player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(HEDamageTypes.CURSE_OF_REBELLING),
+                player
+            );
             this.betrayedItem = itemStack;
         }
 
         @Override
         public Component getLocalizedDeathMessage(LivingEntity living) {
-            return TextUtils.translatable("death.attack.curseOfRebelling", living.getDisplayName(), this.betrayedItem.getDisplayName());
+            return Component.translatable("death.attack." + this.getMsgId(), living.getDisplayName(), this.betrayedItem.getDisplayName());
         }
 
     }

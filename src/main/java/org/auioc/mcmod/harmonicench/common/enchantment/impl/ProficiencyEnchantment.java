@@ -1,16 +1,17 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import java.util.List;
-import javax.annotation.Nonnull;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.chat.TextUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -68,7 +69,7 @@ public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBl
     }
 
     @Override
-    public float getBreakSpeed(int lvl, ItemStack itemStack, Player player, BlockState blockState, BlockPos blockPos, float speed) {
+    public float getBreakSpeed(int lvl, ItemStack itemStack, Player player, BlockState blockState, Optional<BlockPos> blockPos, float speed) {
         if (itemStack.isCorrectToolForDrops(blockState)) {
             int proficiency = getProficiency(itemStack);
             if (proficiency > 0) return speed + proficiency;
@@ -78,8 +79,13 @@ public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBl
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void onItemTooltip(int lvl, @Nonnull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
-        EnchantmentHelper.getEnchantmentTooltip(lines, this.getDescriptionId()).ifPresent((c) -> c.append(" ").append(TextUtils.translatable(getDescriptionId() + ".proficiency", getProficiency(itemStack))));
+    public void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
+        EnchantmentHelper.getEnchantmentTooltip(lines, this.getDescriptionId())
+            .ifPresent(
+                (text) -> ((MutableComponent) text)
+                    .append(" ")
+                    .append(Component.translatable(getDescriptionId() + ".proficiency", getProficiency(itemStack)))
+            );
     }
 
 }

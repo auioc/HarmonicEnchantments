@@ -1,12 +1,12 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
 import java.util.List;
-import java.util.Random;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +20,7 @@ public class IItemEnchantment {
 
     public static interface Hurt {
 
-        int onItemHurt(int lvl, ItemStack itemStack, int damage, Random random, ServerPlayer player);
+        int onItemHurt(int lvl, ItemStack itemStack, int damage, RandomSource random, ServerPlayer player);
 
     }
 
@@ -55,7 +55,7 @@ public class IItemEnchantment {
     public static interface Tooltip {
 
         @OnlyIn(Dist.CLIENT)
-        void onItemTooltip(int lvl, @Nonnull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags);
+        void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags);
 
     }
 

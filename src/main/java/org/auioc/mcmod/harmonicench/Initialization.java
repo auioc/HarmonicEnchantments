@@ -4,7 +4,6 @@ import org.auioc.mcmod.harmonicench.client.event.HEClientEventHandler;
 import org.auioc.mcmod.harmonicench.common.config.HECommonConfig;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.event.HECommonEventHandler;
-import org.auioc.mcmod.harmonicench.common.itemgroup.HECreativeModeTabs;
 import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import org.auioc.mcmod.harmonicench.server.event.HEServerEventHandler;
@@ -58,7 +57,6 @@ public final class Initialization {
         }
 
         private void forgeSetup() {
-            HECreativeModeTabs.init();
             forgeEventBus.register(HECommonEventHandler.class);
             forgeEventBus.register(HEServerEventHandler.class);
         }
