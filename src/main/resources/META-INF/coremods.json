@@ -1,5 +1,5 @@
 {
+    "harmonicench.apply_bonus_count.run": "coremods/apply_bonus_count.run.js",
     "harmonicench.living_entity.magic_absorb": "coremods/living_entity.magic_absorb.js",
-    "harmonicench.living_entity.travel": "coremods/living_entity.travel.js",
-    "harmonicench.apply_bonus_count": "coremods/apply_bonus_count.js"
+    "harmonicench.living_entity.travel": "coremods/living_entity.travel.js"
 }

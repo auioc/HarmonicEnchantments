@@ -62,8 +62,8 @@ function initializeCoreMod() {
 
 //! SRG <-> MCP
 /*
-    m_6515_    getDamageAfterMagicAbsorb
-    m_6168_    getArmorSlots
+    m_6515_    Lnet/minecraft/world/entity/LivingEntity;getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F
+    m_6168_    Lnet/minecraft/world/entity/Mob;getArmorSlots()Ljava/lang/Iterable;
 */
 
 //! LocalVariableTable
@@ -74,66 +74,31 @@ function initializeCoreMod() {
     5       f           F
     6       f1          F
     7       f2          F
-    3       k           I
-    0       this        Lnet/minecraft/world/entity/LivingEntity;
-    1       p_21193_    Lnet/minecraft/world/damagesource/DamageSource;
+~   3       k           I
+~   0       this        Lnet/minecraft/world/entity/LivingEntity;
+~   1       p_21193_    Lnet/minecraft/world/damagesource/DamageSource;
     2       p_21194_    F
 */
 
-//! Original method
+//! Code
 /*
-    if (p_21193_.isBypassMagic()) {
-        return p_21194_;
-    } else {
-        //_ ...
-        if (p_21194_ <= 0.0F) {
-            return 0.0F;
+    protected float getDamageAfterMagicAbsorb(DamageSource p_21193_, float p_21194_) {
+        if (p_21193_.is(DamageTypeTags.BYPASSES_EFFECTS)) { //_ ...
         } else {
-            int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), p_21193_);
-            if (k > 0) {
-                p_21194_ = CombatRules.getDamageAfterMagicAbsorb(p_21194_, (float)k);
+            //_ ...
+            if (p_21194_ <= 0.0F) { //_ ...
+            } else if (p_21193_.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) { //_ ...
+            } else {
+                int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), p_21193_);
++               k += org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer.getDamageProtectionWithItem(this.getArmorSlots(), p_21193_);
+                //_ ...
             }
-
-            return p_21194_;
         }
     }
 *   ========== ByteCode ==========   *
     //_ ...
-    L15
-        LINENUMBER 1533 L15
-    FRAME SAME
-        ALOAD 0
-        INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.getArmorSlots ()Ljava/lang/Iterable;
-        ALOAD 1
-        INVOKESTATIC net/minecraft/world/item/enchantment/EnchantmentHelper.getDamageProtection (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
-        ISTORE 3
     L17
-        LINENUMBER 1534 L17
-    //_ ...
-*/
-
-//! Transformed method
-/*
-    if (p_21193_.isBypassMagic()) {
-        return p_21194_;
-    } else {
-        //_ ...
-        if (p_21194_ <= 0.0F) {
-            return 0.0F;
-        } else {
-            int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), p_21193_);
-+           k += int org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer.getDamageProtectionWithItem(this.getArmorSlots(), p_21193_);
-            if (k > 0) {
-                p_21194_ = CombatRules.getDamageAfterMagicAbsorb(p_21194_, (float)k);
-            }
-
-            return p_21194_;
-        }
-    }
-*   ========== ByteCode ==========   *
-    //_ ...
-    L15
-        LINENUMBER 1533 L15
+        LINENUMBER 1601 L17
     FRAME SAME
         ALOAD 0
         INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.getArmorSlots ()Ljava/lang/Iterable;
@@ -147,7 +112,7 @@ function initializeCoreMod() {
 +       INVOKESTATIC org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
 +       IADD
 +       ISTORE 3
-    L17
-        LINENUMBER 1534 L17
+    L19
+        LINENUMBER 1602 L19
     //_ ...
 */

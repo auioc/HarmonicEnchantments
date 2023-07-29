@@ -66,19 +66,19 @@ function initializeCoreMod() {
 
 //! SRG <-> MCP
 /*
-    m_7372_     run
-    f_79899_    enchantment
+    m_7372_     Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;run(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;
+    f_79899_    Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;enchantment:Lnet/minecraft/world/item/enchantment/Enchantment;
 */
 
 //! LocalVariableTable
 /*
     Slot    Name         Signature
-    4       i            I
+~   4       i            I
     5       j            I
-    0       this         Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;
+~   0       this         Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;
     1       p_79913_     Lnet/minecraft/world/item/ItemStack;
-    2       p_79914_     Lnet/minecraft/world/level/storage/loot/LootContext;
-    3       itemstack    Lnet/minecraft/world/item/ItemStack;
+~   2       p_79914_     Lnet/minecraft/world/level/storage/loot/LootContext;
+~   3       itemstack    Lnet/minecraft/world/item/ItemStack;
 */
 
 //! Code
@@ -95,13 +95,6 @@ function initializeCoreMod() {
     }
 *   ========== ByteCode ==========   *
     //_ ...
-    L3
-        LINENUMBER 45 L3
-        ALOAD 0
-        GETFIELD net/minecraft/world/level/storage/loot/functions/ApplyBonusCount.enchantment : Lnet/minecraft/world/item/enchantment/Enchantment;
-        ALOAD 3
-        INVOKESTATIC net/minecraft/world/item/enchantment/EnchantmentHelper.getItemEnchantmentLevel (Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/item/ItemStack;)I
-        ISTORE 4
     L4
         LINENUMBER 46 L4
 +       ALOAD 2

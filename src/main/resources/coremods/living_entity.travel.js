@@ -65,9 +65,9 @@ function initializeCoreMod() {
 
 //! SRG <-> MCP
 /*
-    m_7023_     travel
-    m_20256_    setDeltaMovement    (Lnet/minecraft/world/phys/Vec3;)V
-    m_21255_    isFallFlying
+    m_7023_     Lnet/minecraft/world/entity/animal/AbstractFish;travel(Lnet/minecraft/world/phys/Vec3;)V
+    m_20256_    Lnet/minecraft/world/entity/Entity;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V
+    m_21255_    Lnet/minecraft/world/entity/LivingEntity;isFallFlying()Z
 */
 
 //! LocalVariableTable
@@ -87,7 +87,7 @@ function initializeCoreMod() {
     18      d11           D
     20      d7            D
     22      f1            F
-    7       vec3          Lnet/minecraft/world/phys/Vec3;
+~   7       vec3          Lnet/minecraft/world/phys/Vec3;
     8       vec31         Lnet/minecraft/world/phys/Vec3;
     9       f             F
     10      d1            D
@@ -103,35 +103,31 @@ function initializeCoreMod() {
     4       gravity       Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
     5       flag          Z
     6       fluidstate    Lnet/minecraft/world/level/material/FluidState;
-    0       this          Lnet/minecraft/world/entity/LivingEntity;
+~   0       this          Lnet/minecraft/world/entity/LivingEntity;
     1       p_21280_      Lnet/minecraft/world/phys/Vec3;
 */
 
 //! Code
 /*
     public void travel(Vec3 p_21280_) {
-        if (this.isEffectiveAi() || this.isControlledByLocalInstance()) {
-            //_ ...
-            if (this.isInWater() && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate)) {
-                //_ ...
-            } else if (this.isInLava() && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate)) {
-                //_ ...
+        if (this.isControlledByLocalInstance()) { //_ ...
+            if ( ... && ... ) { //_ ...
+            } else if ( ... ) { //_ ...
             } else if (this.isFallFlying()) {
+                //_ ...
                 Vec3 vec3 = this.getDeltaMovement();
                 //_ ...
 +               vec3 = org.auioc.mcmod.harmonicench.common.mobeffect.impl.WeightlessnessMobEffect.adjustFallFlySpeed(this, vec3);
-                this.setDeltaMovement(vec3.multiply((double)0.99F, (double)0.98F, (double)0.99F));
+                this.setDeltaMovement(vec3.multiply((double) 0.99F, (double) 0.98F, (double) 0.99F));
                 //_ ...
-            } else {
-                //_ ...
+            } else { //_ ...
             }
-        }
-        //_ ...
+        } //_ ...
     }
 *   ========== ByteCode ==========   *
     //_ ...
     L78
-        LINENUMBER 2093 L78
+         LINENUMBER 2107 L78
     FRAME SAME
 +       ALOAD 0
 +       ALOAD 7
@@ -145,6 +141,6 @@ function initializeCoreMod() {
         INVOKEVIRTUAL net/minecraft/world/phys/Vec3.multiply (DDD)Lnet/minecraft/world/phys/Vec3;
         INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
     L80
-        LINENUMBER 2094 L80
+        LINENUMBER 2108 L80
     //_ ...
 */
