@@ -1,42 +1,42 @@
-modLoader="javafml"
-loaderVersion="[40,)"
-license="GNU GPLv3"
-issueTrackerURL="https://github.com/auioc/HarmonicEnchantments/issues"
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "GNU GPLv3"
+issueTrackerURL = "https://github.com/auioc/HarmonicEnchantments/issues"
 
 [[mods]]
-modId="harmonicench"
-version="${file.jarVersion}"
-updateJSONURL="https://hi.auioc.org/HarmonicEnchantments/update/1.18.2.json"
-displayName="HarmonicEnchantments"
-displayURL="http://hi.auioc.org/HarmonicEnchantments/"
-logoFile="icon.png"
-credits="AUIOC"
-authors="WakelssSloth56"
-description='''
+    modId = "harmonicench"
+    version = "${file.jarVersion}"
+    updateJSONURL = "https://hi.auioc.org/HarmonicEnchantments/update/1.20.1.json"
+    displayName = "HarmonicEnchantments"
+    displayURL = "http://hi.auioc.org/HarmonicEnchantments/"
+    logoFile = "icon.png"
+    credits = "AUIOC"
+    authors = "WakelssSloth56, LainIO24"
+    description = '''
 Harmonic Enchantments
 '''
 
 [[dependencies.harmonicench]]
-    modId="forge"
-    mandatory=true
-    versionRange="[40.2.0,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "forge"
+    mandatory = true
+    versionRange = "[47,)"
+    ordering = "NONE"
+    side = "BOTH"
 [[dependencies.harmonicench]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.18.2,1.19)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.20.1,1.21)"
+    ordering = "NONE"
+    side = "BOTH"
 [[dependencies.harmonicench]]
-    modId="arnicalib"
-    mandatory=true
-    versionRange="[5.7.3,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "arnicalib"
+    mandatory = true
+    versionRange = "[6.0.1,)"
+    ordering = "NONE"
+    side = "BOTH"
 [[dependencies.harmonicench]]
-    modId="hulsealib"
-    mandatory=true
-    versionRange="[1.1.1,)"
-    ordering="NONE"
-    side="BOTH"
+    modId = "hulsealib"
+    mandatory = true
+    versionRange = "[2.0.0,)"
+    ordering = "NONE"
+    side = "BOTH"

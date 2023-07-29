@@ -5,7 +5,7 @@ buildscript {
         maven { url = 'https://repo.spongepowered.org/maven' }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
@@ -21,8 +21,13 @@ repositories {
         url 'https://repo.auioc.com/maven/releases'
         content { includeGroup "org.auioc.mcmod" }
     }
-    maven { url "https://www.cursemaven.com" }
-    maven { url "https://dvs1.progwml6.com/files/maven/" }
+    maven { url "https://maven.blamejared.com/" }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -34,7 +39,7 @@ dependencies {
 
     if (System.getenv('CI') == null) {
         runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-        runtimeOnly fg.deobf("curse.maven:jade-324717:3970956")
+        runtimeOnly fg.deobf("curse.maven:jade-324717:4654448")
     }
 }
 
