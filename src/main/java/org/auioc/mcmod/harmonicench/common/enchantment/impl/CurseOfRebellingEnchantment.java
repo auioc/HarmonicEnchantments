@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
 import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
@@ -59,7 +60,7 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
         if (damage > 0) {
             int d = 0;
             for (int i = 0; i < damage; ++i) {
-                if (random.nextInt(100) < 1) { // TODO ArnicaLib: GameRandomUtils percentageChance
+                if (GameRandomUtils.percentageChance(1, random)) {
                     d++;
                 }
             }

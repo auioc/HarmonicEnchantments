@@ -1,5 +1,6 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
+import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
 import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
 import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
@@ -61,7 +62,7 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
             return;
         }
 
-        if (player.getRandom().nextInt(100) < 100 - chance) {// TODO ArnicaLib: GameRandomUtils percentageChance
+        if (GameRandomUtils.percentageChance(100 - chance, player.getRandom())) {
             return;
         }
 
