@@ -1,18 +1,19 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
-import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.TickEvent;
+import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
+import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
+
 
 public class SunAffinityEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
 
@@ -50,8 +51,8 @@ public class SunAffinityEnchantment extends AbstractHEEnchantment implements IIt
     }
 
     @Override
-    public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, Phase phase, LogicalSide side) {
-        if (phase == Phase.END && side == LogicalSide.SERVER) {
+    public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, TickEvent.Phase phase, LogicalSide side) {
+        if (phase == TickEvent.Phase.END && side == LogicalSide.SERVER) {
             if (player.isFallFlying()) {
                 player.addEffect(new MobEffectInstance(HEMobEffects.WEIGHTLESSNESS.get(), 5, (Math.min(lvl, this.getMaxLevel()) * 20) - 1, false, true, false));
             } else {

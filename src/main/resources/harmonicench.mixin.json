@@ -4,17 +4,18 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "common.MixinAbstractArrow",
+        "common.MixinElytraItem",
         "common.MixinIForgeItemStack",
         "common.MixinProjectile",
         "common.MixinSpectralArrow",
-        "common.MixinElytraItem"
+        "server.MixinCatRelaxOnOwnerGoal",
+        "server.MixinPiglinAi"
     ],
     "client": [],
     "server": [],
     "injectors": {
         "defaultRequire": 1
     },
-    "refmap": "harmonicench.mixin-refmap.json",
     "plugin": "org.auioc.mcmod.arnicalib.mod.mixin.MixinConfigPlugin",
     "minVersion": "0.8"
 }

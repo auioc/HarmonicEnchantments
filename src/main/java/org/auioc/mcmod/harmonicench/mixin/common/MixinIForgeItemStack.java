@@ -1,13 +1,13 @@
 package org.auioc.mcmod.harmonicench.mixin.common;
 
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.extensions.IItemStackExtension;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.extensions.IForgeItemStack;
 
-@Mixin(value = IForgeItemStack.class, remap = false)
+@Mixin(value = IItemStackExtension.class, remap = false)
 public interface MixinIForgeItemStack {
 
     /**

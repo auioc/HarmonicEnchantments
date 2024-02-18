@@ -3,7 +3,7 @@ package org.auioc.mcmod.harmonicench.server.event.impl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public class ApplyLootEnchantmentBonusCountEvent extends Event {
 

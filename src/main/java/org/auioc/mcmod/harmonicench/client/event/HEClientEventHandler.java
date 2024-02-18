@@ -1,13 +1,13 @@
 package org.auioc.mcmod.harmonicench.client.event;
 
+import net.minecraft.client.player.LocalPlayer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.auioc.mcmod.harmonicench.api.effect.IMovementInputMobEffect;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
 public final class HEClientEventHandler {

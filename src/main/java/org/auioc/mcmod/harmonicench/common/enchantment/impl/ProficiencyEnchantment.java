@@ -1,14 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.List;
-import java.util.Optional;
-import javax.annotation.Nullable;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
-import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,8 +12,19 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
+
 
 public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
@@ -50,7 +52,7 @@ public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBl
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof ShearsItem ? true : super.canEnchant(itemStack);
+        return itemStack.getItem() instanceof ShearsItem || super.canEnchant(itemStack);
     }
 
     private static int getProficiency(ItemStack itemStack) {

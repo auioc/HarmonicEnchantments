@@ -1,12 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.Map;
-import java.util.UUID;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,8 +8,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ToolActions;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+
+import java.util.Map;
+import java.util.UUID;
+
 
 public class RapierEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
 

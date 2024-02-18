@@ -1,16 +1,17 @@
 package org.auioc.mcmod.harmonicench.datagen;
 
-import java.util.Set;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEAdvancementProvider;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEDamageTypeTagsProvider;
-import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.Registries;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+
+import java.util.Set;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class HEDataGenerators {
@@ -19,7 +20,6 @@ public final class HEDataGenerators {
         .add(Registries.DAMAGE_TYPE, HEDamageTypes::bootstrap);
 
     @SubscribeEvent
-    @SuppressWarnings("deprecation")
     public static void dataGen(GatherDataEvent event) {
         var generator = event.getGenerator();
         var output = generator.getPackOutput();

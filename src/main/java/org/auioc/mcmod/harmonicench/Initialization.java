@@ -1,87 +1,50 @@
 package org.auioc.mcmod.harmonicench;
 
-import org.auioc.mcmod.harmonicench.client.event.HEClientEventHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import org.auioc.mcmod.harmonicench.client.ClientInitialization;
 import org.auioc.mcmod.harmonicench.common.config.HECommonConfig;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.event.HECommonEventHandler;
 import org.auioc.mcmod.harmonicench.common.mobeffect.HEMobEffects;
+import org.auioc.mcmod.harmonicench.server.advancement.EnchantmentPerformancePredicates;
 import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 import org.auioc.mcmod.harmonicench.server.event.HEServerEventHandler;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @SuppressWarnings("unused")
 public final class Initialization {
 
-    private Initialization() {}
-
     public static void init() {
-        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        final IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        registerConfig();
+        modSetup();
+        forgeSetup();
 
-        final ClientSideOnlySetup ClientSideOnlySetup = new ClientSideOnlySetup(modEventBus, forgeEventBus);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSideOnlySetup::registerConfig);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSideOnlySetup::modSetup);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSideOnlySetup::forgeSetup);
-
-        final CommonSetup CommonSetup = new CommonSetup(modEventBus, forgeEventBus);
-        CommonSetup.modSetup();
-        CommonSetup.forgeSetup();
-        CommonSetup.registerConfig();
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            ClientInitialization.init();
+        }
     }
 
+    private static final IEventBus modEventBus = HarmonicEnchantments.getModEventBus();
+    private static final IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
-    private final static class CommonSetup {
-
-        private final IEventBus modEventBus;
-        private final IEventBus forgeEventBus;
-
-        public CommonSetup(final IEventBus modEventBus, final IEventBus forgeEventBus) {
-            this.modEventBus = modEventBus;
-            this.forgeEventBus = forgeEventBus;
-        }
-
-        public void registerConfig() {
-            ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HECommonConfig.CONFIG);
-        }
-
-        private void modSetup() {
-            HEEnchantments.ENCHANTMENTS.register(modEventBus);
-            HEMobEffects.MOB_EFFECTS.register(modEventBus);
-            HECriteriaTriggers.init();
-        }
-
-        private void forgeSetup() {
-            forgeEventBus.register(HECommonEventHandler.class);
-            forgeEventBus.register(HEServerEventHandler.class);
-        }
-
+    public static void registerConfig() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HECommonConfig.CONFIG);
     }
 
+    private static void modSetup() {
+        HEEnchantments.ENCHANTMENTS.register(modEventBus);
+        HEMobEffects.MOB_EFFECTS.register(modEventBus);
+        EnchantmentPerformancePredicates.init(modEventBus);
+        HECriteriaTriggers.TRIGGERS.register(modEventBus);
+    }
 
-    private final static class ClientSideOnlySetup {
-
-        private final IEventBus modEventBus;
-        private final IEventBus forgeEventBus;
-
-        public ClientSideOnlySetup(final IEventBus modEventBus, final IEventBus forgeEventBus) {
-            this.modEventBus = modEventBus;
-            this.forgeEventBus = forgeEventBus;
-        }
-
-        public void registerConfig() {}
-
-        public void modSetup() {}
-
-        public void forgeSetup() {
-            forgeEventBus.register(HEClientEventHandler.class);
-        }
-
+    private static void forgeSetup() {
+        forgeEventBus.register(HECommonEventHandler.class);
+        forgeEventBus.register(HEServerEventHandler.class);
     }
 
 }

@@ -1,9 +1,10 @@
 package org.auioc.mcmod.harmonicench.api.config;
 
-import java.util.function.Supplier;
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 import org.auioc.mcmod.arnicalib.base.holder.ObjectHolder;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class NullableBooleanValue extends ObjectHolder<BooleanValue> {
 

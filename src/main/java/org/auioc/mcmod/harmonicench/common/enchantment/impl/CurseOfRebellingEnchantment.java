@@ -1,21 +1,11 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
-import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IAdvancementTriggerableEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
-import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment.PerformancePredicate;
-import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
-import com.google.gson.JsonObject;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.SerializationContext;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,8 +13,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
+import org.auioc.mcmod.harmonicench.api.advancement.EPPredicateType;
+import org.auioc.mcmod.harmonicench.api.advancement.IEnchantmentPerformancePredicate;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.server.advancement.EnchantmentPerformancePredicates;
+import org.auioc.mcmod.harmonicench.server.advancement.HECriteriaTriggers;
 
-public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt, IAdvancementTriggerableEnchantment<PerformancePredicate> {
+import java.util.Optional;
+
+public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt {
 
     public CurseOfRebellingEnchantment() {
         super(
@@ -74,16 +75,9 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
     }
 
     private void triggerAdvancement(ServerPlayer player, ItemStack itemStack, boolean isDead) {
-        HECriteriaTriggers.ENCHANTMENT_PERFORMED.trigger(
+        HECriteriaTriggers.ENCHANTMENT_PERFORMED.get().trigger(
             player, this, itemStack,
             (PerformancePredicate p) -> p.matches(isDead)
-        );
-    }
-
-    @Override
-    public PerformancePredicate deserializePerformancePredicate(JsonObject json, DeserializationContext conditionParser) {
-        return new PerformancePredicate(
-            GsonHelper.isBooleanValue(json, "dead") ? GsonHelper.getAsBoolean(json, "dead") : null
         );
     }
 
@@ -110,28 +104,23 @@ public class CurseOfRebellingEnchantment extends AbstractHEEnchantment implement
 
     // ============================================================================================================== //
 
-    public static class PerformancePredicate implements IEnchantmentPerformancePredicate {
-
-        public static final PerformancePredicate ANY = new PerformancePredicate(null);
-
-        private final Boolean isDead;
-
-        public PerformancePredicate(Boolean isDead) {
-            this.isDead = isDead;
-        }
+    public record PerformancePredicate(Optional<Boolean> isDead) implements IEnchantmentPerformancePredicate {
 
         public boolean matches(boolean isDead) {
-            if (this == ANY) return true;
-            if (this.isDead == null) return true;
-            return this.isDead.booleanValue() == isDead;
+            return isDead().isEmpty() || isDead().get() == isDead;
         }
 
+        // ========================================================================================================== //
+
         @Override
-        public JsonObject serializeToJson(SerializationContext conditionSerializer) {
-            var json = new JsonObject();
-            if (this.isDead != null) json.addProperty("dead", this.isDead.booleanValue());
-            return json;
+        public EPPredicateType getType() {
+            return EnchantmentPerformancePredicates.CURSE_OF_REBELLING.get();
         }
+
+        public static final Codec<PerformancePredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                ExtraCodecs.strictOptionalField(Codec.BOOL, "is_dead").forGetter(PerformancePredicate::isDead)
+            ).apply(instance, PerformancePredicate::new)
+        );
 
     }
 

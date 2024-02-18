@@ -1,9 +1,11 @@
 package org.auioc.mcmod.harmonicench.api.enchantment;
 
-import java.util.HashMap;
-import javax.annotation.Nullable;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+
 
 public class HEEnchantmentManager {
 

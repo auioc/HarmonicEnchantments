@@ -1,22 +1,23 @@
 package org.auioc.mcmod.harmonicench.common.event;
 
-import org.auioc.mcmod.arnicalib.game.entity.projectile.IHProjectile;
-import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
-import org.auioc.mcmod.hulsealib.game.event.common.ItemInventoryTickEvent;
-import org.auioc.mcmod.hulsealib.game.event.common.LivingEatEvent;
 import net.minecraft.network.protocol.game.ClientboundSetHealthPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraftforge.event.ItemAttributeModifierEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.IHProjectile;
+import org.auioc.mcmod.arnicalib.game.event.common.ItemInventoryTickEvent;
+import org.auioc.mcmod.arnicalib.game.event.common.PlayerEatEvent;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
+
 
 public class HECommonEventHandler {
 
@@ -25,13 +26,7 @@ public class HECommonEventHandler {
         EnchantmentPerformer.getAttributeModifiers(event.getItemStack(), event.getSlotType())
             .ifPresent((modifierList) -> {
                 modifierList.forEach(
-                    (modifiers) -> {
-                        modifiers.forEach(
-                            (attribute, modifier) -> {
-                                event.addModifier(attribute, modifier);
-                            }
-                        );
-                    }
+                    (modifiers) -> modifiers.forEach(event::addModifier)
                 );
             });
     }
@@ -51,7 +46,6 @@ public class HECommonEventHandler {
         }
 
         event.setAmount(EnchantmentPerformer.onLivingHurt(target, damageSource, event.getAmount()));
-        return;
     }
 
     @SubscribeEvent
@@ -65,9 +59,9 @@ public class HECommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onLivingEat(final LivingEatEvent event) {
+    public static void onLivingEat(final PlayerEatEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            var r = EnchantmentPerformer.onPlayerEat(player, event.getFoodItemStack(), event.getNutrition(), event.getSaturationModifier());
+            var r = EnchantmentPerformer.onPlayerEat(player, event.getFood(), event.getNutrition(), event.getSaturationModifier());
             int nutrition = r.getLeft();
             float saturationModifier = r.getRight();
             if (nutrition == 0) {

@@ -1,5 +1,5 @@
 function initializeCoreMod() {
-    ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+    ASMAPI = Java.type('net.neoforged.coremod.api.ASMAPI');
 
     Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
@@ -14,9 +14,8 @@ function initializeCoreMod() {
             target: {
                 type: 'METHOD',
                 class: 'net.minecraft.world.level.storage.loot.functions.ApplyBonusCount',
-                methodName: ASMAPI.mapMethod('m_7372_'),
-                methodDesc:
-                    '(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;',
+                methodName: 'run',
+                methodDesc: '(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;'
             },
             transformer: function (methodNode) {
                 var toInject = new InsnList();
@@ -28,7 +27,7 @@ function initializeCoreMod() {
                         new FieldInsnNode(
                             Opcodes.GETFIELD,
                             'net/minecraft/world/level/storage/loot/functions/ApplyBonusCount',
-                            ASMAPI.mapField('f_79899_'),
+                            'enchantment',
                             'Lnet/minecraft/world/item/enchantment/Enchantment;'
                         )
                     );
@@ -59,35 +58,27 @@ function initializeCoreMod() {
 
                 // print(ASMAPI.methodNodeToString(methodNode));
                 return methodNode;
-            },
-        },
+            }
+        }
     };
 }
-
-//! SRG <-> MCP
-/*
-    m_7372_     Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;run(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;
-    f_79899_    Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;enchantment:Lnet/minecraft/world/item/enchantment/Enchantment;
-*/
 
 //! LocalVariableTable
 /*
     Slot    Name         Signature
-~   4       i            I
-    5       j            I
-~   0       this         Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;
-    1       p_79913_     Lnet/minecraft/world/item/ItemStack;
-~   2       p_79914_     Lnet/minecraft/world/level/storage/loot/LootContext;
-~   3       itemstack    Lnet/minecraft/world/item/ItemStack;
+    4       i            I
+    0       this         Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount;
+    2       pContext     Lnet/minecraft/world/level/storage/loot/LootContext;
+    3       itemstack    Lnet/minecraft/world/item/ItemStack;
 */
 
 //! Code
 /*
-    public ItemStack run(ItemStack p_79913_, LootContext p_79914_) {
+    public ItemStack run(ItemStack pStack, LootContext pContext) {
         //_ ...
         if (itemstack != null) {
             int i = EnchantmentHelper.getItemEnchantmentLevel(this.enchantment, itemstack);
-+           i = int org.auioc.mcmod.harmonicench.server.event.HEServerEventFactory.onApplyLootEnchantmentBonusCount(p_79914_, itemstack, this.enchantment, i)
++           i = HEServerEventFactory.onApplyLootEnchantmentBonusCount(pContext, itemstack, this.enchantment, i)
             int j = this.formula.calculateNewCount(p_79914_.getRandom(), p_79913_.getCount(), i);
             p_79913_.setCount(j);
         }
@@ -95,8 +86,6 @@ function initializeCoreMod() {
     }
 *   ========== ByteCode ==========   *
     //_ ...
-    L4
-        LINENUMBER 46 L4
 +       ALOAD 2
 +       ALOAD 3
 +       ALOAD 0
@@ -113,7 +102,5 @@ function initializeCoreMod() {
         ILOAD 4
         INVOKEINTERFACE net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula.calculateNewCount (Ljava/util/Random;II)I (itf)
         ISTORE 5
-    L5
-        LINENUMBER 47 L5
     //_ ...
 */

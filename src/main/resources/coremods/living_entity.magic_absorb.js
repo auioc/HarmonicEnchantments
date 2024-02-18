@@ -1,5 +1,5 @@
 function initializeCoreMod() {
-    ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+    ASMAPI = Java.type('net.neoforged.coremod.api.ASMAPI');
 
     Opcodes = Java.type('org.objectweb.asm.Opcodes');
 
@@ -14,9 +14,8 @@ function initializeCoreMod() {
             target: {
                 type: 'METHOD',
                 class: 'net.minecraft.world.entity.LivingEntity',
-                methodName: ASMAPI.mapMethod('m_6515_'),
-                methodDesc:
-                    '(Lnet/minecraft/world/damagesource/DamageSource;F)F',
+                methodName: 'getDamageAfterMagicAbsorb',
+                methodDesc: '(Lnet/minecraft/world/damagesource/DamageSource;F)F'
             },
             transformer: function (methodNode) {
                 var toInject = new InsnList();
@@ -27,7 +26,7 @@ function initializeCoreMod() {
                         new MethodInsnNode(
                             Opcodes.INVOKEVIRTUAL,
                             'net/minecraft/world/entity/LivingEntity',
-                            ASMAPI.mapMethod('m_6168_'),
+                            'getArmorSlots',
                             '()Ljava/lang/Iterable;',
                             false
                         )
@@ -55,51 +54,36 @@ function initializeCoreMod() {
 
                 // print(ASMAPI.methodNodeToString(methodNode));
                 return methodNode;
-            },
-        },
+            }
+        }
     };
 }
 
-//! SRG <-> MCP
-/*
-    m_6515_    Lnet/minecraft/world/entity/LivingEntity;getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F
-    m_6168_    Lnet/minecraft/world/entity/Mob;getArmorSlots()Ljava/lang/Iterable;
-*/
-
 //! LocalVariableTable
 /*
-    Slot    Name        Signature
-    3       i           I
-    4       j           I
-    5       f           F
-    6       f1          F
-    7       f2          F
-~   3       k           I
-~   0       this        Lnet/minecraft/world/entity/LivingEntity;
-~   1       p_21193_    Lnet/minecraft/world/damagesource/DamageSource;
-    2       p_21194_    F
+    Slot    Name            Signature
+    3       k               I
+    0       this            Lnet/minecraft/world/entity/LivingEntity;
+    1       pDamageSource   Lnet/minecraft/world/damagesource/DamageSource;
 */
 
 //! Code
 /*
-    protected float getDamageAfterMagicAbsorb(DamageSource p_21193_, float p_21194_) {
-        if (p_21193_.is(DamageTypeTags.BYPASSES_EFFECTS)) { //_ ...
+    protected float getDamageAfterMagicAbsorb(DamageSource pDamageSource, float pDamageAmount) {
+        if (pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS)) { //_ ...
         } else {
             //_ ...
-            if (p_21194_ <= 0.0F) { //_ ...
-            } else if (p_21193_.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) { //_ ...
+            if (pDamageAmount <= 0.0F) { //_ ...
+            } else if (pDamageSource.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) { //_ ...
             } else {
-                int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), p_21193_);
-+               k += org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer.getDamageProtectionWithItem(this.getArmorSlots(), p_21193_);
+                int k = EnchantmentHelper.getDamageProtection(this.getArmorSlots(), pDamageSource);
++               k += EnchantmentPerformer.getDamageProtectionWithItem(this.getArmorSlots(), pDamageSource);
                 //_ ...
             }
         }
     }
 *   ========== ByteCode ==========   *
     //_ ...
-    L17
-        LINENUMBER 1601 L17
-    FRAME SAME
         ALOAD 0
         INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.getArmorSlots ()Ljava/lang/Iterable;
         ALOAD 1
@@ -112,7 +96,5 @@ function initializeCoreMod() {
 +       INVOKESTATIC org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
 +       IADD
 +       ISTORE 3
-    L19
-        LINENUMBER 1602 L19
     //_ ...
 */

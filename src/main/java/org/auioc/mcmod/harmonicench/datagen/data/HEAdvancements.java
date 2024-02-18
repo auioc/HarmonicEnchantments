@@ -1,23 +1,25 @@
 package org.auioc.mcmod.harmonicench.datagen.data;
 
-import java.util.List;
-import java.util.function.BiFunction;
-import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
-import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
-import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
-import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
-import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
-import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
-import org.auioc.mcmod.harmonicench.server.advancement.criterion.EnchantmentPerformedTrigger;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement.Builder;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DamageSourcePredicate;
+import net.minecraft.advancements.critereon.DistancePredicate;
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.EntityEquipmentPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.EntityTypePredicate;
+import net.minecraft.advancements.critereon.FishingRodHookedTrigger;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.KilledTrigger;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.NbtPredicate;
+import net.minecraft.advancements.critereon.TagPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceKey;
@@ -33,10 +35,25 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
+import org.auioc.mcmod.arnicalib.game.datagen.advancement.DataGenAdvancementEntry;
+import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
+import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment;
+import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
+import org.auioc.mcmod.harmonicench.server.advancement.criterion.EnchantmentPerformedTrigger;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class HEAdvancements {
 
-    private static final ResourceLocation PARENT = new ResourceLocation("minecraft:story/enchant_item");
+    private static final AdvancementHolder PARENT = new AdvancementHolder(new ResourceLocation("minecraft:story/enchant_item"), null);
 
     // ============================================================================================================== //
 
@@ -81,33 +98,35 @@ public class HEAdvancements {
                     .build()
             )
             .parent(PARENT)
-            .requirements(RequirementsStrategy.OR)
+            .requirements(AdvancementRequirements.Strategy.OR)
     );
 
     private static Builder killIllagerInJungle(Builder b) {
         for (var biome : JUNGLES) {
             b.addCriterion(
                 "kill_illager_in_" + biome.location().getPath(),
-                new KilledTrigger.TriggerInstance(
-                    CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
-                    EntityPredicate.wrap(
-                        EntityPredicate.Builder.entity()
-                            .located(LocationPredicate.inBiome(biome))
-                            .build()
-                    ),
-                    EntityPredicate.wrap(
-                        EntityPredicate.Builder.entity()
-                            .of(HEntityTypeTags.ILLAGERS)
-                            .build()
-                    ),
-                    DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
-                        .direct(
+                CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
+                    new KilledTrigger.TriggerInstance(
+                        Optional.of(EntityPredicate.wrap(
                             EntityPredicate.Builder.entity()
-                                .of(EntityTypeTags.ARROWS)
-                                .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
+                                .located(LocationPredicate.Builder.inBiome(biome))
+                                .build()
+                        )),
+                        Optional.of(EntityPredicate.wrap(
+                            EntityPredicate.Builder.entity()
+                                .of(HEntityTypeTags.ILLAGERS)
+                                .build()
+                        )),
+                        Optional.of(
+                            DamageSourcePredicate.Builder.damageType()
+                                .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
+                                .direct(
+                                    EntityPredicate.Builder.entity()
+                                        .of(EntityTypeTags.ARROWS)
+                                        .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
+                                ).build()
                         )
-                        .build()
+                    )
                 )
             );
         }
@@ -128,31 +147,33 @@ public class HEAdvancements {
             .parent(PARENT)
             .addCriterion(
                 "kill_boss",
-                new KilledTrigger.TriggerInstance(
-                    CriteriaTriggers.PLAYER_KILLED_ENTITY.getId(),
-                    ContextAwarePredicate.ANY,
-                    ContextAwarePredicate.create(
-                        new EntityAttributeCondition(
-                            Attributes.MAX_HEALTH,
-                            EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
-                            MinMaxBounds.Doubles.atLeast(80.0),
-                            LootContext.EntityTarget.THIS
-                        )
-                    ),
-                    DamageSourcePredicate.Builder.damageType()
-                        .source(
-                            EntityPredicate.Builder.entity()
-                                .equipment(
-                                    EntityEquipmentPredicate.Builder.equipment()
-                                        .mainhand(
-                                            ItemPredicate.Builder.item()
-                                                .hasEnchantment(new EnchantmentPredicate(HEEnchantments.BANE_OF_CHAMPIONS.get(), MinMaxBounds.Ints.ANY))
-                                                .build()
-                                        )
-                                        .build()
+                CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
+                    new KilledTrigger.TriggerInstance(
+                        Optional.empty(),
+                        Optional.of(
+                            ContextAwarePredicate.create(
+                                new EntityAttributeCondition(
+                                    Attributes.MAX_HEALTH,
+                                    EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
+                                    MinMaxBounds.Doubles.atLeast(80.0),
+                                    LootContext.EntityTarget.THIS
                                 )
+                            )
+                        ),
+                        Optional.of(
+                            DamageSourcePredicate.Builder.damageType()
+                                .source(
+                                    EntityPredicate.Builder.entity()
+                                        .equipment(
+                                            EntityEquipmentPredicate.Builder.equipment()
+                                                .mainhand(
+                                                    ItemPredicate.Builder.item()
+                                                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.BANE_OF_CHAMPIONS.get(), MinMaxBounds.Ints.ANY))
+                                                ).build()
+                                        )
+                                ).build()
                         )
-                        .build()
+                    )
                 )
             )
     );
@@ -199,7 +220,7 @@ public class HEAdvancements {
                     .build()
             )
             .parent(PARENT)
-            .requirements(RequirementsStrategy.OR)
+            .requirements(AdvancementRequirements.Strategy.OR)
     );
 
     private static Builder fishInColdBiomes(Builder b) {
@@ -207,15 +228,21 @@ public class HEAdvancements {
             b.addCriterion(
                 "fish_in_" + biome.location().getPath(),
                 FishingRodHookedTrigger.TriggerInstance.fishedItem(
-                    ItemPredicate.Builder.item()
-                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.LUCK_OF_THE_SNOW.get(), MinMaxBounds.Ints.ANY))
-                        .build(),
-                    EntityPredicate.Builder.entity()
-                        .located(LocationPredicate.inBiome(biome))
-                        .build(),
-                    ItemPredicate.Builder.item()
-                        .of(ItemTags.FISHES)
-                        .build()
+                    Optional.of(
+                        ItemPredicate.Builder.item()
+                            .hasEnchantment(new EnchantmentPredicate(HEEnchantments.LUCK_OF_THE_SNOW.get(), MinMaxBounds.Ints.ANY))
+                            .build()
+                    ),
+                    Optional.of(
+                        EntityPredicate.Builder.entity()
+                            .located(LocationPredicate.Builder.inBiome(biome))
+                            .build()
+                    ),
+                    Optional.of(
+                        ItemPredicate.Builder.item()
+                            .of(ItemTags.FISHES)
+                            .build()
+                    )
                 )
             );
         }
@@ -236,15 +263,15 @@ public class HEAdvancements {
             .parent(PARENT)
             .addCriterion(
                 "aim_entity",
-                new EnchantmentPerformedTrigger.TriggerInstance<>(
-                    ContextAwarePredicate.ANY,
+                EnchantmentPerformedTrigger.createCriterion(
+                    null,
                     HEEnchantments.AIM.get(),
-                    ItemPredicate.ANY,
+                    null,
                     new AimEnchantment.PerformancePredicate(
-                        EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build(),
-                        DistancePredicate.ANY
+                        EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build()
                     )
                 )
+
             )
     );
 
@@ -261,12 +288,13 @@ public class HEAdvancements {
             )
             .parent(PARENT)
             .addCriterion(
-                "betrayal", new EnchantmentPerformedTrigger.TriggerInstance<>(
-                    ContextAwarePredicate.ANY,
+                "betrayal",
+                EnchantmentPerformedTrigger.createCriterion(
+                    null,
                     HEEnchantments.CURSE_OF_REBELLING.get(),
-                    ItemPredicate.ANY,
+                    null,
                     new CurseOfRebellingEnchantment.PerformancePredicate(
-                        true
+                        Optional.of(true)
                     )
                 )
             )
@@ -274,7 +302,7 @@ public class HEAdvancements {
 
     // ============================================================================================================== //
 
-    public static void init() {}
+    public static void init() { }
 
     private static DataGenAdvancementEntry create(String _id, BiFunction<ResourceLocation, Builder, Builder> _builder) {
         return new DataGenAdvancementEntry(HarmonicEnchantments.id(_id), _builder);

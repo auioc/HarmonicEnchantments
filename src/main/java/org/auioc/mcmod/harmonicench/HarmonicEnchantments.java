@@ -1,25 +1,32 @@
 package org.auioc.mcmod.harmonicench;
 
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.Logger;
 import org.auioc.mcmod.arnicalib.base.log.LogUtil;
-import org.auioc.mcmod.arnicalib.base.version.HVersion;
-import org.auioc.mcmod.arnicalib.game.mod.HModUtil;
+import org.auioc.mcmod.arnicalib.game.mod.BuildInfo;
 import org.auioc.mcmod.arnicalib.game.mod.IHMod;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.common.Mod;
+
 
 @Mod(HarmonicEnchantments.MOD_ID)
 public final class HarmonicEnchantments implements IHMod {
 
     public static final String MOD_ID = "harmonicench";
     public static final String MOD_NAME = "HarmonicEnchantments";
-
     public static final Logger LOGGER = LogUtil.getLogger(MOD_NAME);
+    public static final BuildInfo BUILD_INFO = BuildInfo.fromPackage(HarmonicEnchantments.class);
 
-    public static final HVersion VERSION = HModUtil.getVersion(HarmonicEnchantments.class, LOGGER);
+    private static IEventBus modEventBus;
 
-    public HarmonicEnchantments() {
+    public HarmonicEnchantments(IEventBus modEventBus) {
+        HarmonicEnchantments.modEventBus = modEventBus;
+        IHMod.validateVersion(BUILD_INFO, LOGGER);
         Initialization.init();
+    }
+
+    public static IEventBus getModEventBus() {
+        return modEventBus;
     }
 
     public static ResourceLocation id(String path) {

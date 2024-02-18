@@ -1,12 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.LinkedHashMap;
-import java.util.function.BiPredicate;
-import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
-import org.auioc.mcmod.arnicalib.game.entity.MobStance;
-import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -19,14 +12,22 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
+import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
+import org.auioc.mcmod.arnicalib.game.entity.MobStance;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
 
-public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.PiglinStance, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
+import java.util.LinkedHashMap;
+import java.util.function.BiPredicate;
+
+public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Piglin, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
     public MobAffinityEnchantment() {
         super(
             Enchantment.Rarity.VERY_RARE,
             EnchantmentCategory.WEARABLE,
-            new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET},
+            new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET },
             1,
             (o) -> o != Enchantments.AQUA_AFFINITY
         );
@@ -43,7 +44,7 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     }
 
     @Override
-    public MobStance onPiglinChooseStance(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance) {
+    public MobStance isWearingGold(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance) {
         return MobStance.NEUTRAL;
     }
 

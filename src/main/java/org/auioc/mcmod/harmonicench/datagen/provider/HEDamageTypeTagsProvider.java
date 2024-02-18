@@ -1,14 +1,15 @@
 package org.auioc.mcmod.harmonicench.datagen.provider;
 
-import java.util.concurrent.CompletableFuture;
-import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.DamageTypeTagsProvider;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
+
+import java.util.concurrent.CompletableFuture;
 
 public class HEDamageTypeTagsProvider extends DamageTypeTagsProvider {
 

@@ -1,12 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.HashSet;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
-import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,6 +13,14 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
+import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
+import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
+import org.auioc.mcmod.harmonicench.api.mixin.common.IMixinSpectralArrow;
+
+import java.util.HashSet;
 
 public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
@@ -48,7 +49,7 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof CrossbowItem ? true : super.canEnchant(itemStack);
+        return itemStack.getItem() instanceof CrossbowItem || super.canEnchant(itemStack);
     }
 
     @Override
@@ -73,8 +74,8 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
         for (var _old : effects) {
             int newAmplifier = _old.getAmplifier() + ((int) amplifierBonus);
             int newDuration = (_old.getEffect().isInstantenous())
-                ? _old.getDuration()
-                : addDurationBonus(lvl, _old.getDuration());
+                              ? _old.getDuration()
+                              : addDurationBonus(lvl, _old.getDuration());
             var _new = new MobEffectInstance(
                 _old.getEffect(),
                 newDuration, newAmplifier,
@@ -82,7 +83,8 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
                 ((MixinAccessorMobEffectInstance) _old).getHiddenEffect(),
                 _old.getFactorData()
             );
-            _new.setCurativeItems(_old.getCurativeItems());
+            _new.getCures().clear();
+            _new.getCures().addAll(_old.getCures());
             newEffects.add(_new);
         }
         effects.clear();
@@ -101,7 +103,7 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
     }
 
     @Override
-    public void handleFireworkRocket(int lvl, FireworkRocketEntity fireworkRocket) {}
+    public void handleFireworkRocket(int lvl, FireworkRocketEntity fireworkRocket) { }
 
     @Override
     public float onFireworkRocketExplode(int lvl, LivingEntity target, FireworkRocketEntity projectile, LivingEntity owner, float amount) {

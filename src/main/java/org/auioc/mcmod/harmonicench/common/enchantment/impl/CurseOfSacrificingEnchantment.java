@@ -1,13 +1,5 @@
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
-import java.util.List;
-import javax.annotation.Nullable;
-import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentTagUtils;
-import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
-import org.jetbrains.annotations.NotNull;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringUtil;
@@ -22,8 +14,17 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentTagUtils;
+import org.auioc.mcmod.harmonicench.api.enchantment.AbstractHEEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
+import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class CurseOfSacrificingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
 
@@ -94,7 +95,7 @@ public class CurseOfSacrificingEnchantment extends AbstractHEEnchantment impleme
             (text) -> {
                 int time = getSacrificingProcess(itemStack);
                 if (time > 0 && time <= MAX_TIME) {
-                    ((MutableComponent) text).append(String.format(" (%s)", StringUtil.formatTickDuration((MAX_TIME - time) * 20)));
+                    ((MutableComponent) text).append(String.format(" (%s)", StringUtil.formatTickDuration((MAX_TIME - time) * 20, 20))); // TODO
                 }
             }
         );

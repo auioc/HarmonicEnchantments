@@ -1,22 +1,20 @@
 package org.auioc.mcmod.harmonicench.server.event;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import org.auioc.mcmod.arnicalib.game.event.server.FishingRodCastEvent;
+import org.auioc.mcmod.arnicalib.game.event.server.ItemHurtEvent;
+import org.auioc.mcmod.arnicalib.game.event.server.ProjectileWeaponReleaseEvent;
 import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.common.enchantment.impl.SafeTeleportingEnchantment;
 import org.auioc.mcmod.harmonicench.server.event.impl.ApplyLootEnchantmentBonusCountEvent;
+import org.auioc.mcmod.harmonicench.server.event.impl.CatMorningGiftEvent;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentHelper;
 import org.auioc.mcmod.harmonicench.utils.EnchantmentPerformer;
-import org.auioc.mcmod.hulsealib.game.event.server.CatMorningGiftEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.ItemHurtEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.PiglinStanceEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.PreBowReleaseEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.PreCrossbowReleaseEvent;
-import org.auioc.mcmod.hulsealib.game.event.server.PreFishingRodCastEvent;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class HEServerEventHandler {
 
@@ -46,28 +44,16 @@ public final class HEServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void preFishingRodCast(final PreFishingRodCastEvent event) {
+    public static void preFishingRodCast(final FishingRodCastEvent event) {
         var r = EnchantmentPerformer.preFishingRodCast(event.getFishingRod(), event.getServerPlayer(), event.getSpeedBonus(), event.getLuckBonus());
         event.setSpeedBonus(r.getLeft());
         event.setLuckBonus(r.getRight());
     }
 
     @SubscribeEvent
-    public static void preBowRelease(final PreBowReleaseEvent event) {
-        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getBow(), event.getArrow());
-        EnchantmentPerformer.handleProjectile(event.getBow(), event.getArrow());
-    }
-
-    @SubscribeEvent
-    public static void preCrossbowRelease(final PreCrossbowReleaseEvent event) {
-        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getCrossbow(), event.getProjectile());
-        EnchantmentPerformer.handleProjectile(event.getCrossbow(), event.getProjectile());
-    }
-
-    @SubscribeEvent
-    public static void onPiglinChooseStance(final PiglinStanceEvent event) {
-        var r = EnchantmentPerformer.onPiglinChooseStance(event.getTarget(), event.getStance());
-        event.setStance(r);
+    public static void preProjectileWeaponRelease(final ProjectileWeaponReleaseEvent event) {
+        EnchantmentHelper.copyItemEnchantmentsToEntity(event.getWeapon(), event.getProjectile());
+        EnchantmentPerformer.handleProjectile(event.getWeapon(), event.getProjectile());
     }
 
     @SubscribeEvent

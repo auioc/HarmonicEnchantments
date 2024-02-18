@@ -1,36 +1,5 @@
 package org.auioc.mcmod.harmonicench.utils;
 
-import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.run;
-import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnItem;
-import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnItems;
-import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnLiving;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import javax.annotation.Nullable;
-import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.commons.lang3.mutable.MutableFloat;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.mutable.MutableObject;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
-import org.auioc.mcmod.arnicalib.game.entity.MobStance;
-import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
-import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IConfigurableEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
-import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
-import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -58,11 +27,45 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.event.TickEvent;
+import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableObject;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.auioc.mcmod.arnicalib.game.enchantment.IEnchantmentAttachableObject;
+import org.auioc.mcmod.arnicalib.game.entity.MobStance;
+import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorArrow;
+import org.auioc.mcmod.harmonicench.api.enchantment.IAttributeModifierEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IBlockEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IConfigurableEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IItemEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILivingEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.ILootBonusEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IPlayerEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IProjectileEnchantment;
+import org.auioc.mcmod.harmonicench.api.enchantment.IToolActionControllerEnchantment;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+
+import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.run;
+import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnItem;
+import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnItems;
+import static org.auioc.mcmod.arnicalib.game.enchantment.EnchantmentIterator.runOnLiving;
+
 
 public class EnchantmentPerformer {
 
@@ -240,13 +243,13 @@ public class EnchantmentPerformer {
         return bonus;
     }
 
-    public static Pair<Integer, Float> onPlayerEat(ServerPlayer player, ItemStack foodItemStack, int originalNutrition, float originalSaturationModifier) {
+    public static Pair<Integer, Float> onPlayerEat(ServerPlayer player, ItemStack food, int originalNutrition, float originalSaturationModifier) {
         var foodValues = new MutablePair<Integer, Float>(originalNutrition, originalSaturationModifier);
         runOnLiving(
             (slot, itemStack, ench, lvl) -> perform(
                 ench, IPlayerEnchantment.Eat.class,
                 (e) -> {
-                    var r = e.onPlayerEat(lvl, itemStack, slot, player, foodItemStack, foodValues.getLeft(), foodValues.getRight());
+                    var r = e.onPlayerEat(lvl, itemStack, slot, player, food, foodValues.getLeft(), foodValues.getRight());
                     foodValues.setLeft(r.getLeft());
                     foodValues.setRight(r.getRight());
                 }
@@ -256,12 +259,15 @@ public class EnchantmentPerformer {
         return foodValues;
     }
 
-    public static MobStance onPiglinChooseStance(LivingEntity target, MobStance originalStance) {
-        var stance = new MutableObject<MobStance>(originalStance);
+    /**
+     * @see org.auioc.mcmod.harmonicench.mixin.server.MixinPiglinAi#isWearingGold
+     */
+    public static MobStance onPiglinCheckGoldArmor(LivingEntity target) {
+        var stance = new MutableObject<MobStance>(MobStance.DEFAULT);
         runOnLiving(
             (slot, itemStack, ench, lvl) -> perform(
-                ench, ILivingEnchantment.PiglinStance.class,
-                (e) -> stance.setValue(e.onPiglinChooseStance(lvl, slot, target, stance.getValue()))
+                ench, ILivingEnchantment.Piglin.class,
+                (e) -> stance.setValue(e.isWearingGold(lvl, slot, target, stance.getValue()))
             ),
             target
         );

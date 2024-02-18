@@ -6,9 +6,9 @@
 [![GitHub release](https://img.shields.io/github/v/release/auioc/HarmonicEnchantments?style=flat-square)](https://github.com/auioc/HarmonicEnchantments/releases/latest)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/auioc/HarmonicEnchantments/dev-build.yml?branch=1.20-forge&label=dev%20build&style=flat-square)](https://github.com/auioc/HarmonicEnchantments/actions/workflows/dev-build.yml)
 <br/>
-![Minecraft](https://img.shields.io/static/v1?label=Minecraft&message=1.20.1&color=00aa00&style=flat-square)
-[![Forge](https://img.shields.io/static/v1?label=Forge&message=47.1.0&color=e04e14&logo=Conda-Forge&style=flat-square)](http://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
-![Mappings](https://img.shields.io/static/v1?label=Mappings&message=official&color=00aa00&style=flat-square)
+![Minecraft](https://img.shields.io/static/v1?label=Minecraft&message=1.20.4&color=00aa00&style=flat-square)
+[![NeoForge](https://img.shields.io/static/v1?label=NeoForge&message=20.4.80-beta&color=e04e14&style=flat-square)](https://neoforged.net/)
+![Mappings](https://img.shields.io/static/v1?label=Mappings&message=parchment&color=00aa00&style=flat-square)
 <br/>
 ![OpenJDK](https://img.shields.io/static/v1?label=OpenJDK&message=17&color=brightgreen&logo=java&style=flat-square)
 [![Gradle](https://img.shields.io/static/v1?label=Gradle&message=8.1.1&color=brightgreen&logo=gradle&style=flat-square)](https://docs.gradle.org/8.1.1/release-notes.html)
