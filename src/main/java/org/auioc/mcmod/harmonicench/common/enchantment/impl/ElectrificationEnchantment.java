@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2022-2024 AUIOC.ORG
+ *
+ * This file is part of HarmonicEnchantments, a mod made for Minecraft.
+ *
+ * ArnicaLib is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package org.auioc.mcmod.harmonicench.common.enchantment.impl;
 
 import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
@@ -24,7 +43,7 @@ public class ElectrificationEnchantment extends AbstractHEEnchantment implements
         super(
             Enchantment.Rarity.RARE,
             EnchantmentCategory.TRIDENT,
-            new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND},
+            new EquipmentSlot[] { EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND },
             5,
             (o) -> o != Enchantments.RIPTIDE && o != Enchantments.IMPALING
         );
