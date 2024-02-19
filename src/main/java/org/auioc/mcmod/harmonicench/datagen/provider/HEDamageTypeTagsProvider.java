@@ -26,7 +26,7 @@ import net.minecraft.data.tags.DamageTypeTagsProvider;
 import net.minecraft.tags.DamageTypeTags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
+import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
 
 import java.util.concurrent.CompletableFuture;
 

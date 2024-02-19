@@ -35,7 +35,7 @@ function initializeCoreMod() {
                     toInject.add(
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer',
+                            'org/auioc/mcmod/harmoniclib/enchantment/EnchantmentPerformer',
                             'getDamageProtectionWithItem',
                             '(Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I',
                             false
@@ -93,7 +93,7 @@ function initializeCoreMod() {
 +       ALOAD 0
 +       INVOKEVIRTUAL net/minecraft/world/entity/LivingEntity.getArmorSlots ()Ljava/lang/Iterable;
 +       ALOAD 1
-+       INVOKESTATIC org/auioc/mcmod/harmonicench/utils/EnchantmentPerformer.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
++       INVOKESTATIC org/auioc/mcmod/harmoniclib/enchantment/EnchantmentPerformer.getDamageProtectionWithItem (Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I
 +       IADD
 +       ISTORE 3
     //_ ...

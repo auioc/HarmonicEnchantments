@@ -35,7 +35,7 @@ function initializeCoreMod() {
                     toInject.add(
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'org/auioc/mcmod/harmonicench/server/event/HEServerEventFactory',
+                            'org/auioc/mcmod/harmoniclib/event/HLServerEventFactory',
                             'onApplyLootEnchantmentBonusCount',
                             '(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/Enchantment;I)I',
                             false
@@ -78,7 +78,7 @@ function initializeCoreMod() {
         //_ ...
         if (itemstack != null) {
             int i = EnchantmentHelper.getItemEnchantmentLevel(this.enchantment, itemstack);
-+           i = HEServerEventFactory.onApplyLootEnchantmentBonusCount(pContext, itemstack, this.enchantment, i)
++           i = HLServerEventFactory.onApplyLootEnchantmentBonusCount(pContext, itemstack, this.enchantment, i)
             int j = this.formula.calculateNewCount(p_79914_.getRandom(), p_79913_.getCount(), i);
             p_79913_.setCount(j);
         }
@@ -91,7 +91,7 @@ function initializeCoreMod() {
 +       ALOAD 0
 +       GETFIELD net/minecraft/world/level/storage/loot/functions/ApplyBonusCount.enchantment : Lnet/minecraft/world/item/enchantment/Enchantment;
 +       ILOAD 4
-+       INVOKESTATIC org/auioc/mcmod/harmonicench/server/event/HEServerEventFactory.onApplyLootEnchantmentBonusCount (Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/Enchantment;I)I
++       INVOKESTATIC org/auioc/mcmod/harmoniclib/event/HLServerEventFactory.onApplyLootEnchantmentBonusCount (Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/Enchantment;I)I
 +       ISTORE 4
         ALOAD 0
         GETFIELD net/minecraft/world/level/storage/loot/functions/ApplyBonusCount.formula : Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula;

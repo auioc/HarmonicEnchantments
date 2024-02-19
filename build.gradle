@@ -33,6 +33,10 @@ runs {
 ext {
     resourceReplaceProperties = [
         arnicalib_version_range: arnicalib_version_range,
+        lib_mod_id             : lib_mod_id,
+        lib_mod_name           : lib_mod_name,
+        lib_mod_authors        : lib_mod_authors,
+        lib_mod_description    : lib_mod_description
     ]
 }
 

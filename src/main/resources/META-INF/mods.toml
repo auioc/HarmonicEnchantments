@@ -4,6 +4,37 @@ license = "${mod_license}"
 issueTrackerURL = "https://github.com/auioc/HarmonicEnchantments/issues"
 
 [[mods]]
+modId = "${lib_mod_id}"
+version = "${mod_version}"
+displayName = "${lib_mod_name}"
+credits = "${mod_credits}"
+authors = "${lib_mod_authors}"
+description = '''${lib_mod_description}'''
+
+[[mixins]]
+config="harmoniclib.mixin.json"
+
+[[dependencies.${lib_mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neo_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${lib_mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${lib_mod_id}]]
+    modId = "arnicalib"
+    type="required"
+    versionRange = "${arnicalib_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+
+[[mods]]
 modId = "${mod_id}"
 version = "${mod_version}"
 displayName = "${mod_name}"
@@ -30,5 +61,11 @@ description = '''${mod_description}'''
     modId = "arnicalib"
     type="required"
     versionRange = "${arnicalib_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+[[dependencies.${mod_id}]]
+    modId = "${lib_mod_id}"
+    type="required"
+    versionRange = "[${mod_version},)"
     ordering = "NONE"
     side = "BOTH"

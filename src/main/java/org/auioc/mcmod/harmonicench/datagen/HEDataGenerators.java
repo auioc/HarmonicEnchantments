@@ -26,7 +26,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.damagesource.HEDamageTypes;
+import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEAdvancementProvider;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEDamageTypeTagsProvider;
 

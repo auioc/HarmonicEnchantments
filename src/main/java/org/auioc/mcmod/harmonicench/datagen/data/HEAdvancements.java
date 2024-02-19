@@ -60,11 +60,11 @@ import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
 import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
 import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.AimEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.CurseOfRebellingEnchantment;
-import org.auioc.mcmod.harmonicench.common.enchantment.impl.ProficiencyEnchantment;
-import org.auioc.mcmod.harmonicench.server.advancement.criterion.EnchantmentPerformedTrigger;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.impl.AimEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.CurseOfRebellingEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ProficiencyEnchantment;
+import org.auioc.mcmod.harmoniclib.advancement.criterion.EnchantmentPerformedTrigger;
 
 import java.util.List;
 import java.util.Optional;

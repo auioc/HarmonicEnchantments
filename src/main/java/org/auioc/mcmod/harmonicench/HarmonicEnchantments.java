@@ -41,7 +41,7 @@ public final class HarmonicEnchantments implements IHMod {
     public HarmonicEnchantments(IEventBus modEventBus) {
         HarmonicEnchantments.modEventBus = modEventBus;
         IHMod.validateVersion(BUILD_INFO, LOGGER);
-        Initialization.init();
+        HEInitialization.init();
     }
 
     public static IEventBus getModEventBus() {

@@ -25,7 +25,7 @@ function initializeCoreMod() {
                     toInject.add(
                         new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'org/auioc/mcmod/harmonicench/common/mobeffect/impl/WeightlessnessMobEffect',
+                            'org/auioc/mcmod/harmonicench/effect/impl/WeightlessnessMobEffect',
                             'adjustFallFlySpeed',
                             '(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;',
                             false
@@ -91,7 +91,7 @@ function initializeCoreMod() {
     //_ ...
 +       ALOAD 0
 +       ALOAD 7
-+       INVOKESTATIC org/auioc/mcmod/harmonicench/common/mobeffect/impl/WeightlessnessMobEffect.adjustFallFlySpeed (Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
++       INVOKESTATIC org/auioc/mcmod/harmonicench/effect/impl/WeightlessnessMobEffect.adjustFallFlySpeed (Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
 +       ASTORE 7
         ALOAD 0
         ALOAD 7

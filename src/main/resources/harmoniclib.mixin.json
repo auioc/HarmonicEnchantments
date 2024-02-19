@@ -1,0 +1,21 @@
+{
+    "required": true,
+    "package": "org.auioc.mcmod.harmoniclib.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "common.MixinAbstractArrow",
+        "common.MixinElytraItem",
+        "common.MixinIForgeItemStack",
+        "common.MixinProjectile",
+        "common.MixinSpectralArrow",
+        "server.MixinCatRelaxOnOwnerGoal",
+        "server.MixinPiglinAi"
+    ],
+    "client": [],
+    "server": [],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "plugin": "org.auioc.mcmod.arnicalib.mod.mixin.MixinConfigPlugin",
+    "minVersion": "0.8"
+}
