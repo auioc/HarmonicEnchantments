@@ -28,7 +28,7 @@ function initializeCoreMod() {
                             Opcodes.GETFIELD,
                             'net/minecraft/world/level/storage/loot/functions/ApplyBonusCount',
                             'enchantment',
-                            'Lnet/minecraft/world/item/enchantment/Enchantment;'
+                            'Lnet/minecraft/core/Holder;'
                         )
                     );
                     toInject.add(new VarInsnNode(Opcodes.ILOAD, 4));
@@ -37,7 +37,7 @@ function initializeCoreMod() {
                             Opcodes.INVOKESTATIC,
                             'org/auioc/mcmod/harmoniclib/event/HLServerEventFactory',
                             'onApplyLootEnchantmentBonusCount',
-                            '(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/Enchantment;I)I',
+                            '(Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Holder;I)I',
                             false
                         )
                     );
@@ -91,7 +91,7 @@ function initializeCoreMod() {
 +       ALOAD 0
 +       GETFIELD net/minecraft/world/level/storage/loot/functions/ApplyBonusCount.enchantment : Lnet/minecraft/world/item/enchantment/Enchantment;
 +       ILOAD 4
-+       INVOKESTATIC org/auioc/mcmod/harmoniclib/event/HLServerEventFactory.onApplyLootEnchantmentBonusCount (Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/Enchantment;I)I
++       INVOKESTATIC org/auioc/mcmod/harmoniclib/event/HLServerEventFactory.onApplyLootEnchantmentBonusCount (Lnet/minecraft/world/level/storage/loot/LootContext;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Holder;I)I
 +       ISTORE 4
         ALOAD 0
         GETFIELD net/minecraft/world/level/storage/loot/functions/ApplyBonusCount.formula : Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula;

@@ -19,6 +19,7 @@
 
 package org.auioc.mcmod.harmoniclib.event;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +38,8 @@ public final class HLServerEventFactory {
     /**
      * FMLCoreMod: harmoniclib.apply_bonus_count.run
      */
-    public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int enchantmentLevel) {
-        var event = new ApplyLootEnchantmentBonusCountEvent(lootContext, itemStack, enchantment, enchantmentLevel);
+    public static int onApplyLootEnchantmentBonusCount(LootContext lootContext, ItemStack itemStack, Holder<Enchantment> enchantment, int enchantmentLevel) {
+        var event = new ApplyLootEnchantmentBonusCountEvent(lootContext, itemStack, enchantment.value(), enchantmentLevel);
         BUS.post(event);
         return event.getEnchantmentLevel();
     }
