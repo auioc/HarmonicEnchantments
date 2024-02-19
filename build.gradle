@@ -30,6 +30,12 @@ runs {
     }
 }
 
+ext {
+    resourceReplaceProperties = [
+        arnicalib_version_range: arnicalib_version_range,
+    ]
+}
+
 apply from: "${scripts_url}/minecraft/neo/resources.gradle"
 apply from: "${scripts_url}/minecraft/neo/build-info.gradle"
 apply from: "${scripts_url}/minecraft/neo/artifacts.gradle"
