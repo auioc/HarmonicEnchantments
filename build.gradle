@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.auioc.mcmod:arnicalib:${minecraft_version}-${arnicalib_version}")
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
