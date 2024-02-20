@@ -30,6 +30,17 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 
+/**
+ * <b>饱食修补 Dining</b>
+ * <p>
+ * 食用食物后，将玩家增加的饥饿值转化为该物品的耐久度。
+ * <ul>
+ *     <li>每1点饥饿值增加20点耐久度。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class DiningEnchantment extends HLEnchantment implements IPlayerEnchantment.Eat {
 
     public DiningEnchantment() {

@@ -29,6 +29,14 @@ import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
+/**
+ * <b>无偿骑乘 Free Riding</b>
+ * <p>
+ * 骑乘猪或炽足兽时，使用提速不再消耗耐久。
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class FreeRidingEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
 
     public FreeRidingEnchantment() {

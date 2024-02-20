@@ -34,6 +34,17 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
+/**
+ * <b>祝福 Blessing</b>
+ * <p>
+ * 根据物品的所有魔咒等级之和，提供魔法抗性。
+ * <ul>
+ *     <li>增加 <code>∑(N,i=1)(6/i)×∑(n,j=1)[1/(5j-4)]</code> 点魔法抗性。（N：该物品所有魔咒等级之和）</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class BlessingEnchantment extends HLEnchantment implements IItemEnchantment.Protection {
 
     private static final EnchantmentCategory BLESSABLE_ARMOR = EnchantmentCategory.create(

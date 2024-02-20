@@ -34,17 +34,27 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmoniclib.enchantment.EnchantmentHelper;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IBlockEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.EnchantmentHelper;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * <b>熟练 Proficiency</b>
+ * <p>
+ * 随着挖掘次数增加，永久提高挖掘速度。
+ * <ul>
+ *     <li>每次挖掘后，有 <code>[∑(n,k=1)(1/k)]/200</code> 概率使挖掘速度永久提高 1×。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class ProficiencyEnchantment extends HLEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
     public static final String NBT_PROFICIENCY = "Proficiency";

@@ -33,7 +33,18 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 
-
+/**
+ * <b>领航 Sun Affinity</b>
+ * <p>
+ * 鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。
+ * <ul>
+ *     <li>使用鞘翅时，降低玩家 20%/40%/60% 重力影响。（更高等级维持 60%）</li>
+ *     <li>鞘翅只能在 0~12000 刻，并且天气为晴天时使用。（在末地和下界将一直无法使用）</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class SunAffinityEnchantment extends HLEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
 
     public SunAffinityEnchantment() {

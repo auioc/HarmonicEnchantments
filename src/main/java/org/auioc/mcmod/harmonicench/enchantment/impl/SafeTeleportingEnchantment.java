@@ -28,11 +28,18 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.event.HLServerEventHandler;
 
 /**
- * @see HLServerEventHandler#onEnderPearlTeleport
- * @see HLServerEventHandler#onEntityTravelToDimension
+ * <b>传送保护 Safe Teleporting</b>
+ * <p>
+ * 免疫末影珍珠的传送伤害，并在穿越维度时提供防御。
+ * <ul>
+ *     <li>免疫末影珍珠的传送伤害。</li>
+ *     <li>穿越维度时，获得抗性提升Ⅰ，持续 <code>∑(n,k=1)(20/k)</code>秒。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
  */
 public class SafeTeleportingEnchantment extends HLEnchantment {
 

@@ -29,6 +29,18 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
+/**
+ * <b>冰雪眷顾 Luck of the Snow</b>
+ * <p>
+ * 在寒冷和积雪生物群系里，提高钓上宝藏的概率，降低钓上鱼和垃圾的概率。
+ * <ul>
+ *     <li>在寒冷生物群系中，提供相当于同等级海之眷顾的效果。</li>
+ *     <li>在积雪生物群系中，提供相当于两倍等级海之眷顾的效果。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class LuckOfTheSnowEnchantment extends HLEnchantment implements IItemEnchantment.FishingRod {
 
     public LuckOfTheSnowEnchantment() {

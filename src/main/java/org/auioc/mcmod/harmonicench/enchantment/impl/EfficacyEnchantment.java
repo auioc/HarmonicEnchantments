@@ -41,6 +41,18 @@ import org.auioc.mcmod.harmoniclib.mixinapi.IMixinSpectralArrow;
 
 import java.util.HashSet;
 
+/**
+ * <b>效能 Efficacy</b>
+ * <p>
+ * 提高射出药箭和光灵箭施加状态效果的等级与持续时间。
+ * <ul>
+ *     <li>状态效果等级提高 <code>⌊∑(n,k=1)(1/k)⌋</code> 级。</li>
+ *     <li>除治疗之箭、伤害之箭以外的药箭和光灵箭，状态效果持续时间提高 <code>(n+1)×10%</code>。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
     public EfficacyEnchantment() {

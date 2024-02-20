@@ -34,6 +34,18 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
 import org.auioc.mcmod.harmoniclib.mixinapi.IMixinAbstractArrow;
 
+/**
+ * <b>狙击 Sniping</b>
+ * <p>
+ * 更容易命中，对远距离目标造成的伤害更高。
+ * <ul>
+ *     <li>对16格以外的实体造成伤害增加 <code>[(x-16)/32]∑(n,k=1)(1/k)</code> 倍。（对近处不会降低伤害）</li>
+ *     <li>箭矢降低 15%/30%/45% 所受重力影响。（更高等级维持45%）</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class SnipingEnchantment extends HLEnchantment implements IProjectileEnchantment.HurtLiving, IProjectileEnchantment.AbstractArrow {
 
     public SnipingEnchantment() {

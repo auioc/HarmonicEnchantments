@@ -38,6 +38,17 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * <b>锻打 Forging</b>
+ * <p>
+ * 根据盔甲的总附魔数量，增加护甲值和盔甲韧性。
+ * <ul>
+ *     <li>TODO</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class ForgingEnchantment extends HLEnchantment implements IAttributeModifierEnchantment {
 
     private static final EnchantmentCategory METALLIC_ARMOR = EnchantmentCategory.create(

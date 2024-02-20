@@ -35,6 +35,17 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * <b>延展之刃 Long</b>
+ * <p>
+ * 提高剑的攻击距离。
+ * <ul>
+ *     <li>增加攻击距离 <code>∑(n,k=1)(3/4k)</code>。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class LongEnchantment extends HLEnchantment implements IAttributeModifierEnchantment {
 
     private static final UUID ATTACK_RANGE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");

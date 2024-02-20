@@ -30,7 +30,14 @@ import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILootBonusEnchantment;
 
-
+/**
+ * <b>深层研究 Deep Study</b>
+ * <p>
+ * 开采深层矿石时，获得两倍等级时运的效果。
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class DeepStudyEnchantment extends HLEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
 
     public DeepStudyEnchantment() {

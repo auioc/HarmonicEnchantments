@@ -30,6 +30,17 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
+/**
+ * <b>强敌杀手 Bane of Champions</b>
+ * <p>
+ * 对一些强大的生物造成额外伤害。（生命值超过50点的敌对生物）。
+ * <ul>
+ *     <li>每一级增加2.5点额外伤害。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class BaneOfChampionsEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
 
     public BaneOfChampionsEnchantment() {

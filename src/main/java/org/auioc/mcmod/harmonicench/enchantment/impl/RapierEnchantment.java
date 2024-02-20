@@ -38,7 +38,17 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IToolActionControllerEnchantm
 import java.util.Map;
 import java.util.UUID;
 
-
+/**
+ * <b>迅捷之刃 Rapier</b>
+ * <p>
+ * 增加攻击速度，但无法再使出横扫攻击。
+ * <ul>
+ *     <li>增加 <code>∑(n,k=1)[1/(k+9)]</code> 点攻击速度。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class RapierEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");

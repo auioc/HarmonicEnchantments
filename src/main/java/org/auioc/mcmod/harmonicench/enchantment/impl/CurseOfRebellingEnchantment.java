@@ -33,9 +33,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
+import org.auioc.mcmod.harmonicench.advancement.HEEPerformancePredicates;
 import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.advancement.HEEPerformancePredicates;
 import org.auioc.mcmod.harmoniclib.advancement.HLCriteriaTriggers;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.HEPerformancePredicateType;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.IHEPerformancePredicate;
@@ -44,6 +44,17 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
 import java.util.Optional;
 
+/**
+ * <b>叛逆诅咒Curse of Rebelling</b>
+ * <p>
+ * 物品耐久度降低时，有概率对使用者造成伤害。
+ * <ul>
+ *     <li>每下降1点耐久度，有1%概率对使用者造成4点伤害，无视护甲、魔抗、附魔、抗性提升。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class CurseOfRebellingEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
 
     public CurseOfRebellingEnchantment() {

@@ -37,6 +37,18 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
+/**
+ * <b>感电 Electrification</b>
+ * <p>
+ * 降雨或雷暴天气时，有概率产生闪电击中持有者并给予力量效果。
+ * <ul>
+ *     <li>降雨（雷暴）时，每一秒有 1%（5%）概率产生闪电击中持有者。</li>
+ *     <li>持有者被任何闪电击中后，获得力量效果，等级为 <code>⌊∑(n,k=1)[5/(2k+1)]⌋</code> 级，持续 <code>10×∑(n,k=1)(1/k)</code> 秒。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class ElectrificationEnchantment extends HLEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {

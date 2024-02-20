@@ -42,6 +42,19 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * <b>钝重Blunt</b>
+ * <p>
+ * 降低攻击速度，大幅提高暴击伤害（跳劈）。
+ * <ul>
+ *     <li>降低 25% 攻击速度。</li>
+ *     <li>暴击将造成 <code>0.5×(n+3)×100% </code>伤害。</li>
+ *     <li>用红砖或下界砖暴击命中玩家，将给予混乱效果，持续时间 <code>∑(n,k=1)(5/k)</code> 秒。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class BluntEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("F839F42C-4B26-6F66-7025-1EF3294EED97");

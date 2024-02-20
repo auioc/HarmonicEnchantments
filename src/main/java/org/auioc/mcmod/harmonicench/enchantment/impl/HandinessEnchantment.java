@@ -32,6 +32,18 @@ import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
 
+/**
+ * <b>轻巧 Handiness</b>
+ * <p>
+ * 射出的箭命中实体后会短暂提高使用者移动速度。
+ * <ul>
+ *     <li>轻巧Ⅰ（Ⅱ）提供 6 秒速度Ⅰ（Ⅱ）。</li>
+ *     <li>更高等级的附魔不提升效果等级，但持续时间增加 <code>∑(n,k=3)[2/(k-2)]</code> 秒。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class HandinessEnchantment extends HLEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {

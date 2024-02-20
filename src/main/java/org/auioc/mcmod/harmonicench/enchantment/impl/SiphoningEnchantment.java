@@ -32,6 +32,17 @@ import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
+/**
+ * <b>汲取 Siphoning</b>
+ * <p>
+ * 杀死生物后，根据其最大生命值恢复饥饿值和饱和度，优先回复饥饿值。
+ * <ul>
+ *     <li>恢复 <code>(x/15)∑(n,k=1)(1/k)</code> 点饥饿值或饱和度。（x：被击杀生物的最大生命值）</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class SiphoningEnchantment extends HLEnchantment implements ILivingEnchantment.Death {
 
     public SiphoningEnchantment() {

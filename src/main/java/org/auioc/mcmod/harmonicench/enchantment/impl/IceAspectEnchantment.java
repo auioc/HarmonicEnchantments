@@ -20,6 +20,7 @@
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -29,6 +30,18 @@ import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
+/**
+ * <b>冰霜附加 Ice Aspect</b>
+ * <p>
+ * 被击中的实体会被冰冻，每一击命中会延长冰冻时间。
+ * <ul>
+ *     <li>对实体数据 {@link Entity#DATA_TICKS_FROZEN} 为 0 的生物攻击会增加该值 <code>∑(n,k=1)(200/k)</code>，后续每次攻击命中会增加 <code>∑(n,k=1)(100/k)</code>。</li>
+ *     <li>TODO 攻击同时会给予目标缓慢Ⅰ/Ⅱ（更高等级魔咒维持缓慢Ⅱ），初次命中持续时间 <code>[∑(n,k=1)(5/k)]-3.5</code> 秒，之后每次命中增加 <code>∑(n,k=1)(2.5/k)</code>。</li>
+ * </ul>
+ *
+ * @author WakelessSloth56
+ * @author Libellule505
+ */
 public class IceAspectEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
 
     public IceAspectEnchantment() {
