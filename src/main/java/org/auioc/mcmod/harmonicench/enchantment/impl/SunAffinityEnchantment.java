@@ -29,12 +29,12 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.event.TickEvent;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.harmonicench.effect.HEMobEffects;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 
 
-public class SunAffinityEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
+public class SunAffinityEnchantment extends HLEnchantment implements IItemEnchantment.Elytra, IPlayerEnchantment.Tick {
 
     public SunAffinityEnchantment() {
         super(

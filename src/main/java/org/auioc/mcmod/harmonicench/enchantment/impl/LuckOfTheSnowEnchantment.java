@@ -26,10 +26,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.apache.commons.lang3.tuple.Pair;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
-public class LuckOfTheSnowEnchantment extends AbstractHEEnchantment implements IItemEnchantment.FishingRod {
+public class LuckOfTheSnowEnchantment extends HLEnchantment implements IItemEnchantment.FishingRod {
 
     public LuckOfTheSnowEnchantment() {
         super(

@@ -31,7 +31,7 @@ import net.neoforged.neoforge.common.ToolAction;
 import net.neoforged.neoforge.common.ToolActions;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IToolActionControllerEnchantment;
 
@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class RapierEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
+public class RapierEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");
 

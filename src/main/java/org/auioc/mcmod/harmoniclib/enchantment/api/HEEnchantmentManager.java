@@ -28,6 +28,8 @@ import java.util.HashMap;
 
 public class HEEnchantmentManager {
 
+    // TODO Improve?
+
     private static final HashMap<ResourceLocation, BooleanValue> ENABLED = new HashMap<>();
 
     @Nullable

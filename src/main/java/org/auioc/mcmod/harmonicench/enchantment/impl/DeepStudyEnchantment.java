@@ -27,11 +27,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.common.Tags;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILootBonusEnchantment;
 
 
-public class DeepStudyEnchantment extends AbstractHEEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
+public class DeepStudyEnchantment extends HLEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
 
     public DeepStudyEnchantment() {
         super(

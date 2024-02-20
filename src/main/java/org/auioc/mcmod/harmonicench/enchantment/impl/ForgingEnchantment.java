@@ -31,14 +31,14 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
-public class ForgingEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment {
+public class ForgingEnchantment extends HLEnchantment implements IAttributeModifierEnchantment {
 
     private static final EnchantmentCategory METALLIC_ARMOR = EnchantmentCategory.create(
         "METALLIC_ARMOR",

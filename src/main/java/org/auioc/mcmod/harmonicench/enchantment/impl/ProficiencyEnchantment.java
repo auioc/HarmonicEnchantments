@@ -34,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IBlockEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.EnchantmentHelper;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class ProficiencyEnchantment extends AbstractHEEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
+public class ProficiencyEnchantment extends HLEnchantment implements IBlockEnchantment.BreakSpeed, IBlockEnchantment.Break, IItemEnchantment.Tooltip {
 
     public static final String NBT_PROFICIENCY = "Proficiency";
 

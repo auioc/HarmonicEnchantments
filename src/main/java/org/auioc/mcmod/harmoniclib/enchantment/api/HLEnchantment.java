@@ -29,39 +29,39 @@ import org.auioc.mcmod.harmoniclib.config.NullableBooleanValue;
 
 import java.util.function.Predicate;
 
-public abstract class AbstractHEEnchantment extends Enchantment implements IValidSlotsVisibleEnchantment, IConfigurableEnchantment {
+public abstract class HLEnchantment extends Enchantment implements IValidSlotsVisibleEnchantment, IConfigurableEnchantment {
 
     protected final int maxLevel;
     protected final Predicate<Enchantment> compatibility;
     protected final NullableBooleanValue isEnabled = new NullableBooleanValue(() -> HEEnchantmentManager.getConfigEnabled(RegistryUtils.id(this)));
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel, Predicate<Enchantment> compatibility) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel, Predicate<Enchantment> compatibility) {
         super(rarity, category, validSlots);
         this.maxLevel = maxLevel;
         this.compatibility = compatibility;
     }
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, int maxLevel, Predicate<Enchantment> compatibility) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, int maxLevel, Predicate<Enchantment> compatibility) {
         this(rarity, category, new EquipmentSlot[] { validSlot }, maxLevel, compatibility);
     }
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, Predicate<Enchantment> compatibility) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, Predicate<Enchantment> compatibility) {
         this(rarity, category, validSlots, 1, compatibility);
     }
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, Predicate<Enchantment> compatibility) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, Predicate<Enchantment> compatibility) {
         this(rarity, category, validSlot, 1, compatibility);
     }
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, int maxLevel) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot validSlot, int maxLevel) {
         this(rarity, category, validSlot, maxLevel, (o) -> true);
     }
 
-    public AbstractHEEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel) {
+    public HLEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] validSlots, int maxLevel) {
         this(rarity, category, validSlots, maxLevel, (o) -> true);
     }
 
-    public AbstractHEEnchantment() {
+    public HLEnchantment() {
         this(Rarity.COMMON, EnchantmentCategory.VANISHABLE, EquipmentSlot.MAINHAND, 1, (o) -> true);
     }
 

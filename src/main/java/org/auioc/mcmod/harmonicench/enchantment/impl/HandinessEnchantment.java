@@ -29,10 +29,10 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
 
-public class HandinessEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving {
+public class HandinessEnchantment extends HLEnchantment implements IProjectileEnchantment.HurtLiving {
 
     public HandinessEnchantment() {
         super(

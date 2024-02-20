@@ -26,10 +26,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
-public class FreeRidingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Hurt {
+public class FreeRidingEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
 
     public FreeRidingEnchantment() {
         super(

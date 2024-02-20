@@ -35,13 +35,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
 import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
 import org.auioc.mcmod.harmoniclib.mixinapi.IMixinSpectralArrow;
 
 import java.util.HashSet;
 
-public class EfficacyEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
+public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
     public EfficacyEnchantment() {
         super(

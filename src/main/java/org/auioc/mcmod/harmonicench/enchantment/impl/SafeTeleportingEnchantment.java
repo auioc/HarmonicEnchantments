@@ -27,14 +27,14 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.event.HLServerEventHandler;
 
 /**
  * @see HLServerEventHandler#onEnderPearlTeleport
  * @see HLServerEventHandler#onEntityTravelToDimension
  */
-public class SafeTeleportingEnchantment extends AbstractHEEnchantment {
+public class SafeTeleportingEnchantment extends HLEnchantment {
 
     public SafeTeleportingEnchantment() {
         super(

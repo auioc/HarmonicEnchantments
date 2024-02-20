@@ -29,13 +29,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class LongEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment {
+public class LongEnchantment extends HLEnchantment implements IAttributeModifierEnchantment {
 
     private static final UUID ATTACK_RANGE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");
 

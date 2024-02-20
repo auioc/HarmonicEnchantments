@@ -27,10 +27,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.DamageEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
-public class BaneOfChampionsEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Hurt {
+public class BaneOfChampionsEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
 
     public BaneOfChampionsEnchantment() {
         super(

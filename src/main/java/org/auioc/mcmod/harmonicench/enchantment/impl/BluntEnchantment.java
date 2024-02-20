@@ -35,14 +35,14 @@ import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
 import org.auioc.mcmod.arnicalib.game.tag.HItemTags;
 import org.auioc.mcmod.harmonicench.effect.HEMobEffects;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class BluntEnchantment extends AbstractHEEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
+public class BluntEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
 
     private static final UUID ATTACK_SPEED_UUID = UUID.fromString("F839F42C-4B26-6F66-7025-1EF3294EED97");
 

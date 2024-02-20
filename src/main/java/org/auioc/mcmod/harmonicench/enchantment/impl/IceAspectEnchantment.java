@@ -26,10 +26,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
-public class IceAspectEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Hurt {
+public class IceAspectEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
 
     public IceAspectEnchantment() {
         super(

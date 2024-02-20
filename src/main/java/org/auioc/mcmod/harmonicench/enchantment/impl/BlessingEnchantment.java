@@ -31,10 +31,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
-public class BlessingEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Protection {
+public class BlessingEnchantment extends HLEnchantment implements IItemEnchantment.Protection {
 
     private static final EnchantmentCategory BLESSABLE_ARMOR = EnchantmentCategory.create(
         "BLESSABLE_ARMOR",

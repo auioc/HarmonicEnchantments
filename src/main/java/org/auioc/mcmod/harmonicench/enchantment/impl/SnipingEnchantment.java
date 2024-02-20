@@ -30,11 +30,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
 import org.auioc.mcmod.harmoniclib.mixinapi.IMixinAbstractArrow;
 
-public class SnipingEnchantment extends AbstractHEEnchantment implements IProjectileEnchantment.HurtLiving, IProjectileEnchantment.AbstractArrow {
+public class SnipingEnchantment extends HLEnchantment implements IProjectileEnchantment.HurtLiving, IProjectileEnchantment.AbstractArrow {
 
     public SnipingEnchantment() {
         super(

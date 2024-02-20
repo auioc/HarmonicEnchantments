@@ -33,11 +33,11 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
-public class ElectrificationEnchantment extends AbstractHEEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
+public class ElectrificationEnchantment extends HLEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Hurt {
 
     public ElectrificationEnchantment() {
         super(

@@ -36,13 +36,13 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.game.effect.MobEffectUtils;
 import org.auioc.mcmod.arnicalib.game.entity.MobStance;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 
 import java.util.LinkedHashMap;
 import java.util.function.BiPredicate;
 
-public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Piglin, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
+public class MobAffinityEnchantment extends HLEnchantment implements ILivingEnchantment.Piglin, ILivingEnchantment.Cat, ILivingEnchantment.Potion {
 
     public MobAffinityEnchantment() {
         super(

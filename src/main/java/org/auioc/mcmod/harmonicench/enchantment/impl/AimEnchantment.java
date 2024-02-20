@@ -46,14 +46,14 @@ import org.auioc.mcmod.harmonicench.advancement.HEEPerformancePredicates;
 import org.auioc.mcmod.harmoniclib.advancement.HLCriteriaTriggers;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.HEPerformancePredicateType;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.IHEPerformancePredicate;
-import org.auioc.mcmod.harmoniclib.enchantment.api.AbstractHEEnchantment;
+import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
 
 import java.util.Optional;
 
 
-public class AimEnchantment extends AbstractHEEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick {
+public class AimEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt, IPlayerEnchantment.Tick {
 
     public AimEnchantment() {
         super(
