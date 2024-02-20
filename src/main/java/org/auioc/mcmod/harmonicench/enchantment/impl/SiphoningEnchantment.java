@@ -67,13 +67,12 @@ public class SiphoningEnchantment extends HLEnchantment implements ILivingEnchan
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof AxeItem ? true : super.canEnchant(itemStack);
+        return itemStack.getItem() instanceof AxeItem || super.canEnchant(itemStack);
     }
 
     @Override
     public void onLivingDeath(int lvl, ItemStack itemStack, LivingEntity target, DamageSource source) {
-        if (!(source.getEntity() instanceof Player)) return;
-        var player = (Player) source.getEntity();
+        if (!(source.getEntity() instanceof Player player)) return;
 
         double x = target.getMaxHealth();
         double r = MathUtil.sigma(lvl, 1, (double i) -> (x / 15.0D) * (1.0D / i));

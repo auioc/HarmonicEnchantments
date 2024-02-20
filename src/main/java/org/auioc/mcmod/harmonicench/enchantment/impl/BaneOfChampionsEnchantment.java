@@ -65,7 +65,7 @@ public class BaneOfChampionsEnchantment extends HLEnchantment implements ILiving
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof AxeItem ? true : super.canEnchant(itemStack);
+        return itemStack.getItem() instanceof AxeItem || super.canEnchant(itemStack);
     }
 
     @Override

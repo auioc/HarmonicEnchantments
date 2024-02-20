@@ -120,7 +120,6 @@ public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnc
         }
         effects.clear();
         effects.addAll(newEffects);
-        return;
     }
 
     @Override

@@ -86,8 +86,7 @@ public class BluntEnchantment extends HLEnchantment implements IAttributeModifie
 
     @Override
     public boolean canEnchant(ItemStack itemStack) {
-        var item = itemStack.getItem();
-        return (item instanceof SwordItem || isBrick(itemStack)) ? true : super.canEnchant(itemStack);
+        return itemStack.getItem() instanceof SwordItem || isBrick(itemStack) || super.canEnchant(itemStack);
     }
 
     @Override
