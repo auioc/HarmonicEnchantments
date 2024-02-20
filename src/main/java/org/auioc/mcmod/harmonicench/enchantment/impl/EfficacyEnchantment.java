@@ -63,7 +63,7 @@ public class EfficacyEnchantment extends AbstractHEEnchantment implements IProje
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 15;
+        return 50;
     }
 
     @Override
