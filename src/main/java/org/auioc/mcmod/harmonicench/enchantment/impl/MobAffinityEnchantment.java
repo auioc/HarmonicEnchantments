@@ -28,6 +28,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -45,7 +47,7 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     public MobAffinityEnchantment() {
         super(
             Enchantment.Rarity.VERY_RARE,
-            EnchantmentCategory.WEARABLE,
+            EnchantmentCategory.ARMOR_HEAD,
             new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET },
             1,
             (o) -> o != Enchantments.AQUA_AFFINITY
@@ -61,6 +63,17 @@ public class MobAffinityEnchantment extends AbstractHEEnchantment implements ILi
     public int getMaxCost(int lvl) {
         return 41;
     }
+
+    public boolean canEnchant(ItemStack itemStack) {
+        if (itemStack.getItem() instanceof ArmorItem armor) {
+            var slot = armor.getEquipmentSlot();
+            if (slot == EquipmentSlot.CHEST || slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET) {
+                return true;
+            }
+        }
+        return super.canEnchant(itemStack);
+    }
+
 
     @Override
     public MobStance isWearingGold(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance) {
