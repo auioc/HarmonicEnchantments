@@ -107,7 +107,9 @@ public class AimEnchantment extends HLEnchantment implements ILivingEnchantment.
 
     @Override
     public void onPlayerTick(int lvl, ItemStack itemStack, EquipmentSlot slot, Player player, TickEvent.Phase phase, LogicalSide side) {
-        if (phase == TickEvent.Phase.END && side == LogicalSide.SERVER && player.tickCount % 11 == 0 && player.isScoping()) {
+        if (phase == TickEvent.Phase.END && side == LogicalSide.SERVER
+            && player.tickCount % 11 == 0 && player.isScoping()
+        ) {
             var hit = RayCastUtils.entityOnView(player, 100.0D);
             if (hit != null && hit.getEntity() instanceof LivingEntity living) {
                 if (!living.hasEffect(MobEffects.GLOWING)) {

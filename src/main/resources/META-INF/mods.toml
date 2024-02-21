@@ -14,9 +14,6 @@ description = '''${lib_mod_description}'''
 [[mixins]]
 config="harmoniclib.mixin.json"
 
-[[accessTransformers]]
-file="META-INF/accesstransformer.cfg"
-
 [[dependencies.${lib_mod_id}]]
     modId="neoforge"
     type="required"

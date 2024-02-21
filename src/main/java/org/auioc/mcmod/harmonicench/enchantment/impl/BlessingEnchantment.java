@@ -36,6 +36,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.base.collection.ListUtils;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
@@ -117,7 +118,7 @@ public class BlessingEnchantment extends HLEnchantment implements IItemEnchantme
 
     @Override
     public void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
-        if (ItemStack.shouldShowInTooltip(itemStack.getHideFlags(), ItemStack.TooltipPart.MODIFIERS)) { // TODO arnicalib
+        if (ItemUtils.shouldShowInTooltip(itemStack, ItemStack.TooltipPart.MODIFIERS)) {
             int i = ListUtils.indexOf(
                 lines,
                 (l) -> l.getContents() instanceof TranslatableContents t && TOOLTIP_MODIFIER_KEYS.contains(t.getKey())
