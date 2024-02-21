@@ -43,11 +43,10 @@ public class HLCommonEventHandler {
     @SubscribeEvent
     public static void onGetItemAttributeModifier(final ItemAttributeModifierEvent event) {
         EnchantmentPerformer.getAttributeModifiers(event.getItemStack(), event.getSlotType())
-            .ifPresent((modifierList) -> {
-                modifierList.forEach(
+            .ifPresent((list) -> list.forEach(
                     (modifiers) -> modifiers.forEach(event::addModifier)
-                );
-            });
+                )
+            );
     }
 
     @SubscribeEvent

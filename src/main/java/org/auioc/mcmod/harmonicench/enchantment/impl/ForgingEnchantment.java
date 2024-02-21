@@ -43,7 +43,7 @@ import java.util.UUID;
  * <p>
  * 根据盔甲的总附魔数量，增加护甲值和盔甲韧性。
  * <ul>
- *     <li>TODO</li>
+ *     <li>增加 <code>x∑(n,k=1)(1/2k)</code> 点护甲值和盔甲韧性。（x：该物品魔咒数）</li>
  * </ul>
  *
  * @author WakelessSloth56
@@ -55,17 +55,10 @@ public class ForgingEnchantment extends HLEnchantment implements IAttributeModif
         "METALLIC_ARMOR",
         (item) -> {
             if (item instanceof ArmorItem arrow && arrow.getMaterial() instanceof ArmorMaterials material) {
-                switch (material) {
-                    case CHAIN:
-                    case IRON:
-                    case GOLD:
-                    case NETHERITE: {
-                        return true;
-                    }
-                    default: {
-                        break;
-                    }
-                }
+                return switch (material) {
+                    case CHAIN, IRON, GOLD, NETHERITE -> true;
+                    default -> false;
+                };
             }
             return false;
         }
@@ -99,9 +92,9 @@ public class ForgingEnchantment extends HLEnchantment implements IAttributeModif
     @Override
     public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
         if (itemStack.canEquip(slot, null)) {
-            double x = (Math.log((double) itemStack.getBaseRepairCost() + 1) / Math.log(2.0D));
+            double x = itemStack.getAllEnchantments().size();
             if (x > 0.0D) {
-                double bonus = x * MathUtil.sigma(lvl, 1, (double i) -> 1 / (3 * i));
+                double bonus = x * MathUtil.sigma(lvl, 1, (double i) -> 1 / (2 * i));
                 return Map.of(
                     Attributes.ARMOR,
                     new AttributeModifier(ARMOR_MODIFIER_UUID, this.descriptionId, bonus, AttributeModifier.Operation.ADDITION),

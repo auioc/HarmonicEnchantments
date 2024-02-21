@@ -112,7 +112,7 @@ public class EnchantmentPerformer {
         runOnItem(
             (ench, lvl) -> perform(
                 ench, IAttributeModifierEnchantment.class,
-                (e) -> e.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent((m) -> modifiers.add(m))
+                (e) -> e.getOptionalAttributeModifier(lvl, slotType, itemStack).ifPresent(modifiers::add)
             ),
             itemStack
         );
