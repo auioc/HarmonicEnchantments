@@ -35,7 +35,7 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
  * <p>
  * 食用食物后，将玩家增加的饥饿值转化为该物品的耐久度。
  * <ul>
- *     <li>每1点饥饿值增加20点耐久度。</li>
+ *     <li>每 1 点饥饿值增加 10 点耐久度。</li>
  * </ul>
  *
  * @author WakelessSloth56
@@ -74,13 +74,13 @@ public class DiningEnchantment extends HLEnchantment implements IPlayerEnchantme
     public Pair<Integer, Float> onPlayerEat(int lvl, ItemStack itemStack, EquipmentSlot slot, ServerPlayer player, ItemStack foodItemStack, int nutrition, float saturationModifier) {
         if (itemStack.isDamaged() && nutrition > 0) {
             int damage = itemStack.getDamageValue();
-            int c = (int) Math.ceil(damage / 20.0D);
+            int c = (int) Math.ceil(damage / 10.0D);
             if (nutrition >= c) {
                 saturationModifier *= ((float) c) / ((float) nutrition);
                 nutrition -= c;
                 damage = 0;
             } else {
-                damage -= nutrition * 20;
+                damage -= nutrition * 10;
                 saturationModifier = 0.0F;
                 nutrition = 0;
             }
