@@ -54,6 +54,7 @@
     "enchantment.harmonicench.proficiency.proficiency": "（熟练度：%s）",
     "enchantment.harmonicench.curse_of_sacrificing.vanished": "%1$s渴求祭品，在抽取了%2$s的生命之后消失了",
     "enchantment.harmonicench.aim.looking_at": "发现%1$s，距离%2$s %3$s 米",
+    "enchantment.harmonicench.blessing.tooltip": "魔法抗性",
 
     "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛",
 
