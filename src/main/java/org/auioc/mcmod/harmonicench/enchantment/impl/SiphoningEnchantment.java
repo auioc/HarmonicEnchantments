@@ -49,7 +49,7 @@ public class SiphoningEnchantment extends HLEnchantment implements ILivingEnchan
         super(
             Enchantment.Rarity.RARE,
             EnchantmentCategory.WEAPON,
-            EquipmentSlot.MAINHAND,
+            new EquipmentSlot[] { EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND },
             3,
             (o) -> o != Enchantments.MOB_LOOTING
         );
