@@ -20,6 +20,8 @@
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -68,9 +70,16 @@ public class IceAspectEnchantment extends HLEnchantment implements ILivingEnchan
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
         if (isSource && target.canFreeze()) {
             int ticksFrozen = target.getTicksFrozen();
+
             double f = (ticksFrozen == 0) ? 200.0D : 100.0D;
             double r = MathUtil.sigma(lvl, 1, (double i) -> f / i);
             target.setTicksFrozen(ticksFrozen + ((int) r));
+
+            double t = (ticksFrozen == 0)
+                       ? MathUtil.sigma(lvl, 1, (double i) -> 5.0D / i) - 3.5D
+                       : MathUtil.sigma(lvl, 1, (double i) -> 2.5D / i);
+            var effect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, (int) (t * 20.0D), Math.max(lvl, 2) - 1);
+            target.addEffect(effect, source.getEntity());
         }
         return amount;
     }
