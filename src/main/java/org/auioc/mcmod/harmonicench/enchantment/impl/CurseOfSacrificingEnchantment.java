@@ -82,10 +82,14 @@ public class CurseOfSacrificingEnchantment extends HLEnchantment implements IIte
     }
 
     @Override
-    public boolean isTreasureOnly() { return true; }
+    public boolean isTreasureOnly() {
+        return true;
+    }
 
     @Override
-    public boolean isCurse() { return true; }
+    public boolean isCurse() {
+        return true;
+    }
 
     @Override
     public void onInventoryTick(int lvl, ItemStack itemStack, Player player, Level level, int index, boolean selected) {

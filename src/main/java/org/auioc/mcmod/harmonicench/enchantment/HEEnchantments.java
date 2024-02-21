@@ -37,16 +37,19 @@ import org.auioc.mcmod.harmonicench.enchantment.impl.ElectrificationEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.ForgingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.FreeRidingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.HandinessEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.HarvestEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.IceAspectEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.LongEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.LuckOfTheSnowEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.MobAffinityEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ObserverEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.ProficiencyEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.RapierEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.SafeTeleportingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.SiphoningEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.SnipingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.SunAffinityEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.TideEnchantment;
 
 import java.util.function.Supplier;
 
@@ -83,5 +86,8 @@ public final class HEEnchantments {
     public static final DeferredHolder<Enchantment, LongEnchantment> LONG = register("long", LongEnchantment::new);
     public static final DeferredHolder<Enchantment, AimEnchantment> AIM = register("aim", AimEnchantment::new);
     public static final DeferredHolder<Enchantment, BluntEnchantment> BLUNT = register("blunt", BluntEnchantment::new);
+    public static final DeferredHolder<Enchantment, TideEnchantment> TIDE = register("tide", TideEnchantment::new);
+    public static final DeferredHolder<Enchantment, HarvestEnchantment> HARVEST = register("harvest", HarvestEnchantment::new);
+    public static final DeferredHolder<Enchantment, ObserverEnchantment> OBSERVER = register("observer", ObserverEnchantment::new);
 
 }

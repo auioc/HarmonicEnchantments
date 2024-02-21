@@ -87,7 +87,9 @@ public class AimEnchantment extends HLEnchantment implements ILivingEnchantment.
     }
 
     @Override
-    public boolean isTreasureOnly() { return true; }
+    public boolean isTreasureOnly() {
+        return true;
+    }
 
     @Override
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
