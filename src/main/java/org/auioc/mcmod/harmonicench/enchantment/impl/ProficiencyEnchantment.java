@@ -111,12 +111,14 @@ public class ProficiencyEnchantment extends HLEnchantment implements IBlockEncha
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
-        EnchantmentHelper.getEnchantmentTooltip(lines, this.getDescriptionId())
-            .ifPresent(
-                (text) -> ((MutableComponent) text)
-                    .append(" ")
-                    .append(Component.translatable(getDescriptionId() + ".proficiency", getProficiency(itemStack)))
-            );
+        if (EnchantmentHelper.NOT_BOOK.test(itemStack)) {
+            EnchantmentHelper.getEnchantmentTooltip(lines, this.getDescriptionId())
+                .ifPresent(
+                    (text) -> ((MutableComponent) text)
+                        .append(" ")
+                        .append(Component.translatable(getDescriptionId() + ".proficiency", getProficiency(itemStack)))
+                );
+        }
     }
 
 }
