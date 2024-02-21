@@ -35,25 +35,28 @@ import java.util.function.BiPredicate;
 
 public class ILivingEnchantment {
 
-    public static interface Death {
+    public interface Death {
 
         void onLivingDeath(int lvl, ItemStack itemStack, LivingEntity target, DamageSource source);
 
     }
 
-    public static interface Hurt {
+    public interface Hurt {
 
+        /**
+         * @param isSource Enchantment iterator runs on source entity or target entity
+         */
         float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount);
 
     }
 
-    public static interface Piglin {
+    public interface Piglin {
 
         MobStance isWearingGold(int lvl, EquipmentSlot slot, LivingEntity target, MobStance stance);
 
     }
 
-    public static interface Cat {
+    public interface Cat {
 
         void onCatMorningGiftConditionCheck(
             int lvl, EquipmentSlot slot, net.minecraft.world.entity.animal.Cat cat, Player owner, LinkedHashMap<ResourceLocation, BiPredicate<net.minecraft.world.entity.animal.Cat, Player>> conditions
@@ -61,7 +64,7 @@ public class ILivingEnchantment {
 
     }
 
-    public static interface Potion {
+    public interface Potion {
 
         void onPotionAdded(int lvl, EquipmentSlot slot, @Nullable Entity source, MobEffectInstance newEffect, MobEffectInstance oldEffect);
 
