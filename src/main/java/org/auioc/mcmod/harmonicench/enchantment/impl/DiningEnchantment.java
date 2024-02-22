@@ -63,7 +63,7 @@ public class DiningEnchantment extends HLEnchantment implements IPlayerEnchantme
 
     @Override
     public int getMaxCost(int lvl) {
-        return 50;
+        return 75;
     }
 
     @Override
