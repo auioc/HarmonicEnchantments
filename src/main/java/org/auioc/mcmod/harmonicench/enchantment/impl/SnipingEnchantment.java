@@ -60,14 +60,17 @@ public class SnipingEnchantment extends HLEnchantment implements IProjectileEnch
         );
     }
 
+    // Ⅰ: 15 - 50
+    // Ⅱ: 24 - 50
+    // Ⅲ: 33 - 50
     @Override
     public int getMinCost(int lvl) {
-        return lvl * 10 - 9;
+        return lvl * 20 - 8;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 20;
+        return 50;
     }
 
     @Override
