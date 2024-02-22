@@ -70,14 +70,19 @@ public class ProficiencyEnchantment extends HLEnchantment implements IBlockEncha
         );
     }
 
+    // Ⅰ:  1 - 61
+    // Ⅱ: 11 - 71
+    // Ⅲ: 21 - 81
+    // Ⅳ: 31 - 91
+    // Ⅴ: 41 - 101
     @Override
     public int getMinCost(int lvl) {
-        return 1 + 10 * (lvl - 1);
+        return lvl * 10 - 9;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return getMinCost(lvl) + 60;
     }
 
     @Override
