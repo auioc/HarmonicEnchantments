@@ -68,12 +68,12 @@ public class CurseOfRebellingEnchantment extends HLEnchantment implements IItemE
 
     @Override
     public int getMinCost(int lvl) {
-        return 10 + 20 * (lvl - 1);
+        return 25;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return 50;
     }
 
     @Override

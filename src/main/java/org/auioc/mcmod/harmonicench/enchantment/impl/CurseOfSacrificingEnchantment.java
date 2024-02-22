@@ -73,12 +73,12 @@ public class CurseOfSacrificingEnchantment extends HLEnchantment implements IIte
 
     @Override
     public int getMinCost(int lvl) {
-        return 15 + (lvl - 1) * 9;
+        return 25;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return 50;
     }
 
     @Override

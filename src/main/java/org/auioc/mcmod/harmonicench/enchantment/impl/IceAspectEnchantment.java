@@ -56,14 +56,16 @@ public class IceAspectEnchantment extends HLEnchantment implements ILivingEnchan
         );
     }
 
+    // Ⅰ: 10 - 60
+    // Ⅱ: 30 - 80
     @Override
     public int getMinCost(int lvl) {
-        return 10 + 20 * (lvl - 1);
+        return lvl * 20 - 10;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return getMinCost(lvl) + 50;
     }
 
     @Override

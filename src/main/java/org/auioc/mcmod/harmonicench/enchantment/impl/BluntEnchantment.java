@@ -74,9 +74,14 @@ public class BluntEnchantment extends HLEnchantment implements IAttributeModifie
         );
     }
 
+    // Ⅰ:  5 - 25
+    // Ⅱ: 13 - 33
+    // Ⅲ: 21 - 41
+    // Ⅳ: 29 - 49
+    // Ⅴ: 37 - 57
     @Override
     public int getMinCost(int lvl) {
-        return 5 + (lvl - 1) * 8;
+        return lvl * 8 - 3;
     }
 
     @Override

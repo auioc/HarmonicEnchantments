@@ -50,9 +50,12 @@ public class TideEnchantment extends HLEnchantment {
         );
     }
 
+    // Ⅰ: 12 - 50
+    // Ⅱ: 19 - 50
+    // Ⅲ: 26 - 50
     @Override
     public int getMinCost(int lvl) {
-        return (lvl * 7) + 5;
+        return lvl * 7 + 5;
     }
 
     @Override

@@ -76,6 +76,8 @@ public class AimEnchantment extends HLEnchantment implements ILivingEnchantment.
         );
     }
 
+    // Ⅰ: 10 - 25
+    // Ⅱ: 20 - 35
     @Override
     public int getMinCost(int lvl) {
         return lvl * 10;

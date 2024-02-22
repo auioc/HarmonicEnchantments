@@ -61,14 +61,19 @@ public class ElectrificationEnchantment extends HLEnchantment implements IItemEn
         );
     }
 
+    // Ⅰ:  1 - 21
+    // Ⅱ:  9 - 29
+    // Ⅲ: 17 - 37
+    // Ⅳ: 25 - 45
+    // Ⅴ: 33 - 53
     @Override
     public int getMinCost(int lvl) {
-        return 1 + (lvl - 1) * 8;
+        return lvl * 8 - 7;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 20;
+        return getMinCost(lvl) + 20;
     }
 
     @Override

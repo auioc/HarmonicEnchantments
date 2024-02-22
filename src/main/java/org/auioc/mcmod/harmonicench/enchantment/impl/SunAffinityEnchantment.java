@@ -56,6 +56,9 @@ public class SunAffinityEnchantment extends HLEnchantment implements IItemEnchan
         );
     }
 
+    // Ⅰ: 10 - 40
+    // Ⅱ: 20 - 50
+    // Ⅲ: 30 - 60
     @Override
     public int getMinCost(int lvl) {
         return 10 * lvl;
@@ -63,7 +66,7 @@ public class SunAffinityEnchantment extends HLEnchantment implements IItemEnchan
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 30;
+        return getMinCost(lvl) + 30;
     }
 
     @Override

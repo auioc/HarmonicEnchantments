@@ -56,14 +56,16 @@ public class HandinessEnchantment extends HLEnchantment implements IProjectileEn
         );
     }
 
+    // Ⅰ: 12 - 37
+    // Ⅱ: 32 - 57
     @Override
     public int getMinCost(int lvl) {
-        return 12 + (lvl - 1) * 20;
+        return lvl * 20 - 8;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 25;
+        return getMinCost(lvl) + 25;
     }
 
     @Override

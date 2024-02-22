@@ -73,9 +73,13 @@ public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnc
         );
     }
 
+    // Ⅰ:  1 - 50
+    // Ⅱ: 11 - 50
+    // Ⅲ: 21 - 50
+    // Ⅳ: 31 - 50
     @Override
     public int getMinCost(int lvl) {
-        return 1 + (lvl - 1) * 10;
+        return lvl * 10 - 9;
     }
 
     @Override
