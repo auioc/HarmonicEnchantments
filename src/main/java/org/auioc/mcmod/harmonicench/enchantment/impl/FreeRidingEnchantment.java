@@ -51,12 +51,12 @@ public class FreeRidingEnchantment extends HLEnchantment implements IItemEnchant
 
     @Override
     public int getMinCost(int lvl) {
-        return 10;
+        return 25;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return 35;
+        return 75;
     }
 
     @Override
