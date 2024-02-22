@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.EnchantmentHelper;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IBlockEnchantment;
@@ -65,7 +66,7 @@ public class ProficiencyEnchantment extends HLEnchantment implements IBlockEncha
             EnchantmentCategory.DIGGER,
             EquipmentSlot.MAINHAND,
             5,
-            (o) -> o != Enchantments.BLOCK_EFFICIENCY
+            (o) -> o != Enchantments.BLOCK_EFFICIENCY && o != HEEnchantments.HARVEST.get()
         );
     }
 

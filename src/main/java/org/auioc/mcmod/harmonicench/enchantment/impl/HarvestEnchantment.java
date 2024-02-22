@@ -25,6 +25,7 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 
 /**
@@ -46,7 +47,7 @@ public class HarvestEnchantment extends HLEnchantment {
             HEnchantmentCategory.HOE,
             EquipmentSlot.MAINHAND,
             3,
-            (o) -> o != Enchantments.BLOCK_EFFICIENCY
+            (o) -> o != Enchantments.BLOCK_EFFICIENCY && o != HEEnchantments.PROFICIENCY.get()
         );
     }
 
