@@ -55,14 +55,18 @@ public class SiphoningEnchantment extends HLEnchantment implements ILivingEnchan
         );
     }
 
+
+    // Ⅰ: 15 - 61
+    // Ⅱ: 24 - 71
+    // Ⅲ: 33 - 81
     @Override
     public int getMinCost(int lvl) {
-        return 15 + (lvl - 1) * 9;
+        return lvl * 9 + 6;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return getMinCost(lvl) + 45 + lvl;
     }
 
     @Override
