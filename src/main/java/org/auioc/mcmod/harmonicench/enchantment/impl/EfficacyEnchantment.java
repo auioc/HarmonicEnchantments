@@ -26,8 +26,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.SpectralArrow;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -55,10 +55,15 @@ import java.util.HashSet;
  */
 public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
 
+    private static final EnchantmentCategory PROJECTILE_WEAPON = EnchantmentCategory.create(
+        "PROJECTILE_WEAPON",
+        (item) -> item instanceof BowItem || item instanceof CrossbowItem
+    );
+
     public EfficacyEnchantment() {
         super(
             Enchantment.Rarity.RARE,
-            EnchantmentCategory.BOW,
+            PROJECTILE_WEAPON,
             EquipmentSlot.MAINHAND,
             4,
             (o) -> o != Enchantments.POWER_ARROWS
@@ -76,11 +81,6 @@ public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnc
     @Override
     public int getMaxCost(int lvl) {
         return 50;
-    }
-
-    @Override
-    public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof CrossbowItem || super.canEnchant(itemStack);
     }
 
     @Override
