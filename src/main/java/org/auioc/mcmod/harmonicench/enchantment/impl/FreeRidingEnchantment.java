@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
@@ -44,7 +45,7 @@ public class FreeRidingEnchantment extends HLEnchantment implements IItemEnchant
             Enchantment.Rarity.VERY_RARE,
             HEnchantmentCategory.FOOD_ON_A_STACK,
             EquipmentSlot.MAINHAND,
-            (o) -> o != Enchantments.MENDING && o != Enchantments.UNBREAKING
+            (o) -> o != Enchantments.MENDING && o != Enchantments.UNBREAKING && o != HEEnchantments.DINING.get()
         );
     }
 

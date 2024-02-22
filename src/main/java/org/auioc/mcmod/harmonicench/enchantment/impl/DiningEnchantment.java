@@ -52,6 +52,7 @@ public class DiningEnchantment extends HLEnchantment implements IPlayerEnchantme
                 && o != Enchantments.INFINITY_ARROWS
                 && o != HEEnchantments.BLESSING.get()
                 && o != HEEnchantments.FORGING.get()
+                && o != HEEnchantments.FREE_RIDING.get()
         );
     }
 
