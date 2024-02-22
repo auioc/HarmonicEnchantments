@@ -63,14 +63,17 @@ public class RapierEnchantment extends HLEnchantment implements IAttributeModifi
         );
     }
 
+    // Ⅰ:  5 - 20
+    // Ⅱ: 14 - 29
+    // Ⅲ: 23 - 38
     @Override
     public int getMinCost(int lvl) {
-        return 15 + (lvl - 1) * 9;
+        return lvl * 9 - 4;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return super.getMinCost(lvl) + 50;
+        return getMinCost(lvl) + 15;
     }
 
     @Override
