@@ -53,14 +53,18 @@ public class SafeTeleportingEnchantment extends HLEnchantment {
         );
     }
 
+    // Ⅰ:  5 - 11
+    // Ⅱ: 11 - 17
+    // Ⅲ: 17 - 23
+    // Ⅳ: 23 - 29
     @Override
     public int getMinCost(int lvl) {
-        return 5 + (lvl - 1) * 6;
+        return lvl * 6 - 1;
     }
 
     @Override
     public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 6;
+        return getMinCost(lvl) + 6;
     }
 
     public static void handleLivingTravelToDimension(int lvl, LivingEntity living) {
