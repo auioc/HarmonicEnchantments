@@ -254,8 +254,8 @@ public class EnchantmentPerformer {
                 ench, IItemEnchantment.FishingRod.class,
                 (e) -> {
                     var r = e.preFishingRodCast(lvl, fishingRod, player, bonus.getLeft(), bonus.getRight());
-                    bonus.setLeft(r.getLeft());
-                    bonus.setRight(r.getRight());
+                    bonus.setLeft(r.x());
+                    bonus.setRight(r.y());
                 }
             ),
             fishingRod

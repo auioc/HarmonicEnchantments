@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.apache.commons.lang3.tuple.Pair;
+import org.auioc.mcmod.arnicalib.base.tuple.IntPair;
 import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
 import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
@@ -67,14 +67,14 @@ public class LuckOfTheSnowEnchantment extends HLEnchantment implements IItemEnch
     }
 
     @Override
-    public Pair<Integer, Integer> preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus) {
+    public IntPair preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus) {
         float temperature = player.level().getBiome(player.blockPosition()).value().getBaseTemperature();
         if (temperature <= 0.05F) {
             luckBonus += lvl * 2;
         } else if (temperature <= 0.3F) {
             luckBonus += lvl;
         }
-        return Pair.of(speedBonus, luckBonus);
+        return new IntPair(speedBonus, luckBonus);
     }
 
 }
