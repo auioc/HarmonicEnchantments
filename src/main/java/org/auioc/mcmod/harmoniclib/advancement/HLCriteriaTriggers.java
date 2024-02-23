@@ -25,6 +25,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.harmoniclib.HarmonicLib;
 import org.auioc.mcmod.harmoniclib.advancement.criterion.EnchantmentPerformedTrigger;
+import org.auioc.mcmod.harmoniclib.advancement.criterion.LootEnchantmentAppliedTrigger;
 
 import java.util.function.Supplier;
 
@@ -39,5 +40,6 @@ public final class HLCriteriaTriggers {
     // ============================================================================================================== //
 
     public static final DeferredHolder<CriterionTrigger<?>, EnchantmentPerformedTrigger> ENCHANTMENT_PERFORMED = register("enchantment_performed", EnchantmentPerformedTrigger::new);
+    public static final DeferredHolder<CriterionTrigger<?>, LootEnchantmentAppliedTrigger> LOOT_ENCHANTMENT_APPLIED = register("loot_enchantment_applied", LootEnchantmentAppliedTrigger::new);
 
 }

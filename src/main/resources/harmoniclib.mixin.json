@@ -9,6 +9,7 @@
         "common.MixinProjectile",
         "common.MixinSpectralArrow",
         "server.MixinCatRelaxOnOwnerGoal",
+        "server.MixinEnchantWithLevelsFunction",
         "server.MixinPiglinAi"
     ],
     "client": [],
