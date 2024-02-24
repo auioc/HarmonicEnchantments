@@ -3,7 +3,7 @@
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
- * ArnicaLib is free software: you can redistribute it and/or modify it under
+ * HarmonicEnchantments is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
@@ -318,6 +318,36 @@ public class HEAdvancements {
                 )
             )
     );
+
+    // ====================================================================== //
+
+    //    public static final DataGenAdvancementEntry TEST = create(
+    //        "divergence/test", (id, b) -> b
+    //            .display(
+    //                new DisplayInfoBuilder()
+    //                    .icon(Items.GLASS)
+    //                    .title(Component.literal("TEST"))
+    //                    .challengeFrame().announceChat().showToast()
+    //                    .build()
+    //            )
+    //            .parent(PARENT)
+    //            .addCriterion(
+    //                "test",
+    //                LootEnchantmentAppliedTrigger.createCriterion(
+    //                    Optional.empty(),
+    //                    Optional.empty(),
+    //                    MinMaxBounds.Ints.atLeast(3),
+    //                    Optional.of(
+    //                        HEnchantmentPredicate.builder()
+    //                            .enchantments(Enchantments.ALL_DAMAGE_PROTECTION, Enchantments.AQUA_AFFINITY)
+    //                            .level(MinMaxBounds.Ints.atLeast(2))
+    //                            .properties(HEnchantmentPropertiesPredicate.builder().curse(true).build())
+    //                            .build()
+    //                    ),
+    //                    Optional.of(LootEnchantmentAppliedTrigger.Requirement.ANY)
+    //                )
+    //            )
+    //    );
 
     // ============================================================================================================== //
 

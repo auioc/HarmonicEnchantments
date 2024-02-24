@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2022-2024 AUIOC.ORG
  *
- * This file is part of HarmonicEnchantments, a mod made for Minecraft.
+ * This file is part of HarmonicLib, a mod made for Minecraft.
  *
- * ArnicaLib is free software: you can redistribute it and/or modify it under
+ * HarmonicLib is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
