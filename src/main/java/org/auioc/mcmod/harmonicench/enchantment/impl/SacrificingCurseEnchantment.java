@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * <b>献祭诅咒Curse of Sacrificing</b>
+ * <b>献祭诅咒 Curse of Sacrificing</b>
  * <p>
  * 需要定期杀死生物。
  * <ul>
@@ -57,12 +57,12 @@ import java.util.List;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class CurseOfSacrificingEnchantment extends HLEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
+public class SacrificingCurseEnchantment extends HLEnchantment implements IItemEnchantment.Tick.Inventory, ILivingEnchantment.Death, IItemEnchantment.Tooltip {
 
     private static final String NBT_TIME = "SacrificingProcess";
     private static final int MAX_TIME = 20 * 60;
 
-    public CurseOfSacrificingEnchantment() {
+    public SacrificingCurseEnchantment() {
         super(
             Enchantment.Rarity.RARE,
             EnchantmentCategory.VANISHABLE,

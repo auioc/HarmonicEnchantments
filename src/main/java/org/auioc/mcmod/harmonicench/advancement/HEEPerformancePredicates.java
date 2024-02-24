@@ -24,7 +24,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.impl.AimEnchantment;
-import org.auioc.mcmod.harmonicench.enchantment.impl.CurseOfRebellingEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.RebellingCurseEnchantment;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.HEPerformancePredicateType;
 import org.auioc.mcmod.harmoniclib.advancement.predicate.IHEPerformancePredicate;
 import org.auioc.mcmod.harmoniclib.core.HLRegistries;
@@ -40,7 +40,7 @@ public class HEEPerformancePredicates {
     }
 
     public static DeferredHolder<HEPerformancePredicateType, HEPerformancePredicateType> AIM = register("aim", AimEnchantment.PerformancePredicate.CODEC);
-    public static DeferredHolder<HEPerformancePredicateType, HEPerformancePredicateType> CURSE_OF_REBELLING = register("curse_of_rebelling", CurseOfRebellingEnchantment.PerformancePredicate.CODEC);
+    public static DeferredHolder<HEPerformancePredicateType, HEPerformancePredicateType> REBELLING_CURSE = register("rebelling_curse", RebellingCurseEnchantment.PerformancePredicate.CODEC);
 
 
 }

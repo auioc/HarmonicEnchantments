@@ -62,8 +62,8 @@ import org.auioc.mcmod.arnicalib.game.tag.HEntityTypeTags;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.impl.AimEnchantment;
-import org.auioc.mcmod.harmonicench.enchantment.impl.CurseOfRebellingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.ProficiencyEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.RebellingCurseEnchantment;
 import org.auioc.mcmod.harmoniclib.advancement.criterion.EnchantmentPerformedTrigger;
 
 import java.util.List;
@@ -310,9 +310,9 @@ public class HEAdvancements {
                 "betrayal",
                 EnchantmentPerformedTrigger.createCriterion(
                     null,
-                    HEEnchantments.CURSE_OF_REBELLING.get(),
+                    HEEnchantments.REBELLING_CURSE.get(),
                     null,
-                    new CurseOfRebellingEnchantment.PerformancePredicate(
+                    new RebellingCurseEnchantment.PerformancePredicate(
                         Optional.of(true)
                     )
                 )

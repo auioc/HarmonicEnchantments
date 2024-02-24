@@ -45,7 +45,7 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 import java.util.Optional;
 
 /**
- * <b>叛逆诅咒Curse of Rebelling</b>
+ * <b>叛逆诅咒 Curse of Rebelling</b>
  * <p>
  * 物品耐久度降低时，有概率对使用者造成伤害。
  * <ul>
@@ -55,9 +55,9 @@ import java.util.Optional;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class CurseOfRebellingEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
+public class RebellingCurseEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
 
-    public CurseOfRebellingEnchantment() {
+    public RebellingCurseEnchantment() {
         super(
             Enchantment.Rarity.RARE,
             EnchantmentCategory.BREAKABLE,
@@ -144,7 +144,7 @@ public class CurseOfRebellingEnchantment extends HLEnchantment implements IItemE
 
         @Override
         public HEPerformancePredicateType getType() {
-            return HEEPerformancePredicates.CURSE_OF_REBELLING.get();
+            return HEEPerformancePredicates.REBELLING_CURSE.get();
         }
 
         public static final Codec<PerformancePredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
