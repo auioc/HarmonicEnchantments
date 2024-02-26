@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2024 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -21,25 +21,33 @@ package org.auioc.mcmod.harmonicench.datagen.provider;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.DamageTypeTagsProvider;
-import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.data.tags.StructureTagsProvider;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.auioc.mcmod.arnicalib.base.reflection.ReflectionUtils;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
+import org.auioc.mcmod.harmonicench.data.HETags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class HEDamageTypeTagsProvider extends DamageTypeTagsProvider {
+public class HEStructureTagsProvider extends StructureTagsProvider {
 
-    public HEDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper fileHelper) {
+    public HEStructureTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper fileHelper) {
         super(output, registries, HarmonicEnchantments.MOD_ID, fileHelper);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider registries) {
-        tag(DamageTypeTags.BYPASSES_ARMOR).add(HEDamageTypes.CURSE_OF_REBELLING);
-        tag(DamageTypeTags.BYPASSES_EFFECTS).add(HEDamageTypes.CURSE_OF_REBELLING);
-        tag(DamageTypeTags.BYPASSES_ENCHANTMENTS).add(HEDamageTypes.CURSE_OF_REBELLING);
+        var dowsingLocatable = tag(HETags.DOWSING_LOCATABLE);
+        ReflectionUtils.getFieldValues(BuiltinStructures.class, ResourceKey.class)
+            .values()
+            .stream()
+            // net.minecraft.data.tags.TagsProvider#run
+            // java.lang.IllegalArgumentException: Couldn't define tag {} as it is missing following references: minecraft:trial_chambers
+            // trial_chambers doesn't exist in 1.20.4
+            .filter((k) -> k != BuiltinStructures.TRIAL_CHAMBERS)
+            .forEach(dowsingLocatable::add);
     }
 
 }

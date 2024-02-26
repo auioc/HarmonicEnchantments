@@ -29,6 +29,7 @@ import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEAdvancementProvider;
 import org.auioc.mcmod.harmonicench.datagen.provider.HEDamageTypeTagsProvider;
+import org.auioc.mcmod.harmonicench.datagen.provider.HEStructureTagsProvider;
 
 import java.util.Set;
 
@@ -49,6 +50,7 @@ public final class HEDataGenerators {
 
         generator.addProvider(run, new HEAdvancementProvider(output, registries, fileHelper));
         generator.addProvider(run, new HEDamageTypeTagsProvider(output, registries, fileHelper));
+        generator.addProvider(run, new HEStructureTagsProvider(output, registries, fileHelper));
     }
 
 }
