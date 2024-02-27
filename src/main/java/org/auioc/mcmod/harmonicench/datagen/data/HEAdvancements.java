@@ -20,15 +20,18 @@
 package org.auioc.mcmod.harmonicench.datagen.data;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DamagePredicate;
 import net.minecraft.advancements.critereon.DamageSourcePredicate;
 import net.minecraft.advancements.critereon.DistancePredicate;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.EntityEquipmentPredicate;
+import net.minecraft.advancements.critereon.EntityHurtPlayerTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.advancements.critereon.FishingRodHookedTrigger;
@@ -46,11 +49,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -69,6 +74,7 @@ import org.auioc.mcmod.harmoniclib.advancement.criterion.EnchantmentPerformedTri
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class HEAdvancements {
 
@@ -93,7 +99,7 @@ public class HEAdvancements {
                         .of(EntityType.VEX)
                         .distance(DistancePredicate.horizontal(MinMaxBounds.Doubles.atLeast(30.0D))),
                     DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
+                        .tag(tag(DamageTypeTags.IS_PROJECTILE))
                         .direct(
                             EntityPredicate.Builder.entity()
                                 .of(EntityTypeTags.ARROWS)
@@ -138,7 +144,7 @@ public class HEAdvancements {
                         )),
                         Optional.of(
                             DamageSourcePredicate.Builder.damageType()
-                                .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
+                                .tag(tag(DamageTypeTags.IS_PROJECTILE))
                                 .direct(
                                     EntityPredicate.Builder.entity()
                                         .of(EntityTypeTags.ARROWS)
@@ -181,16 +187,8 @@ public class HEAdvancements {
                         ),
                         Optional.of(
                             DamageSourcePredicate.Builder.damageType()
-                                .source(
-                                    EntityPredicate.Builder.entity()
-                                        .equipment(
-                                            EntityEquipmentPredicate.Builder.equipment()
-                                                .mainhand(
-                                                    ItemPredicate.Builder.item()
-                                                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.BANE_OF_CHAMPIONS.get(), MinMaxBounds.Ints.ANY))
-                                                ).build()
-                                        )
-                                ).build()
+                                .source(entityMainHand(item(HEEnchantments.BANE_OF_CHAMPIONS.get())))
+                                .build()
                         )
                     )
                 )
@@ -248,8 +246,7 @@ public class HEAdvancements {
                 "fish_in_" + biome.location().getPath(),
                 FishingRodHookedTrigger.TriggerInstance.fishedItem(
                     Optional.of(
-                        ItemPredicate.Builder.item()
-                            .hasEnchantment(new EnchantmentPredicate(HEEnchantments.LUCK_OF_THE_SNOW.get(), MinMaxBounds.Ints.ANY))
+                        item(HEEnchantments.LUCK_OF_THE_SNOW.get())
                             .build()
                     ),
                     Optional.of(
@@ -321,6 +318,33 @@ public class HEAdvancements {
 
     // ====================================================================== //
 
+    public static final DataGenAdvancementEntry WALKING_BATTERY = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var player = entityMainHand(item(Items.TRIDENT, HEEnchantments.ELECTRIFICATION.get()));
+        var damage = damageInstance().type(damageType().tag(tag(DamageTypeTags.IS_LIGHTNING)));
+        return create(
+            "divergence/walking_battery", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(glintIcon(Items.TRIDENT))
+                        .titleAndDescription(titleKey(id))
+                        .goalFrame().announceChat().showToast().hidden()
+                        .build()
+                )
+                .parent(PARENT)
+                .addCriterion(
+                    "hurt_by_lightning",
+                    CriteriaTriggers.ENTITY_HURT_PLAYER.createCriterion(
+                        new EntityHurtPlayerTrigger.TriggerInstance(
+                            Optional.of(EntityPredicate.wrap(player)),
+                            Optional.of(damage.build())
+                        )
+                    )
+                )
+        );
+    }).get();
+
+    // ====================================================================== //
+
     //    public static final DataGenAdvancementEntry TEST = create(
     //        "divergence/test", (id, b) -> b
     //            .display(
@@ -353,7 +377,7 @@ public class HEAdvancements {
 
     public static void init() { }
 
-    private static DataGenAdvancementEntry create(String _id, BiFunction<ResourceLocation, Builder, Builder> _builder) {
+    private static DataGenAdvancementEntry create(String _id, BiFunction<ResourceLocation, Advancement.Builder, Advancement.Builder> _builder) {
         return new DataGenAdvancementEntry(HarmonicEnchantments.id(_id), _builder);
     }
 
@@ -371,6 +395,40 @@ public class HEAdvancements {
 
     private static ItemStack glintIcon(Item item) {
         return ItemUtils.createItemStack(item, 1, parseNbt("{Enchantments:[{}]}"));
+    }
+
+    private static EntityPredicate entity(EntityType<?> entity) {
+        return EntityPredicate.Builder.entity().of(entity).build();
+    }
+
+    private static DamagePredicate.Builder damageInstance() {
+        return DamagePredicate.Builder.damageInstance();
+    }
+
+    private static DamageSourcePredicate.Builder damageType() {
+        return DamageSourcePredicate.Builder.damageType();
+    }
+
+    private static <T> TagPredicate<T> tag(TagKey<T> tag) {
+        return TagPredicate.is(tag);
+    }
+
+    private static ItemPredicate.Builder item(Item item, Enchantment enchantment) {
+        return ItemPredicate.Builder.item()
+            .of(item)
+            .hasEnchantment(new EnchantmentPredicate(enchantment, MinMaxBounds.Ints.ANY));
+    }
+
+    private static ItemPredicate.Builder item(Enchantment enchantment) {
+        return ItemPredicate.Builder.item()
+            .hasEnchantment(new EnchantmentPredicate(enchantment, MinMaxBounds.Ints.ANY));
+    }
+
+    private static EntityPredicate.Builder entityMainHand(ItemPredicate.Builder itemPredicate) {
+        return EntityPredicate.Builder.entity()
+            .equipment(EntityEquipmentPredicate.Builder.equipment()
+                .mainhand(itemPredicate).build()
+            );
     }
 
 }
