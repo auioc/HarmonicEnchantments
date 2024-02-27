@@ -160,7 +160,7 @@ public class HEAdvancements {
     public static final DataGenAdvancementEntry SHOW_THE_BLADE = ((Supplier<DataGenAdvancementEntry>) () -> {
         var killed = new EntityAttributeCondition(
             Attributes.MAX_HEALTH,
-            EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
+            EntityAttributeCondition.ValueType.BASE,
             MinMaxBounds.Doubles.atLeast(80.0),
             LootContext.EntityTarget.THIS
         );

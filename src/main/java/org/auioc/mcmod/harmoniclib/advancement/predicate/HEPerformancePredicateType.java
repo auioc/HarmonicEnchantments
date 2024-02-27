@@ -28,7 +28,7 @@ public record HEPerformancePredicateType(Codec<? extends IHEPerformancePredicate
     public static final Codec<IHEPerformancePredicate> CODEC = ExtraCodecs.lazyInitializedCodec(() ->
         HLRegistries.ENCHANTMENT_PERFORMANCE_PREDICATE_TYPE
             .byNameCodec()
-            .dispatch("performance", IHEPerformancePredicate::getType, HEPerformancePredicateType::codec)
+            .dispatch("condition", IHEPerformancePredicate::getType, HEPerformancePredicateType::codec)
     );
 
 }
