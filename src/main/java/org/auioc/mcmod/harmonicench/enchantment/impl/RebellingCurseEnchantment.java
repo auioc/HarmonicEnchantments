@@ -136,6 +136,10 @@ public class RebellingCurseEnchantment extends HLEnchantment implements IItemEnc
 
     public record PerformancePredicate(Optional<Boolean> isDead) implements IHEPerformancePredicate {
 
+        public PerformancePredicate(boolean isDead) {
+            this(Optional.of(isDead));
+        }
+
         public boolean matches(boolean isDead) {
             return isDead().isEmpty() || isDead().get() == isDead;
         }

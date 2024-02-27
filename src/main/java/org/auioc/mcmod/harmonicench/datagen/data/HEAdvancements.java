@@ -21,7 +21,6 @@ package org.auioc.mcmod.harmonicench.datagen.data;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -33,7 +32,6 @@ import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.EntityEquipmentPredicate;
 import net.minecraft.advancements.critereon.EntityHurtPlayerTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.advancements.critereon.FishingRodHookedTrigger;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -44,7 +42,6 @@ import net.minecraft.advancements.critereon.NbtPredicate;
 import net.minecraft.advancements.critereon.TagPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -56,7 +53,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.auioc.mcmod.arnicalib.game.advancement.DisplayInfoBuilder;
@@ -75,6 +71,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 public class HEAdvancements {
 
@@ -82,245 +79,244 @@ public class HEAdvancements {
 
     // ============================================================================================================== //
 
-    public static final DataGenAdvancementEntry HEADSHOT = create(
-        "divergence/headshot", (id, b) -> b
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.CROSSBOW))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .addCriterion(
-                "snipe_vex",
-                KilledTrigger.TriggerInstance.playerKilledEntity(
-                    EntityPredicate.Builder.entity()
-                        .of(EntityType.VEX)
-                        .distance(DistancePredicate.horizontal(MinMaxBounds.Doubles.atLeast(30.0D))),
-                    DamageSourcePredicate.Builder.damageType()
-                        .tag(tag(DamageTypeTags.IS_PROJECTILE))
-                        .direct(
-                            EntityPredicate.Builder.entity()
-                                .of(EntityTypeTags.ARROWS)
-                                .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:sniping\"}]}")))
-                        )
-                )
-            )
-    );
-
-    // ====================================================================== //
-
-    private static final List<ResourceKey<Biome>> JUNGLES = List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE);
-
-    public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = create(
-        "divergence/guerrilla_in_the_jungle", (id, b) -> killIllagerInJungle(b)
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.BOW))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .requirements(AdvancementRequirements.Strategy.OR)
-    );
-
-    private static Builder killIllagerInJungle(Builder b) {
-        for (var biome : JUNGLES) {
-            b.addCriterion(
-                "kill_illager_in_" + biome.location().getPath(),
-                CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
-                    new KilledTrigger.TriggerInstance(
-                        Optional.of(EntityPredicate.wrap(
-                            EntityPredicate.Builder.entity()
-                                .located(LocationPredicate.Builder.inBiome(biome))
-                                .build()
-                        )),
-                        Optional.of(EntityPredicate.wrap(
-                            EntityPredicate.Builder.entity()
-                                .of(HEntityTypeTags.ILLAGERS)
-                                .build()
-                        )),
-                        Optional.of(
-                            DamageSourcePredicate.Builder.damageType()
-                                .tag(tag(DamageTypeTags.IS_PROJECTILE))
-                                .direct(
-                                    EntityPredicate.Builder.entity()
-                                        .of(EntityTypeTags.ARROWS)
-                                        .nbt(new NbtPredicate(parseNbt("{Enchantments:[{id:\"harmonicench:handiness\"}]}")))
-                                ).build()
-                        )
-                    )
-                )
+    public static final DataGenAdvancementEntry HEADSHOT = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var killed = entity()
+            .of(EntityType.VEX)
+            .distance(DistancePredicate.horizontal(MinMaxBounds.Doubles.atLeast(30.0D)));
+        var damage = damageType()
+            .tag(tag(DamageTypeTags.IS_PROJECTILE))
+            .direct(entity()
+                .of(EntityTypeTags.ARROWS)
+                .nbt(nbt("{Enchantments:[{id:\"harmonicench:sniping\"}]}"))
             );
-        }
-        return b;
-    }
 
-    // ====================================================================== //
-
-    public static final DataGenAdvancementEntry SHOW_THE_BLADE = create(
-        "divergence/show_the_blade", (id, b) -> b
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.NETHERITE_SWORD))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .addCriterion(
-                "kill_boss",
-                CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
-                    new KilledTrigger.TriggerInstance(
-                        Optional.empty(),
-                        Optional.of(
-                            ContextAwarePredicate.create(
-                                new EntityAttributeCondition(
-                                    Attributes.MAX_HEALTH,
-                                    EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
-                                    MinMaxBounds.Doubles.atLeast(80.0),
-                                    LootContext.EntityTarget.THIS
-                                )
-                            )
-                        ),
-                        Optional.of(
-                            DamageSourcePredicate.Builder.damageType()
-                                .source(entityMainHand(item(HEEnchantments.BANE_OF_CHAMPIONS.get())))
-                                .build()
-                        )
-                    )
-                )
-            )
-    );
-
-    // ====================================================================== //
-
-    public static final DataGenAdvancementEntry COME_WITH_PRACTICE = create(
-        "divergence/come_with_practice", (id, b) -> b
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.NETHERITE_PICKAXE))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .addCriterion(
-                "proficient",
-                InventoryChangeTrigger.TriggerInstance.hasItems(
-                    ItemPredicate.Builder.item()
-                        .hasEnchantment(new EnchantmentPredicate(HEEnchantments.PROFICIENCY.get(), MinMaxBounds.Ints.ANY))
-                        .hasNbt(parseNbt(String.format("{%s:%d}", ProficiencyEnchantment.NBT_PROFICIENCY, 26)))
+        return create(
+            "divergence/headshot", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(glintIcon(Items.CROSSBOW))
+                        .titleAndDescription(titleKey(id))
+                        .goalFrame().announceChat().showToast().hidden()
                         .build()
                 )
-            )
-    );
+                .parent(PARENT)
+                .addCriterion(
+                    "snipe_vex",
+                    KilledTrigger.TriggerInstance.playerKilledEntity(
+                        killed,
+                        damage
+                    )
+                )
+        );
+    }).get();
 
     // ====================================================================== //
 
-    private static final List<ResourceKey<Biome>> COLD_BIOMES = List.of(
-        Biomes.TAIGA, Biomes.FROZEN_OCEAN, Biomes.FROZEN_RIVER, Biomes.SNOWY_PLAINS, Biomes.SNOWY_BEACH,
-        Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS,
-        Biomes.FROZEN_PEAKS, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.ICE_SPIKES,
-        Biomes.THE_VOID
-    );
-
-    public static final DataGenAdvancementEntry FISH_IN_THE_SNOW = create(
-        "divergence/fish_in_the_snow", (id, b) -> fishInColdBiomes(b)
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.FISHING_ROD))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .requirements(AdvancementRequirements.Strategy.OR)
-    );
-
-    private static Builder fishInColdBiomes(Builder b) {
-        for (var biome : COLD_BIOMES) {
-            b.addCriterion(
-                "fish_in_" + biome.location().getPath(),
-                FishingRodHookedTrigger.TriggerInstance.fishedItem(
-                    Optional.of(
-                        item(HEEnchantments.LUCK_OF_THE_SNOW.get())
-                            .build()
-                    ),
-                    Optional.of(
-                        EntityPredicate.Builder.entity()
-                            .located(LocationPredicate.Builder.inBiome(biome))
-                            .build()
-                    ),
-                    Optional.of(
-                        ItemPredicate.Builder.item()
-                            .of(ItemTags.FISHES)
-                            .build()
-                    )
-                )
+    public static final DataGenAdvancementEntry GUERRILLA_IN_THE_JUNGLE = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var jungles = List.of(Biomes.JUNGLE, Biomes.SPARSE_JUNGLE, Biomes.BAMBOO_JUNGLE);
+        var killed = entity(HEntityTypeTags.ILLAGERS);
+        var damage = damageType()
+            .tag(tag(DamageTypeTags.IS_PROJECTILE))
+            .direct(
+                entity()
+                    .of(EntityTypeTags.ARROWS)
+                    .nbt(nbt("{Enchantments:[{id:\"harmonicench:handiness\"}]}"))
             );
-        }
-        return b;
-    }
+        var killIllagerInJungles = (UnaryOperator<Advancement.Builder>) (b) -> {
+            for (var biome : jungles) {
+                b.addCriterion(
+                    "kill_illager_in_" + biome.location().getPath(),
+                    CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
+                        new KilledTrigger.TriggerInstance(
+                            Optional.of(EntityPredicate.wrap(
+                                entity().located(LocationPredicate.Builder.inBiome(biome))
+                            )),
+                            Optional.of(EntityPredicate.wrap(killed)),
+                            Optional.of(damage.build())
+                        )
+                    )
+                );
+            }
+            return b;
+        };
+
+        return create(
+            "divergence/guerrilla_in_the_jungle", (id, b) ->
+                killIllagerInJungles.apply(b)
+                    .display(
+                        new DisplayInfoBuilder()
+                            .icon(glintIcon(Items.BOW))
+                            .titleAndDescription(titleKey(id))
+                            .goalFrame().announceChat().showToast().hidden()
+                            .build()
+                    )
+                    .parent(PARENT)
+                    .requirements(AdvancementRequirements.Strategy.OR)
+        );
+    }).get();
 
     // ====================================================================== //
 
-    public static final DataGenAdvancementEntry WHOS_THE_HAWK_EYE_NOW = create(
-        "divergence/whos_the_hawk_eye_now", (id, b) -> b
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(glintIcon(Items.SPYGLASS))
-                    .titleAndDescription(titleKey(id))
-                    .goalFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .addCriterion(
-                "aim_entity",
-                EnchantmentPerformedTrigger.createCriterion(
-                    null,
-                    HEEnchantments.AIM.get(),
-                    null,
-                    new AimEnchantment.PerformancePredicate(
-                        EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.PHANTOM)).build()
+    public static final DataGenAdvancementEntry SHOW_THE_BLADE = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var killed = new EntityAttributeCondition(
+            Attributes.MAX_HEALTH,
+            EntityAttributeCondition.AttributeValueType.CURRENT_VALUE,
+            MinMaxBounds.Doubles.atLeast(80.0),
+            LootContext.EntityTarget.THIS
+        );
+        var damage = damageType()
+            .source(entityMainHand(item(HEEnchantments.BANE_OF_CHAMPIONS.get())));
+
+        return create(
+            "divergence/show_the_blade", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(glintIcon(Items.NETHERITE_SWORD))
+                        .titleAndDescription(titleKey(id))
+                        .goalFrame().announceChat().showToast().hidden()
+                        .build()
+                )
+                .parent(PARENT)
+                .addCriterion(
+                    "kill_boss",
+                    CriteriaTriggers.PLAYER_KILLED_ENTITY.createCriterion(
+                        new KilledTrigger.TriggerInstance(
+                            Optional.empty(),
+                            Optional.of(ContextAwarePredicate.create(killed)),
+                            Optional.of(damage.build())
+                        )
                     )
                 )
-
-            )
-    );
+        );
+    }).get();
 
     // ====================================================================== //
 
-    public static final DataGenAdvancementEntry BETRAYAL = create(
-        "divergence/betrayal", (id, b) -> b
-            .display(
-                new DisplayInfoBuilder()
-                    .icon(Items.GLASS)
-                    .titleAndDescription(titleKey(id))
-                    .challengeFrame().announceChat().showToast().hidden()
-                    .build()
-            )
-            .parent(PARENT)
-            .addCriterion(
-                "betrayal",
-                EnchantmentPerformedTrigger.createCriterion(
-                    null,
-                    HEEnchantments.REBELLING_CURSE.get(),
-                    null,
-                    new RebellingCurseEnchantment.PerformancePredicate(
-                        Optional.of(true)
+    public static final DataGenAdvancementEntry COME_WITH_PRACTICE = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var item = item(HEEnchantments.PROFICIENCY.get())
+            .hasNbt(parseNbt(String.format("{%s:%d}", ProficiencyEnchantment.NBT_PROFICIENCY, 26)));
+
+        return create(
+            "divergence/come_with_practice", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(glintIcon(Items.NETHERITE_PICKAXE))
+                        .titleAndDescription(titleKey(id))
+                        .goalFrame().announceChat().showToast().hidden()
+                        .build()
+                )
+                .parent(PARENT)
+                .addCriterion(
+                    "proficient",
+                    InventoryChangeTrigger.TriggerInstance.hasItems(item)
+                )
+        );
+    }).get();
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry FISH_IN_THE_SNOW = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var coldBiomes = List.of(
+            Biomes.TAIGA, Biomes.FROZEN_OCEAN, Biomes.FROZEN_RIVER, Biomes.SNOWY_PLAINS, Biomes.SNOWY_BEACH,
+            Biomes.SNOWY_TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.GROVE, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS,
+            Biomes.FROZEN_PEAKS, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.ICE_SPIKES,
+            Biomes.THE_VOID
+        );
+
+        var fishingRod = item(HEEnchantments.LUCK_OF_THE_SNOW.get());
+        var hookedItem = item(ItemTags.FISHES);
+
+        var fishInColdBiome = (UnaryOperator<Advancement.Builder>) (b) -> {
+            for (var biome : coldBiomes) {
+                b.addCriterion(
+                    "fish_in_" + biome.location().getPath(),
+                    FishingRodHookedTrigger.TriggerInstance.fishedItem(
+                        Optional.of(fishingRod.build()),
+                        Optional.of(
+                            entity()
+                                .located(LocationPredicate.Builder.inBiome(biome))
+                                .build()
+                        ),
+                        Optional.of(hookedItem.build())
+                    )
+                );
+            }
+            return b;
+        };
+
+        return create(
+            "divergence/fish_in_the_snow", (id, b) ->
+                fishInColdBiome.apply(b)
+                    .display(
+                        new DisplayInfoBuilder()
+                            .icon(glintIcon(Items.FISHING_ROD))
+                            .titleAndDescription(titleKey(id))
+                            .goalFrame().announceChat().showToast().hidden()
+                            .build()
+                    )
+                    .parent(PARENT)
+                    .requirements(AdvancementRequirements.Strategy.OR)
+        );
+    }).get();
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry WHOS_THE_HAWK_EYE_NOW = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var enchantment = HEEnchantments.AIM.get();
+        var aimed = entity(EntityType.PHANTOM);
+
+        return create(
+            "divergence/whos_the_hawk_eye_now", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(glintIcon(Items.SPYGLASS))
+                        .titleAndDescription(titleKey(id))
+                        .goalFrame().announceChat().showToast().hidden()
+                        .build()
+                )
+                .parent(PARENT)
+                .addCriterion(
+                    "aim_entity",
+                    EnchantmentPerformedTrigger.createCriterion(
+                        null, enchantment, null,
+                        new AimEnchantment.PerformancePredicate(aimed)
                     )
                 )
-            )
-    );
+        );
+    }).get();
+
+    // ====================================================================== //
+
+    public static final DataGenAdvancementEntry BETRAYAL = ((Supplier<DataGenAdvancementEntry>) () -> {
+        var enchantment = HEEnchantments.REBELLING_CURSE.get();
+        boolean isDead = true;
+
+        return create(
+            "divergence/betrayal", (id, b) -> b
+                .display(
+                    new DisplayInfoBuilder()
+                        .icon(Items.GLASS)
+                        .titleAndDescription(titleKey(id))
+                        .challengeFrame().announceChat().showToast().hidden()
+                        .build()
+                )
+                .parent(PARENT)
+                .addCriterion(
+                    "betrayal",
+                    EnchantmentPerformedTrigger.createCriterion(
+                        null, enchantment, null,
+                        new RebellingCurseEnchantment.PerformancePredicate(isDead)
+                    )
+                )
+        );
+    }).get();
 
     // ====================================================================== //
 
     public static final DataGenAdvancementEntry WALKING_BATTERY = ((Supplier<DataGenAdvancementEntry>) () -> {
         var player = entityMainHand(item(Items.TRIDENT, HEEnchantments.ELECTRIFICATION.get()));
         var damage = damageInstance().type(damageType().tag(tag(DamageTypeTags.IS_LIGHTNING)));
+
         return create(
             "divergence/walking_battery", (id, b) -> b
                 .display(
@@ -342,36 +338,6 @@ public class HEAdvancements {
                 )
         );
     }).get();
-
-    // ====================================================================== //
-
-    //    public static final DataGenAdvancementEntry TEST = create(
-    //        "divergence/test", (id, b) -> b
-    //            .display(
-    //                new DisplayInfoBuilder()
-    //                    .icon(Items.GLASS)
-    //                    .title(Component.literal("TEST"))
-    //                    .challengeFrame().announceChat().showToast()
-    //                    .build()
-    //            )
-    //            .parent(PARENT)
-    //            .addCriterion(
-    //                "test",
-    //                LootEnchantmentAppliedTrigger.createCriterion(
-    //                    Optional.empty(),
-    //                    Optional.empty(),
-    //                    MinMaxBounds.Ints.atLeast(3),
-    //                    Optional.of(
-    //                        HEnchantmentPredicate.builder()
-    //                            .enchantments(Enchantments.ALL_DAMAGE_PROTECTION, Enchantments.AQUA_AFFINITY)
-    //                            .level(MinMaxBounds.Ints.atLeast(2))
-    //                            .properties(HEnchantmentPropertiesPredicate.builder().curse(true).build())
-    //                            .build()
-    //                    ),
-    //                    Optional.of(LootEnchantmentAppliedTrigger.Requirement.ANY)
-    //                )
-    //            )
-    //    );
 
     // ============================================================================================================== //
 
@@ -397,8 +363,16 @@ public class HEAdvancements {
         return ItemUtils.createItemStack(item, 1, parseNbt("{Enchantments:[{}]}"));
     }
 
+    private static EntityPredicate.Builder entity() {
+        return EntityPredicate.Builder.entity();
+    }
+
     private static EntityPredicate entity(EntityType<?> entity) {
-        return EntityPredicate.Builder.entity().of(entity).build();
+        return entity().of(entity).build();
+    }
+
+    private static EntityPredicate entity(TagKey<EntityType<?>> tag) {
+        return entity().of(tag).build();
     }
 
     private static DamagePredicate.Builder damageInstance() {
@@ -413,15 +387,26 @@ public class HEAdvancements {
         return TagPredicate.is(tag);
     }
 
+    private static NbtPredicate nbt(String nbt) {
+        return new NbtPredicate(parseNbt(nbt));
+    }
+
+    private static ItemPredicate.Builder item() {
+        return ItemPredicate.Builder.item();
+    }
+
+    private static ItemPredicate.Builder item(TagKey<Item> tag) {
+        return item().of(tag);
+    }
+
     private static ItemPredicate.Builder item(Item item, Enchantment enchantment) {
-        return ItemPredicate.Builder.item()
+        return item()
             .of(item)
             .hasEnchantment(new EnchantmentPredicate(enchantment, MinMaxBounds.Ints.ANY));
     }
 
     private static ItemPredicate.Builder item(Enchantment enchantment) {
-        return ItemPredicate.Builder.item()
-            .hasEnchantment(new EnchantmentPredicate(enchantment, MinMaxBounds.Ints.ANY));
+        return item().hasEnchantment(new EnchantmentPredicate(enchantment, MinMaxBounds.Ints.ANY));
     }
 
     private static EntityPredicate.Builder entityMainHand(ItemPredicate.Builder itemPredicate) {
