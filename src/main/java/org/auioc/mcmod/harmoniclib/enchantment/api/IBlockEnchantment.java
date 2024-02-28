@@ -28,13 +28,13 @@ import java.util.Optional;
 
 public class IBlockEnchantment {
 
-    public static interface BreakSpeed {
+    public interface BreakSpeed {
 
         float getBreakSpeed(int lvl, ItemStack itemStack, Player player, BlockState blockState, Optional<BlockPos> blockPos, float speed);
 
     }
 
-    public static interface Break {
+    public interface Break {
 
         void onBlockBreak(int lvl, ItemStack itemStack, Player player, BlockState blockState, BlockPos blockPos);
 

@@ -27,8 +27,8 @@
     "enchantment.harmonicench.aim": "瞄准",
     "enchantment.harmonicench.blunt": "钝重",
     "enchantment.harmonicench.tide": "唤潮（未实现）",
-    "enchantment.harmonicench.harvest": "收割（未实现）",
-    "enchantment.harmonicench.observer": "观测（未实现）",
+    "enchantment.harmonicench.harvest": "收割",
+    "enchantment.harmonicench.observer": "观测",
 
     "enchantment.harmonicench.rapier.desc": "增加攻击速度，但无法再使出横扫攻击。",
     "enchantment.harmonicench.handiness.desc": "射出的箭命中实体后会短暂提高使用者移动速度。",
