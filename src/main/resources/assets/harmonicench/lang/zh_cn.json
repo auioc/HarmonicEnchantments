@@ -60,6 +60,7 @@
     "enchantment.harmonicench.blessing.tooltip": "魔法抗性",
     "enchantment.harmonicench.observer.weather.1": "%1$s观察星星，发现%2$s后会有雷暴",
     "enchantment.harmonicench.observer.weather.2": "%1$s观察星星，发现%3$s后会有降雨，%2$s后会有雷暴",
+    "enchantment.harmonicench.observer.structure": "%1$s观察星星，发现 (%2$s, %3$s) 处有%5$s（距离%4$s）。",
 
     "death.attack.curseOfRebelling": "%1$s死于%2$s的背叛",
 
