@@ -97,7 +97,7 @@ public class HarvestEnchantment extends HLEnchantment implements ILivingEnchantm
 
     @Override
     public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (isSource && this.isValidSlot(slot)) {
+        if (isSource && !source.isIndirect() && this.isValidSlot(slot)) {
             float p = Math.max(lvl, 3) * 15.0F / 100.0F;
             float health = target.getHealth();
             if (health / target.getMaxHealth() <= p) {
