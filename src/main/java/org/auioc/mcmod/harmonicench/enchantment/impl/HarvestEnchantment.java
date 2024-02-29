@@ -20,6 +20,7 @@
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PlayerHeadItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -101,11 +103,19 @@ public class HarvestEnchantment extends HLEnchantment implements ILivingEnchantm
             float p = Math.max(lvl, 3) * 15.0F / 100.0F;
             float health = target.getHealth();
             if (health / target.getMaxHealth() <= p) {
-                var skull = SKULLS.get(target.getType());
-                if (skull != null) {
+                if (target instanceof Player player) {
+                    var skull = new ItemStack(Items.PLAYER_HEAD);
+                    var nbt = new CompoundTag();
+                    nbt.putString(PlayerHeadItem.TAG_SKULL_OWNER, player.getGameProfile().getName());
+                    skull.setTag(nbt);
                     target.spawnAtLocation(skull);
+                } else {
+                    var skull = SKULLS.get(target.getType());
+                    if (skull != null) {
+                        target.spawnAtLocation(skull);
+                    }
                 }
-                return Float.MAX_VALUE;
+                return target.getMaxHealth();
             }
         }
         return amount;
