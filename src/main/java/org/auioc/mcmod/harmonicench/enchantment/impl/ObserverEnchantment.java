@@ -46,7 +46,7 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
  * 在晴朗的夜晚，了解天象。
  * <ul>
  *     <li>使用望远镜持续 10（5）秒后，在对话框报告距离下次雨或雷暴的时间。</li>
- *     <li>触发时，有 5%（10%）的概率，在对话框报告玩家 64 格内最近的可定位结构（<code>{@linkplain HETags#DOWSING_LOCATABLE #harmonicench:dowsing_locatable}</code>）。</li>
+ *     <li>触发时，有 10%（20%）的概率，在对话框报告玩家 64 格内最近的可定位结构（<code>{@linkplain HETags#DOWSING_LOCATABLE #harmonicench:dowsing_locatable}</code>）。</li>
  *     <li>生效限制：必须处于晴朗的夜晚，玩家在正上方没有视野遮挡，仰角不少于60度，且准心不能指向任何方块或实体。</li>
  * </ul>
  *
@@ -103,7 +103,7 @@ public class ObserverEnchantment extends HLEnchantment implements IPlayerEnchant
             )
         ) {
             reportWeather(player, level);
-            if (GameRandomUtils.percentageChance(lvl * 5, player.getRandom())) {
+            if (GameRandomUtils.percentageChance(lvl * 10, player.getRandom())) {
                 dowseStructure(player, level);
             }
         }
