@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,30 +19,22 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import org.auioc.mcmod.arnicalib.game.random.GameRandomUtils;
-import org.auioc.mcmod.harmonicench.advancement.HEEPerformancePredicates;
-import org.auioc.mcmod.harmonicench.damagesource.HEDamageTypes;
-import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.advancement.HLCriteriaTriggers;
-import org.auioc.mcmod.harmoniclib.advancement.predicate.HEPerformancePredicateType;
-import org.auioc.mcmod.harmoniclib.advancement.predicate.IHEPerformancePredicate;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.DamageEntity;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.item.enchantment.effects.RemoveBinomial;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.effect.ItemDamagedEffect;
 
-import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * <b>叛逆诅咒 Curse of Rebelling</b>
@@ -55,107 +47,40 @@ import java.util.Optional;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class RebellingCurseEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
+public class RebellingCurseEnchantment extends HEEnchantment {
 
-    public RebellingCurseEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.BREAKABLE,
-            EquipmentSlot.values(),
-            (o) -> o != HEEnchantments.FREE_RIDING.get()
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        (tag) -> tag.add() // TODO HEEnchantments.FREE_RIDING
+    );
 
-    @Override
-    public int getMinCost(int lvl) {
-        return 25;
-    }
+    /**
+     * Ⅰ:  2 - 50
+     */
+    private static final Cost COST = constantCost(2, 50);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return 50;
-    }
+    private static final EnchantmentValueEffect PROCESS_ITEM_DELTA_DAMAGE = new RemoveBinomial(LevelBasedValue.constant(0.99F));
+    private static final Function<BootstrapContext<Enchantment>, EnchantmentEntityEffect> HURT_OWNER = (ctx) -> new DamageEntity(
+        LevelBasedValue.perLevel(4.0F), LevelBasedValue.perLevel(4.0F),
+        ctx.lookup(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.GENERIC_KILL)
+    );
 
-    @Override
-    public boolean isTreasureOnly() {
-        return true;
-    }
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.DURABILITY_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        1,
+        COST,
+        4,
+        EquipmentSlotGroup.ANY
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            HEEnchantmentEffectComponents.ITEM_DAMAGED.get(),
+            new ItemDamagedEffect(PROCESS_ITEM_DELTA_DAMAGE, HURT_OWNER.apply(ctx))
+        )
+    );
 
-    @Override
-    public boolean isCurse() {
-        return true;
-    }
-
-    @Override
-    public int onItemHurt(int lvl, ItemStack itemStack, int damage, RandomSource random, ServerPlayer player) {
-        if (damage > 0) {
-            int d = 0;
-            for (int i = 0; i < damage; ++i) {
-                if (GameRandomUtils.percentageChance(1, random)) {
-                    d++;
-                }
-            }
-            int value = d * 4;
-            if (value > 0) {
-                player.hurt(new DamageSource(player, itemStack), value);
-                triggerAdvancement(player, itemStack, player.isDeadOrDying());
-            }
-        }
-        return damage;
-    }
-
-    private void triggerAdvancement(ServerPlayer player, ItemStack itemStack, boolean isDead) {
-        HLCriteriaTriggers.ENCHANTMENT_PERFORMED.get().trigger(
-            player, this, itemStack,
-            (PerformancePredicate p) -> p.matches(isDead)
-        );
-    }
-
-    // ============================================================================================================== //
-
-    private static class DamageSource extends net.minecraft.world.damagesource.DamageSource {
-
-        private final ItemStack betrayedItem;
-
-        public DamageSource(Player player, ItemStack itemStack) {
-            super(
-                player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(HEDamageTypes.CURSE_OF_REBELLING),
-                player
-            );
-            this.betrayedItem = itemStack;
-        }
-
-        @Override
-        public Component getLocalizedDeathMessage(LivingEntity living) {
-            return Component.translatable("death.attack." + this.getMsgId(), living.getDisplayName(), this.betrayedItem.getDisplayName());
-        }
-
-    }
-
-    // ============================================================================================================== //
-
-    public record PerformancePredicate(Optional<Boolean> isDead) implements IHEPerformancePredicate {
-
-        public PerformancePredicate(boolean isDead) {
-            this(Optional.of(isDead));
-        }
-
-        public boolean matches(boolean isDead) {
-            return isDead().isEmpty() || isDead().get() == isDead;
-        }
-
-        // ========================================================================================================== //
-
-        @Override
-        public HEPerformancePredicateType getType() {
-            return HEEPerformancePredicates.REBELLING_CURSE.get();
-        }
-
-        public static final Codec<PerformancePredicate> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                ExtraCodecs.strictOptionalField(Codec.BOOL, "is_dead").forGetter(PerformancePredicate::isDead)
-            ).apply(instance, PerformancePredicate::new)
-        );
-
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).curse().treasure().tradeable();
     }
 
 }

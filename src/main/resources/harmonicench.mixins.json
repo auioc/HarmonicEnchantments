@@ -1,0 +1,15 @@
+{
+    "required": true,
+    "package": "org.auioc.mcmod.harmonicench.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "SpectralArrowAccessor",
+        "MixinArrow"
+    ],
+    "client": [],
+    "server": [],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,15 +19,17 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.tuple.IntPair;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.AddValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import org.auioc.mcmod.arnicalib.game.critereon.BiomePredicate;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.ExtraLocationCheck;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
  * <b>冰雪眷顾 Luck of the Snow</b>
@@ -41,40 +43,43 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class LuckOfTheSnowEnchantment extends HLEnchantment implements IItemEnchantment.FishingRod {
+public class LuckOfTheSnowEnchantment extends HEEnchantment {
 
-    public LuckOfTheSnowEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.FISHING_ROD,
-            EquipmentSlot.values(),
-            3,
-            (o) -> o != Enchantments.FISHING_LUCK
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.LUCK_OF_THE_SEA);
 
-    // Ⅰ: 15 - 61
-    // Ⅱ: 24 - 71
-    // Ⅲ: 33 - 81
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 9 + 6;
-    }
+    /**
+     * Ⅰ: 15 - 61 <br>
+     * Ⅱ: 24 - 71 <br>
+     * Ⅲ: 33 - 81 <br>
+     */
+    private static final Cost COST = dynamicCost(15, 9, 61, 10);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 45 + lvl;
-    }
+    private static final MinMaxBounds.Doubles IS_COLD = MinMaxBounds.Doubles.between(0.05D, 0.35D);
+    private static final EnchantmentValueEffect COLD_BONUS = new AddValue(LevelBasedValue.perLevel(1.0F));
 
-    @Override
-    public IntPair preFishingRodCast(int lvl, ItemStack fishingRod, ServerPlayer player, int speedBonus, int luckBonus) {
-        float temperature = player.level().getBiome(player.blockPosition()).value().getBaseTemperature();
-        if (temperature <= 0.05F) {
-            luckBonus += lvl * 2;
-        } else if (temperature <= 0.3F) {
-            luckBonus += lvl;
-        }
-        return new IntPair(speedBonus, luckBonus);
+    private static final MinMaxBounds.Doubles IS_SNOWY = MinMaxBounds.Doubles.atMost(0.05D);
+    private static final EnchantmentValueEffect SNOWY_BONUS = new AddValue(LevelBasedValue.perLevel(2.0F));
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.FISHING_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        3,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.FISHING_LUCK_BONUS, SNOWY_BONUS,
+            ExtraLocationCheck.checkBiome(BiomePredicate.withClimate(b -> b.temperature(IS_SNOWY)))
+        ).withEffect(
+            EnchantmentEffectComponents.FISHING_LUCK_BONUS, COLD_BONUS,
+            ExtraLocationCheck.checkBiome(BiomePredicate.withClimate(b -> b.temperature(IS_COLD)))
+        )
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

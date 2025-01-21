@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,16 +19,17 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.AddValue;
 import net.neoforged.neoforge.common.Tags;
-import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.ILootBonusEnchantment;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.BlockStateCondition;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.effect.LootBonusCountEffect;
 
 /**
  * <b>深层研究 Deep Study</b>
@@ -38,40 +39,35 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.ILootBonusEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class DeepStudyEnchantment extends HLEnchantment implements ILootBonusEnchantment.ApplyBonusCountFunction {
+public class DeepStudyEnchantment extends HEEnchantment {
 
-    public DeepStudyEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            HEnchantmentCategory.PICKAXE,
-            EquipmentSlot.MAINHAND,
-            3,
-            (o) -> o != Enchantments.BLOCK_FORTUNE
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.FORTUNE);
 
-    // Ⅰ: 15 - 61
-    // Ⅱ: 24 - 71
-    // Ⅲ: 33 - 81
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 9 + 6;
-    }
+    /**
+     * Ⅰ: 15 - 61 <br>
+     * Ⅱ: 24 - 71 <br>
+     * Ⅲ: 33 - 81 <br>
+     */
+    private static final Cost COST = dynamicCost(15, 9, 65, 9);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 45 + lvl;
-    }
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.PICKAXES,
+        EXCLUSIVE,
+        Rarity.RARE,
+        3,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            HEEnchantmentEffectComponents.LOOT_BONUS_COUNT.get(),
+            new LootBonusCountEffect(HolderSet.direct(lookupEnchantment(ctx).getOrThrow(Enchantments.FORTUNE)), new AddValue(LevelBasedValue.perLevel(2))),
+            () -> new BlockStateCondition(lookupBlock(ctx).getOrThrow(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE))
+        )
+    );
 
-    @Override
-    public int onApplyLootEnchantmentBonusCount(int lvl, LootContext lootContext, ItemStack itemStack, Enchantment enchantment, int enchantmentLevel) {
-        if (
-            enchantment == Enchantments.BLOCK_FORTUNE
-                && lootContext.getParam(LootContextParams.BLOCK_STATE).is(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE)
-        ) {
-            return enchantmentLevel + (lvl * 2);
-        }
-        return enchantmentLevel;
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

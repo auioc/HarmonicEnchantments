@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,28 +19,30 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
-import org.auioc.mcmod.arnicalib.game.tag.HItemTags;
-import org.auioc.mcmod.harmonicench.effect.HEMobEffects;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.item.enchantment.effects.SetValue;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.neoforged.neoforge.common.Tags;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IPlayerEnchantment;
-
-import java.util.Map;
-import java.util.UUID;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 
 /**
  * <b>钝重Blunt</b>
@@ -55,68 +57,80 @@ import java.util.UUID;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class BluntEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IPlayerEnchantment.CriticalHit {
+public class BluntEnchantment extends HEEnchantment {
 
-    private static final UUID ATTACK_SPEED_UUID = UUID.fromString("F839F42C-4B26-6F66-7025-1EF3294EED97");
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.EFFICIENCY,
+        Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
+        HEEnchantments.BANE_OF_CHAMPIONS, HEEnchantments.RAPIER
+    );
 
-    public BluntEnchantment() {
-        super(
-            Enchantment.Rarity.UNCOMMON,
-            HEnchantmentCategory.AXE,
-            EquipmentSlot.MAINHAND,
-            5,
-            (o) -> o != Enchantments.SHARPNESS
-                && o != Enchantments.SMITE
-                && o != Enchantments.BANE_OF_ARTHROPODS
-                && o != Enchantments.BLOCK_EFFICIENCY
-                && o != HEEnchantments.BANE_OF_CHAMPIONS.get()
-                && o != HEEnchantments.RAPIER.get()
-        );
-    }
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.addTags(ItemTags.AXES, ItemTags.SWORD_ENCHANTABLE, Tags.Items.BRICKS)
+    );
 
-    // Ⅰ:  5 - 25
-    // Ⅱ: 13 - 33
-    // Ⅲ: 21 - 41
-    // Ⅳ: 29 - 49
-    // Ⅴ: 37 - 57
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 8 - 3;
-    }
+    /**
+     * Ⅰ:  5 - 25 <br>
+     * Ⅱ: 13 - 33 <br>
+     * Ⅲ: 21 - 41 <br>
+     * Ⅳ: 29 - 49 <br>
+     * Ⅴ: 37 - 57 <br>
+     */
+    private static final Cost COST = dynamicCost(5, 8, 25, 8);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 20;
-    }
+    private static final LevelBasedValue ATTACK_SPEED_BONUS = LevelBasedValue.constant(-0.25F);
 
-    @Override
-    public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof SwordItem || isBrick(itemStack) || super.canEnchant(itemStack);
-    }
+    /**
+     * <code>0.5×(lvl+3)×100%</code>
+     */
+    private static final EnchantmentValueEffect CRITICAL_HIT_BONUS = new SetValue(LevelBasedValue.perLevel(2.0F, 0.5F));
 
-    @Override
-    public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
-        return Map.of(
-            Attributes.ATTACK_SPEED,
-            new AttributeModifier(
-                ATTACK_SPEED_UUID, this.descriptionId,
-                isBrick(itemStack) ? -0.95D : -0.25D, AttributeModifier.Operation.MULTIPLY_TOTAL
+    /**
+     * <code>∑(lvl,k=1)(5/k)</code>
+     */
+    private static final LevelBasedValue EFFECT_DURATION = HELevelBasedValue.harmonic(
+        5F, LevelBasedValue.perLevel(1F)
+    );
+    private static final LevelBasedValue EFFECT_AMPLIFIER = LevelBasedValue.constant(0F);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        ItemTags.AXES,
+        EXCLUSIVE,
+        Rarity.UNCOMMON,
+        5,
+        COST,
+        2,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.ATTRIBUTES,
+            new EnchantmentAttributeEffect(
+                HarmonicEnchantments.id("enchantment.blunt"),
+                Attributes.ATTACK_SPEED,
+                ATTACK_SPEED_BONUS,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
             )
-        );
-    }
+        ).withEffect(
+            HEEnchantmentEffectComponents.CRITICAL_HIT.get(),
+            EnchantmentTarget.ATTACKER,
+            EnchantmentTarget.VICTIM,
+            CriticalHitEffect.changeMultiplier(CRITICAL_HIT_BONUS)
+        ).withEffect(
+            HEEnchantmentEffectComponents.CRITICAL_HIT.get(),
+            EnchantmentTarget.ATTACKER,
+            EnchantmentTarget.VICTIM,
+            CriticalHitEffect.entityEffect(new ApplyMobEffect(
+                HolderSet.direct(MobEffects.BLINDNESS), // TODO 混乱效果
+                EFFECT_DURATION, EFFECT_DURATION,
+                EFFECT_AMPLIFIER, EFFECT_AMPLIFIER
+            )),
+            MatchTool.toolMatches(ItemPredicate.Builder.item().of(lookupItem(ctx), Tags.Items.BRICKS))
+        )
+    );
 
-    @Override
-    public float onCriticalHit(int lvl, ItemStack itemStack, Player player, Entity target, float damageModifier) {
-        if (isBrick(itemStack) && target instanceof Player targetPlayer) {
-            targetPlayer.addEffect(new MobEffectInstance(HEMobEffects.CONFUSION.get(), (int) MathUtil.sigma(lvl, 1, (double i) -> 5.0D / i) * 20));
-        }
-        return damageModifier + (0.5F * lvl);
-    }
-
-    // ====================================================================== //
-
-    private static boolean isBrick(ItemStack itemStack) {
-        return itemStack.is(HItemTags.BRICKS);
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
     }
 
 }

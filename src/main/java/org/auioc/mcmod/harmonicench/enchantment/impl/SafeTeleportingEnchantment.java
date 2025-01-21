@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,15 +19,19 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
+import net.minecraft.world.item.enchantment.effects.SetValue;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 
 /**
  * <b>传送保护 Safe Teleporting</b>
@@ -41,35 +45,48 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class SafeTeleportingEnchantment extends HLEnchantment {
+public class SafeTeleportingEnchantment extends HEEnchantment {
 
-    public SafeTeleportingEnchantment() {
-        super(
-            Enchantment.Rarity.UNCOMMON,
-            EnchantmentCategory.ARMOR_FEET,
-            EquipmentSlot.FEET,
-            4,
-            (o) -> o != Enchantments.FALL_PROTECTION
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.FEATHER_FALLING);
 
-    // Ⅰ:  5 - 11
-    // Ⅱ: 11 - 17
-    // Ⅲ: 17 - 23
-    // Ⅳ: 23 - 29
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 6 - 1;
-    }
+    /**
+     * Ⅰ:  5 - 20 <br>
+     * Ⅱ: 14 - 29 <br>
+     * Ⅲ: 23 - 38 <br>
+     */
+    private static final Cost COST = dynamicCost(5, 6, 11, 6);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 6;
-    }
+    /**
+     * <code>∑(lvl,k=1)(20/k)</code>
+     */
+    private static final LevelBasedValue RESISTANCE_DURATION = HELevelBasedValue.harmonic(
+        20F, LevelBasedValue.perLevel(1F)
+    );
 
-    public static void handleLivingTravelToDimension(int lvl, LivingEntity living) {
-        double duration = MathUtil.sigma(lvl, 1, (double i) -> 20.0D / i);
-        living.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, (int) (duration * 20)));
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.FOOT_ARMOR_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.UNCOMMON,
+        4,
+        COST,
+        4,
+        EquipmentSlotGroup.FEET
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            HEEnchantmentEffectComponents.ENDER_PEARL_LANDED.get(),
+            EnderPearlLandedEffect.changeDamage(new SetValue(LevelBasedValue.constant(0.0F)))
+        ).withEffect(
+            HEEnchantmentEffectComponents.DIMENSION_TRAVEL.get(),
+            DimensionTravelEffect.entityEffect(new ApplyMobEffect(
+                HolderSet.direct(MobEffects.DAMAGE_RESISTANCE),
+                RESISTANCE_DURATION, RESISTANCE_DURATION,
+                LevelBasedValue.constant(0.0F), LevelBasedValue.constant(0.0F)
+            ))
+        )
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

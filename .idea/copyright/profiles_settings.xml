@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings>
+    <module2copyright>
+      <element module="src:auioc" copyright="auioc.mcmod:gplv3" />
+    </module2copyright>
+  </settings>
+</component>

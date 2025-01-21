@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,69 +19,70 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
-
-import java.util.Map;
-import java.util.UUID;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
 
 /**
  * <b>延展之刃 Long</b>
  * <p>
  * 提高剑的攻击距离。
- * <ul>
- *     <li>增加攻击距离 <code>∑(n,k=1)(3/4k)</code>。</li>
- * </ul>
  *
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class LongEnchantment extends HLEnchantment implements IAttributeModifierEnchantment {
+public class LongEnchantment extends HEEnchantment {
 
-    private static final UUID ATTACK_RANGE_UUID = UUID.fromString("2A117CB2-C6AA-15F5-18EE-4B8C74CF8B9F");
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.SWEEPING_EDGE, HEEnchantments.RAPIER
+    );
 
-    public LongEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.WEAPON,
-            EquipmentSlot.MAINHAND,
-            3,
-            (o) -> o != Enchantments.SWEEPING_EDGE && o != HEEnchantments.RAPIER.get()
-        );
-    }
 
-    // Ⅰ:  5 - 20
-    // Ⅱ: 14 - 29
-    // Ⅲ: 23 - 38
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 9 - 4;
-    }
+    /**
+     * Ⅰ:  5 - 20 <br>
+     * Ⅱ: 14 - 29 <br>
+     * Ⅲ: 23 - 38 <br>
+     */
+    private static final Cost COST = dynamicCost(5, 9, 20, 9);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 15;
-    }
+    /**
+     * <code>∑(lvl,k=1)(3/4k)</code>
+     */
+    private static final LevelBasedValue ATTACK_SPEED_BONUS = HELevelBasedValue.harmonic(
+        3F, LevelBasedValue.perLevel(4F)
+    );
 
-    @Override
-    public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
-        return Map.of(
-            NeoForgeMod.ENTITY_REACH.value(),
-            new AttributeModifier(
-                ATTACK_RANGE_UUID, this.descriptionId,
-                MathUtil.sigma(lvl, 1, (double i) -> 3.0D / (4.0D * i)), AttributeModifier.Operation.ADDITION
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.SWORD_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        3,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.ATTRIBUTES,
+            new EnchantmentAttributeEffect(
+                HarmonicEnchantments.id("enchantment.long"),
+                Attributes.ATTACK_SPEED,
+                ATTACK_SPEED_BONUS,
+                AttributeModifier.Operation.ADD_VALUE
             )
-        );
+        )
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

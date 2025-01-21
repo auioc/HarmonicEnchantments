@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,133 +19,78 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.entity.projectile.SpectralArrow;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.entity.projectile.ITippedArrow;
-import org.auioc.mcmod.arnicalib.mod.mixin.common.MixinAccessorMobEffectInstance;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
-import org.auioc.mcmod.harmoniclib.mixinapi.IMixinSpectralArrow;
-
-import java.util.HashSet;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.AddValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.item.enchantment.effects.MultiplyValue;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeSpectralArrowDuration;
+import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
 
 /**
  * <b>效能 Efficacy</b>
  * <p>
  * 提高射出药箭和光灵箭施加状态效果的等级与持续时间。
- * <ul>
- *     <li>状态效果等级提高 <code>⌊∑(n,k=1)(1/k)⌋</code> 级。</li>
- *     <li>除治疗之箭、伤害之箭以外的药箭和光灵箭，状态效果持续时间提高 <code>(n+1)×10%</code>。</li>
- * </ul>
  *
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class EfficacyEnchantment extends HLEnchantment implements IProjectileEnchantment.TippedArrow, IProjectileEnchantment.SpectralArrow, IProjectileEnchantment.FireworkRocket {
+public class EfficacyEnchantment extends HEEnchantment {
 
-    private static final EnchantmentCategory PROJECTILE_WEAPON = EnchantmentCategory.create(
-        "PROJECTILE_WEAPON",
-        (item) -> item instanceof BowItem || item instanceof CrossbowItem
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MULTISHOT, Enchantments.PIERCING, Enchantments.POWER, Enchantments.FLAME
     );
 
-    public EfficacyEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            PROJECTILE_WEAPON,
-            EquipmentSlot.MAINHAND,
-            4,
-            (o) -> o != Enchantments.POWER_ARROWS
-                && o != Enchantments.FLAMING_ARROWS
-                && o != Enchantments.MULTISHOT
-                && o != Enchantments.PIERCING
-        );
-    }
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.addTag(ItemTags.BOW_ENCHANTABLE).addTag(ItemTags.CROSSBOW_ENCHANTABLE)
+    );
 
-    // Ⅰ:  1 - 50
-    // Ⅱ: 11 - 50
-    // Ⅲ: 21 - 50
-    // Ⅳ: 31 - 50
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 10 - 9;
-    }
+    /**
+     * Ⅰ:  1 - 50 <br>
+     * Ⅱ: 11 - 50 <br>
+     * Ⅲ: 21 - 50 <br>
+     * Ⅳ: 31 - 50 <br>
+     */
+    private static final Cost COST = new Cost(Enchantment.dynamicCost(1, 10), Enchantment.constantCost(50));
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return 50;
-    }
+    /**
+     * <code>duration * [1+(n+1)*10%]</code>
+     */
+    private static final EnchantmentValueEffect DURATION_BONUS = new MultiplyValue(LevelBasedValue.perLevel(1.2F, 0.1F));
 
-    @Override
-    public void handleTippedArrow(int lvl, Arrow arrow, ITippedArrow potionArrow) {
-        var effects = potionArrow.getEffects();
+    /**
+     * <code>amplifier + ∑(lvl,k=1)(1/k)</code>
+     */
+    private static final EnchantmentValueEffect AMPLIFIER_BONUS = new AddValue(HELevelBasedValue.harmonic());
 
-        for (var effectI : potionArrow.getPotion().getEffects()) {
-            effects.add(
-                new MobEffectInstance(
-                    effectI.getEffect(),
-                    Math.max(effectI.getDuration() / 8, 1), effectI.getAmplifier(),
-                    effectI.isAmbient(), effectI.isVisible()
-                )
-            );
-        }
-        potionArrow.setPotion(Potions.EMPTY);
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        EXCLUSIVE,
+        Rarity.RARE,
+        4,
+        COST,
+        1,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.PROJECTILE_SPAWNED,
+            new ChangeSpectralArrowDuration(DURATION_BONUS)
+        )
+        .withEffect(
+            HEEnchantmentEffectComponents.ARROW_POTION.get(),
+            ModifyMobEffect.of(DURATION_BONUS, AMPLIFIER_BONUS)
+        )
+    );
 
-        double amplifierBonus = 0.0D;
-        for (int k = 1, n = lvl + 1; k < n; k++) amplifierBonus += 1.0D / ((double) k);
-
-        var newEffects = new HashSet<MobEffectInstance>();
-        for (var _old : effects) {
-            int newAmplifier = _old.getAmplifier() + ((int) amplifierBonus);
-            int newDuration = (_old.getEffect().isInstantenous())
-                              ? _old.getDuration()
-                              : addDurationBonus(lvl, _old.getDuration());
-            var _new = new MobEffectInstance(
-                _old.getEffect(),
-                newDuration, newAmplifier,
-                _old.isAmbient(), _old.isVisible(), _old.showIcon(),
-                ((MixinAccessorMobEffectInstance) _old).getHiddenEffect(),
-                _old.getFactorData()
-            );
-            _new.getCures().clear();
-            _new.getCures().addAll(_old.getCures());
-            newEffects.add(_new);
-        }
-        effects.clear();
-        effects.addAll(newEffects);
-    }
-
-    @Override
-    public void handleSpectralArrow(int lvl, SpectralArrow spectralArrow) {
-        var _spectralArrow = (IMixinSpectralArrow) spectralArrow;
-        _spectralArrow.setDuration(addDurationBonus(lvl, _spectralArrow.getDuration()));
-    }
-
-    private static int addDurationBonus(int lvl, int duration) {
-        return (int) (duration * (1 + ((lvl + 1.0D) * 0.1D)));
-    }
-
-    @Override
-    public void handleFireworkRocket(int lvl, FireworkRocketEntity fireworkRocket) { }
-
-    @Override
-    public float onFireworkRocketExplode(int lvl, LivingEntity target, FireworkRocketEntity projectile, LivingEntity owner, float amount) {
-        double ynn = MathUtil.sigma(lvl, 1, (double i) -> 1.0D / i);
-        int luckAmplifier = ((int) ynn) - 1;
-        int luckDuration = ((int) (((10.0D + ((double) lvl)) / 10.0D) * 37.5D)) * 20;
-        owner.addEffect(new MobEffectInstance(MobEffects.LUCK, luckDuration, luckAmplifier));
-        return amount * (1.0F + ((float) ynn));
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
     }
 
 }

@@ -1,54 +1,127 @@
 plugins {
     id 'java-library'
-    id 'eclipse'
-    id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.80'
+    id 'net.neoforged.moddev' version '1.0.23'
+    id 'idea'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
 
 repositories {
+    mavenLocal()
     maven {
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
+        url 'https://repo.auioc.com/maven/releases'
+        content { includeGroup 'org.auioc.mcmod' }
     }
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+
+        serverData {
+            serverData()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        clientData {
+            clientData()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
     implementation("org.auioc.mcmod:arnicalib:${minecraft_version}-${arnicalib_version}")
-    compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
-    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    // implementation fileTree(dir: 'libs', include: '*.jar', exclude: '*-sources.jar')
 }
 
-apply from: "${scripts_url}/minecraft/neo/minecraft.gradle"
-runs {
-    configureEach {
-        // systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-        systemProperty 'mixin.debug', 'true'
-    }
-}
-
-ext {
-    resourceReplaceProperties = [
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+        minecraft_version      : minecraft_version,
+        minecraft_version_range: minecraft_version_range,
+        neo_version            : neo_version,
+        neo_version_range      : neo_version_range,
+        loader_version_range   : loader_version_range,
+        mod_id                 : mod_id,
+        mod_name               : mod_name,
+        mod_license            : mod_license,
+        mod_version            : mod_version,
+        mod_authors            : mod_authors,
+        mod_credits            : mod_credits,
+        mod_description        : mod_description,
         arnicalib_version_range: arnicalib_version_range,
-        lib_mod_id             : lib_mod_id,
-        lib_mod_name           : lib_mod_name,
-        lib_mod_authors        : lib_mod_authors,
-        lib_mod_description    : lib_mod_description
     ]
+
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
-apply from: "${scripts_url}/minecraft/neo/resources.gradle"
-apply from: "${scripts_url}/minecraft/neo/build-info.gradle"
-apply from: "${scripts_url}/minecraft/neo/artifacts.gradle"
-apply from: "${scripts_url}/minecraft/neo/publishing.gradle"
-apply from: "${scripts_url}/common/signing.gradle"
-apply from: "${scripts_url}/minecraft/neo/custom-clean.gradle"
-apply from: "${scripts_url}/minecraft/neo/update-json.gradle"
+apply from: 'scripts/gradle/build-info.gradle'
+apply from: 'scripts/gradle/artifacts.gradle'
+apply from: 'scripts/gradle/publishing.gradle'
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

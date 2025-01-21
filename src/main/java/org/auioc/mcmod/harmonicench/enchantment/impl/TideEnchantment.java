@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 AUIOC.ORG
+ * Copyright (C) 2024-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,12 +19,7 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
  * <b>唤潮 Tide</b> TODO
@@ -37,30 +32,6 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
  * @author Libellule505
  * @since 2.1.0
  */
-public class TideEnchantment extends HLEnchantment {
-
-    public TideEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.TRIDENT,
-            EquipmentSlot.MAINHAND,
-            3,
-            (o) -> o != Enchantments.LOYALTY && o != Enchantments.CHANNELING
-                && o != HEEnchantments.ELECTRIFICATION.get()
-        );
-    }
-
-    // Ⅰ: 12 - 50
-    // Ⅱ: 19 - 50
-    // Ⅲ: 26 - 50
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 7 + 5;
-    }
-
-    @Override
-    public int getMaxCost(int lvl) {
-        return 50;
-    }
+public class TideEnchantment extends HEEnchantment {
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,16 +19,20 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.DamageEnchantment;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.AddValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.EntityAttributeCondition;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
  * <b>强敌杀手 Bane of Champions</b>
@@ -41,44 +45,50 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class BaneOfChampionsEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
+public class BaneOfChampionsEnchantment extends HEEnchantment {
 
-    public BaneOfChampionsEnchantment() {
-        super(
-            Enchantment.Rarity.UNCOMMON,
-            EnchantmentCategory.WEAPON,
-            EquipmentSlot.MAINHAND,
-            5,
-            (o) -> !(o instanceof DamageEnchantment)
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
+        HEEnchantments.BLUNT
+    );
 
-    // Ⅰ:  5 - 25
-    // Ⅱ: 13 - 33
-    // Ⅲ: 21 - 41
-    // Ⅳ: 29 - 49
-    // Ⅴ: 37 - 57
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 8 - 3;
-    }
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.addTag(ItemTags.SWORD_ENCHANTABLE).addTag(ItemTags.AXES)
+    );
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return this.getMinCost(lvl) + 20;
-    }
+    /**
+     * Ⅰ:  5 - 25 <br>
+     * Ⅱ: 13 - 33 <br>
+     * Ⅲ: 21 - 41 <br>
+     * Ⅳ: 29 - 49 <br>
+     * Ⅴ: 37 - 57 <br>
+     */
+    private static final Cost COST = dynamicCost(5, 8, 25, 8);
 
-    @Override
-    public boolean canEnchant(ItemStack itemStack) {
-        return itemStack.getItem() instanceof AxeItem || super.canEnchant(itemStack);
-    }
+    private static final LootItemCondition.Builder IS_CHAMPION = () -> new EntityAttributeCondition(
+        Attributes.MAX_HEALTH,
+        EntityAttributeCondition.ValueType.BASE,
+        MinMaxBounds.Doubles.atLeast(50.0D),
+        LootContext.EntityTarget.THIS
+    );
 
-    @Override
-    public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (isSource && target.getHealth() > 50.0F) {
-            return amount + ((float) lvl) * 2.5F;
-        }
-        return amount;
+    private static final EnchantmentValueEffect DAMAGE_BONUS = new AddValue(LevelBasedValue.perLevel(2.5F));
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        ItemTags.SWORD_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.UNCOMMON,
+        5,
+        COST,
+        2,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(EnchantmentEffectComponents.DAMAGE, DAMAGE_BONUS, IS_CHAMPION)
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
     }
 
 }

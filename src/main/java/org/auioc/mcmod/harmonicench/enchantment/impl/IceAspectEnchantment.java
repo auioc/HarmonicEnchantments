@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,71 +19,138 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.ILivingEnchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.AddValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.item.enchantment.effects.SetValue;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import org.auioc.mcmod.arnicalib.game.critereon.FrozenPredicate;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
 
 /**
  * <b>冰霜附加 Ice Aspect</b>
  * <p>
  * 被击中的实体会被冰冻，每一击命中会延长冰冻时间。
  * <ul>
- *     <li>对实体数据 {@link Entity#DATA_TICKS_FROZEN} 为 0 的生物攻击会增加该值 <code>∑(n,k=1)(200/k)</code>，后续每次攻击命中会增加 <code>∑(n,k=1)(100/k)</code>。</li>
- *     <li>TODO 攻击同时会给予目标缓慢Ⅰ/Ⅱ（更高等级魔咒维持缓慢Ⅱ），初次命中持续时间 <code>[∑(n,k=1)(5/k)]-3.5</code> 秒，之后每次命中增加 <code>∑(n,k=1)(2.5/k)</code>。</li>
+ *     <li>TODO 对实体数据 {@link Entity#DATA_TICKS_FROZEN} 为 0 的生物攻击会增加该值 <code>∑(n,k=1)(200/k)</code>，后续每次攻击命中会增加 <code>∑(n,k=1)(100/k)</code>。</li>
  * </ul>
  *
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class IceAspectEnchantment extends HLEnchantment implements ILivingEnchantment.Hurt {
+public class IceAspectEnchantment extends HEEnchantment {
 
-    public IceAspectEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.WEAPON,
-            EquipmentSlot.MAINHAND,
-            2,
-            (o) -> o != Enchantments.FIRE_ASPECT
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.FIRE_ASPECT);
 
-    // Ⅰ: 10 - 60
-    // Ⅱ: 30 - 80
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 20 - 10;
-    }
+    /**
+     * Ⅰ: 10 - 60 <br>
+     * Ⅱ: 30 - 80 <br>
+     */
+    private static final Cost COST = dynamicCost(10, 20, 60, 20);
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 50;
-    }
+   /* private static final MobEffectsPredicate.Builder IS_SLOWNESS = MobEffectsPredicate.Builder.effects().and(MobEffects.MOVEMENT_SLOWDOWN);
+    private static final LootItemCondition.Builder HAS_SLOWNESS = LootItemEntityPropertyCondition.hasProperties(
+        LootContext.EntityTarget.THIS,
+        EntityPredicate.Builder.entity().effects(IS_SLOWNESS)
+    );
+    private static final LevelBasedValue SLOWNESS_AMPLIFIER = LevelBasedValue.lookup(List.of(0F), LevelBasedValue.constant(1F));
+    // <code>∑(lvl,k=1)(5/k) - 3.5</code>
+    private static final LevelBasedValue SLOWNESS_DURATION_BASE = HLevelBasedValue.sum(
+        new HELevelBasedValue.SigmaSum(
+            1,
+            new LevelBasedValue.Fraction(
+                LevelBasedValue.constant(5F),
+                LevelBasedValue.perLevel(1F)
+            )
+        ),
+        LevelBasedValue.constant(-3.5F)
+    );
+    // <code>∑(lvl,k=1)(2.5/k)</code>
+    private static final LevelBasedValue SLOWNESS_DURATION_ADDITION = new HELevelBasedValue.SigmaSum(
+        1,
+        new LevelBasedValue.Fraction(
+            LevelBasedValue.constant(2.5F),
+            LevelBasedValue.perLevel(1F)
+        )
+    );*/
 
-    @Override
-    public float onLivingHurt(int lvl, boolean isSource, EquipmentSlot slot, LivingEntity target, DamageSource source, float amount) {
-        if (isSource && target.canFreeze()) {
-            int ticksFrozen = target.getTicksFrozen();
+    private static final FrozenPredicate IS_FREEZING = FrozenPredicate.ticks(MinMaxBounds.Ints.atLeast(1));
+    private static final FrozenPredicate IS_NOT_FREEZING = FrozenPredicate.ticks(MinMaxBounds.Ints.exactly(0));
 
-            double f = (ticksFrozen == 0) ? 200.0D : 100.0D;
-            double r = MathUtil.sigma(lvl, 1, (double i) -> f / i);
-            target.setTicksFrozen(ticksFrozen + ((int) r));
+    /**
+     * set <code>∑(lvl,k=1)(200/k)</code>
+     */
+    private static final EnchantmentValueEffect FROZEN_TICKS_BASE = new SetValue(
+        HELevelBasedValue.harmonic(200F, LevelBasedValue.perLevel(1F))
+    );
 
-            double t = (ticksFrozen == 0)
-                       ? MathUtil.sigma(lvl, 1, (double i) -> 5.0D / i) - 3.5D
-                       : MathUtil.sigma(lvl, 1, (double i) -> 2.5D / i);
-            var effect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, (int) (t * 20.0D), Math.max(lvl, 2) - 1);
-            target.addEffect(effect, source.getEntity());
-        }
-        return amount;
+    /**
+     * add <code>∑(lvl,k=1)(100/k)</code>
+     */
+    private static final EnchantmentValueEffect FROZEN_TICKS_ADDITION = new AddValue(
+        HELevelBasedValue.harmonic(100F, LevelBasedValue.perLevel(1F))
+    );
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.SWORD_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        2,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+            .withEffect(
+                EnchantmentEffectComponents.POST_ATTACK,
+                EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+                new ChangeFrozenTicks(FROZEN_TICKS_ADDITION),
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().subPredicate(IS_FREEZING)
+                )
+            ).withEffect(
+                EnchantmentEffectComponents.POST_ATTACK,
+                EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+                new ChangeFrozenTicks(FROZEN_TICKS_BASE),
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().subPredicate(IS_NOT_FREEZING)
+                )
+            )
+     /*   .withEffect(
+            EnchantmentEffectComponents.POST_ATTACK,
+            EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+            ModifyMobEffect.forEntity(
+                ModifyMobEffect.duration(
+                    IS_SLOWNESS, new AddValue(HEHelper.ticksToSeconds(SLOWNESS_DURATION_ADDITION))
+                )
+            ),
+            HAS_SLOWNESS
+        ).withEffect(
+            EnchantmentEffectComponents.POST_ATTACK,
+            EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+            new ApplyMobEffect(
+                HolderSet.direct(MobEffects.MOVEMENT_SLOWDOWN),
+                SLOWNESS_DURATION_BASE, SLOWNESS_DURATION_BASE,
+                SLOWNESS_AMPLIFIER, SLOWNESS_AMPLIFIER
+            ),
+            InvertedLootItemCondition.invert(HAS_SLOWNESS)
+        )*/
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,16 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.game.enchantment.HEnchantmentCategory;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.SetValue;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
 
 /**
  * <b>无偿骑乘 Free Riding</b>
@@ -38,35 +36,40 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class FreeRidingEnchantment extends HLEnchantment implements IItemEnchantment.Hurt {
+public class FreeRidingEnchantment extends HEEnchantment {
 
-    public FreeRidingEnchantment() {
-        super(
-            Enchantment.Rarity.VERY_RARE,
-            HEnchantmentCategory.FOOD_ON_A_STACK,
-            EquipmentSlot.MAINHAND,
-            (o) -> o != Enchantments.MENDING && o != Enchantments.UNBREAKING && o != HEEnchantments.DINING.get()
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MENDING, Enchantments.UNBREAKING,
+        HEEnchantments.REBELLING_CURSE
+        // TODO       HEEnchantments.DINING
+    );
 
-    @Override
-    public int getMinCost(int lvl) {
-        return 25;
-    }
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.add(Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK)
+    );
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return 75;
-    }
+    /**
+     * Ⅰ: 25 - 75 <br>
+     */
+    private static final Cost COST = constantCost(25, 75);
 
-    @Override
-    public boolean isTreasureOnly() {
-        return true;
-    }
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        EXCLUSIVE,
+        Rarity.VERY_RARE,
+        1,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.ITEM_DAMAGE,
+            new SetValue(LevelBasedValue.constant(0F))
+        )
+    );
 
-    @Override
-    public int onItemHurt(int lvl, ItemStack itemStack, int damage, RandomSource random, ServerPlayer player) {
-        return 0;
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).treasure().tradeable();
     }
 
 }

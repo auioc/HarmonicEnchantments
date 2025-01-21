@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,31 +19,54 @@
 
 package org.auioc.mcmod.harmonicench;
 
+import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.config.ModConfig;
-import org.auioc.mcmod.harmonicench.advancement.HEEPerformancePredicates;
-import org.auioc.mcmod.harmonicench.config.HECommonConfig;
-import org.auioc.mcmod.harmonicench.effect.HEMobEffects;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffects;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.handler.HEEventHandler;
+import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 
 public final class HEInitialization {
 
     public static void init() {
         registerConfig();
         modSetup();
+        forgeSetup();
     }
 
     private static final IEventBus modEventBus = HarmonicEnchantments.getModEventBus();
+    private static final IEventBus forgeEventBus = NeoForge.EVENT_BUS;
 
     public static void registerConfig() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HECommonConfig.CONFIG);
+        //        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HECommonConfig.CONFIG);
     }
 
     private static void modSetup() {
-        HEEnchantments.ENCHANTMENTS.register(modEventBus);
-        HEMobEffects.MOB_EFFECTS.register(modEventBus);
-        HEEPerformancePredicates.EPPT.register(modEventBus);
+        modEventBus.addListener(HEInitialization::commonSetup);
+        HELevelBasedValue.TYPES.register(modEventBus);
+        HEEnchantmentEffectComponents.TYPES.register(modEventBus);
+        HEEnchantmentEffects.ENTITY_EFFECT_TYPES.register(modEventBus);
+        modEventBus.addListener(HEEnchantments::register);
+        modEventBus.addListener(HEInitialization::register);
+    }
+
+    private static void forgeSetup() {
+        forgeEventBus.register(HEEventHandler.class);
+    }
+
+    private static void commonSetup(final FMLCommonSetupEvent event) {
+        HELootContextParamSets.init();
+    }
+
+    private static void register(RegisterEvent event) {
+        if (event.getRegistryKey().compareTo(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE) == 0) {
+            HEEnchantmentEffects.bootstrap();
+        }
     }
 
 }

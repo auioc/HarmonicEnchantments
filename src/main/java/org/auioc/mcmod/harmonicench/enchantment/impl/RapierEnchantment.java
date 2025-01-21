@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,77 +19,79 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
+import net.neoforged.neoforge.common.ItemAbilities;
+import org.auioc.mcmod.arnicalib.base.event.EventResult;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IAttributeModifierEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IToolActionControllerEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
 
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * <b>迅捷之刃 Rapier</b>
  * <p>
- * 增加攻击速度，但无法再使出横扫攻击。
- * <ul>
- *     <li>增加 <code>∑(n,k=1)[1/(k+9)]</code> 点攻击速度。</li>
- * </ul>
+ * 增加剑的攻击速度，但无法再使出横扫攻击。
  *
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class RapierEnchantment extends HLEnchantment implements IAttributeModifierEnchantment, IToolActionControllerEnchantment {
+public class RapierEnchantment extends HEEnchantment {
 
-    private static final UUID ATTACK_SPEED_UUID = UUID.fromString("DD970DD3-E85C-C575-F1E2-4708A674A99C");
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.SWEEPING_EDGE,
+        HEEnchantments.LONG, HEEnchantments.BLUNT
+    );
 
-    public RapierEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.WEAPON,
-            EquipmentSlot.MAINHAND,
-            3,
-            (o) -> o != Enchantments.SWEEPING_EDGE && o != HEEnchantments.LONG.get()
-        );
-    }
+    /**
+     * Ⅰ:  5 - 20 <br>
+     * Ⅱ: 14 - 29 <br>
+     * Ⅲ: 23 - 38 <br>
+     */
+    private static final Cost COST = dynamicCost(5, 9, 20, 9);
 
-    // Ⅰ:  5 - 20
-    // Ⅱ: 14 - 29
-    // Ⅲ: 23 - 38
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 9 - 4;
-    }
+    /**
+     * <code>∑(lvl,k=1)[1/(k+9)]</code>
+     */
+    private static final LevelBasedValue ATTACK_SPEED_BONUS = HELevelBasedValue.harmonic(
+        LevelBasedValue.perLevel(10F, 1F)
+    );
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 15;
-    }
-
-    @Override
-    public boolean canPerformAction(ToolAction toolAction) {
-        return !toolAction.equals(ToolActions.SWORD_SWEEP);
-    }
-
-    @Override
-    public Map<Attribute, AttributeModifier> getAttributeModifier(int lvl, EquipmentSlot slot, ItemStack itemStack) {
-        return Map.of(
-            Attributes.ATTACK_SPEED,
-            new AttributeModifier(
-                ATTACK_SPEED_UUID, this.descriptionId,
-                MathUtil.sigma(lvl, 1, (double i) -> 1 / (i + 9.0D)), AttributeModifier.Operation.ADDITION
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.SWORD_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.COMMON,
+        3,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(
+            EnchantmentEffectComponents.ATTRIBUTES,
+            new EnchantmentAttributeEffect(
+                HarmonicEnchantments.id("enchantment.rapier"),
+                Attributes.ATTACK_SPEED,
+                ATTACK_SPEED_BONUS,
+                AttributeModifier.Operation.ADD_VALUE
             )
-        );
+        )
+        .withSpecialEffect(
+            HEEnchantmentEffectComponents.ITEM_ABILITIES.get(),
+            Map.of(ItemAbilities.SWORD_SWEEP, EventResult.DENY)
+        )
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

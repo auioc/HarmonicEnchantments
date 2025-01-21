@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,18 +19,20 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.phys.Vec3;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
+import org.auioc.mcmod.arnicalib.game.enchantment.HLevelBasedValue;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+
+import java.util.List;
 
 /**
  * <b>轻巧 Handiness</b>
@@ -44,37 +46,49 @@ import org.auioc.mcmod.harmoniclib.enchantment.api.IProjectileEnchantment;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class HandinessEnchantment extends HLEnchantment implements IProjectileEnchantment.HurtLiving {
+public class HandinessEnchantment extends HEEnchantment {
 
-    public HandinessEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            EnchantmentCategory.BOW,
-            EquipmentSlot.MAINHAND,
-            2,
-            (o) -> o != Enchantments.PUNCH_ARROWS
-        );
-    }
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.PUNCH);
 
-    // Ⅰ: 12 - 37
-    // Ⅱ: 32 - 57
-    @Override
-    public int getMinCost(int lvl) {
-        return lvl * 20 - 8;
-    }
 
-    @Override
-    public int getMaxCost(int lvl) {
-        return getMinCost(lvl) + 25;
-    }
+    /**
+     * Ⅰ: 12 - 37 <br>
+     * Ⅱ: 32 - 57 <br>
+     */
+    private static final Cost COST = dynamicCost(12, 20, 37, 20);
 
-    @Override
-    public float onHurtLiving(int lvl, LivingEntity target, Projectile projectile, LivingEntity owner, Vec3 postion, float amount) {
-        int amplifier = Math.min(lvl, this.getMaxLevel()) - 1;
-        double duration = 6;
-        if (lvl > this.getMaxLevel()) duration += MathUtil.sigma(lvl, 3, (double i) -> (2 / (i - 2.0D)));
-        owner.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, ((int) duration) * 20, amplifier));
-        return amount;
+    /**
+     * lookup <code>[6, 6, (6 + ∑(lvl,k=3)[2/(k-2)])]</code>
+     */
+    private static final LevelBasedValue SPEED_DURATION = LevelBasedValue.lookup(
+        List.of(6F, 6F),
+        HLevelBasedValue.sum(
+            LevelBasedValue.constant(6F),
+            HELevelBasedValue.harmonic(3, 2F, LevelBasedValue.perLevel(-1F, 1F))
+        )
+    );
+    private static final LevelBasedValue SPEED_AMPLIFIER = LevelBasedValue.lookup(List.of(0F), LevelBasedValue.constant(1F));
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.BOW_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        2,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+        .withEffect(EnchantmentEffectComponents.POST_ATTACK,
+            EnchantmentTarget.ATTACKER, EnchantmentTarget.ATTACKER, new ApplyMobEffect(
+                HolderSet.direct(MobEffects.MOVEMENT_SPEED),
+                SPEED_DURATION, SPEED_DURATION,
+                SPEED_AMPLIFIER, SPEED_AMPLIFIER
+            )
+        )
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 AUIOC.ORG
+ * Copyright (C) 2022-2025 AUIOC.ORG
  *
  * This file is part of HarmonicEnchantments, a mod made for Minecraft.
  *
@@ -19,32 +19,7 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import org.auioc.mcmod.arnicalib.base.collection.ListUtils;
-import org.auioc.mcmod.arnicalib.base.math.MathUtil;
-import org.auioc.mcmod.arnicalib.game.item.ItemUtils;
-import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmoniclib.enchantment.api.HLEnchantment;
-import org.auioc.mcmod.harmoniclib.enchantment.api.IItemEnchantment;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
+import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
  * <b>祝福 Blessing</b>
@@ -57,82 +32,6 @@ import java.util.List;
  * @author WakelessSloth56
  * @author Libellule505
  */
-public class BlessingEnchantment extends HLEnchantment implements IItemEnchantment.Protection, IItemEnchantment.Tooltip {
-
-    private static final EnchantmentCategory BLESSABLE_ARMOR = EnchantmentCategory.create(
-        "BLESSABLE_ARMOR",
-        (item) -> {
-            if (item instanceof ArmorItem arrow && arrow.getMaterial() instanceof ArmorMaterials material) {
-                switch (material) {
-                    case LEATHER:
-                    case GOLD:
-                    case NETHERITE: {
-                        return true;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-            }
-            return false;
-        }
-    );
-
-    private static final EquipmentSlot[] VALID_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET };
-
-    public BlessingEnchantment() {
-        super(
-            Enchantment.Rarity.RARE,
-            BLESSABLE_ARMOR,
-            VALID_SLOTS,
-            (o) -> o != Enchantments.MENDING && o != HEEnchantments.FORGING.get()
-        );
-    }
-
-    @Override
-    public int getMinCost(int lvl) {
-        return 1;
-    }
-
-    @Override
-    public int getMaxCost(int lvl) {
-        return 51;
-    }
-
-    private static int calcMagicProtection(int lvl, ItemStack itemStack) {
-        int N = EnchantmentHelper.getEnchantments(itemStack).values().stream().mapToInt((i) -> i).sum();
-        double l = MathUtil.sigma(N, 1, (double i) -> 6.0D / i);
-        double r = MathUtil.sigma(lvl, 1, (double j) -> 1.0D / (5.0D * j - 4.0D));
-        return (int) (l * r);
-    }
-
-    @Override
-    public int getDamageProtection(int lvl, ItemStack itemStack, DamageSource source) {
-        if (source.is(DamageTypes.MAGIC)) {
-            return calcMagicProtection(lvl, itemStack);
-        }
-        return 0;
-    }
-
-    private static final List<String> TOOLTIP_MODIFIER_KEYS = Arrays.stream(VALID_SLOTS).map((slot) -> "item.modifiers." + slot.getName()).toList();
-
-    @Override
-    public void onItemTooltip(int lvl, @NotNull ItemStack itemStack, @Nullable Player player, List<Component> lines, TooltipFlag flags) {
-        if (ItemUtils.shouldShowInTooltip(itemStack, ItemStack.TooltipPart.MODIFIERS)) {
-            int i = ListUtils.indexOf(
-                lines,
-                (l) -> l.getContents() instanceof TranslatableContents t && TOOLTIP_MODIFIER_KEYS.contains(t.getKey())
-            );
-            if (i >= 0) {
-                var text = Component.translatable(
-                        "attribute.modifier.plus.0",
-                        calcMagicProtection(lvl, itemStack),
-                        Component.translatable("enchantment.harmonicench.blessing.tooltip")
-                    )
-                    .withStyle(ChatFormatting.BLUE);
-                lines.add(i + 1, text);
-            }
-        }
-    }
+public class BlessingEnchantment extends HEEnchantment {
 
 }
