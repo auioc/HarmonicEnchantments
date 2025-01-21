@@ -50,7 +50,6 @@ public class HandinessEnchantment extends HEEnchantment {
 
     private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.PUNCH);
 
-
     /**
      * Ⅰ: 12 - 37 <br>
      * Ⅱ: 32 - 57 <br>

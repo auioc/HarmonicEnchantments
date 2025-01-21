@@ -19,10 +19,12 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
- * <b>领航 Sun Affinity</b>
+ * <b>TODO 领航 Sun Affinity</b>
  * <p>
  * 鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。
  * <ul>
@@ -34,5 +36,31 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class SunAffinityEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.add(Items.ELYTRA)
+    );
+
+    /**
+     * Ⅰ: 10 - 40 <br>
+     * Ⅱ: 20 - 50 <br>
+     * Ⅲ: 30 - 60 <br>
+     */
+    private static final Cost COST = dynamicCost(10, 10, 40, 10);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        Rarity.RARE,
+        3,
+        COST,
+        8,
+        EquipmentSlotGroup.CHEST
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS).tradeable();
+    }
 
 }

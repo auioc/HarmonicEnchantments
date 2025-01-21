@@ -19,10 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>祝福 Blessing</b>
+ * <b>TODO 祝福 Blessing</b>
  * <p>
  * 根据物品的所有魔咒等级之和，提供魔法抗性。
  * <ul>
@@ -33,5 +37,37 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class BlessingEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.add(
+        Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS,
+        Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS,
+        Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS
+    ));
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MENDING,
+        HEEnchantments.FORGING, HEEnchantments.DINING
+    );
+
+    /**
+     * Ⅰ: 1 - 51 <br>
+     */
+    private static final Cost COST = constantCost(1, 51);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        EXCLUSIVE,
+        Rarity.RARE,
+        1,
+        COST,
+        2,
+        EquipmentSlotGroup.ARMOR
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable().treasure();
+    }
 
 }

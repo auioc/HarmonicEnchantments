@@ -19,10 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>狙击 Sniping</b>
+ * <b>TODO 狙击 Sniping</b>
  * <p>
  * 更容易命中，对远距离目标造成的伤害更高。
  * <ul>
@@ -34,5 +38,33 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class SnipingEnchantment extends HEEnchantment {
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MULTISHOT, Enchantments.QUICK_CHARGE,
+        HEEnchantments.EFFICACY
+    );
+
+    /**
+     * Ⅰ:  1 - 21 <br>
+     * Ⅱ: 11 - 31 <br>
+     * Ⅲ: 21 - 41 <br>
+     */
+    private static final Cost COST = dynamicCost(1, 10, 21, 10);
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.CROSSBOW_ENCHANTABLE,
+        EXCLUSIVE,
+        Rarity.RARE,
+        3,
+        COST,
+        2,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(EXCLUSIVE).tradeable();
+    }
 
 }

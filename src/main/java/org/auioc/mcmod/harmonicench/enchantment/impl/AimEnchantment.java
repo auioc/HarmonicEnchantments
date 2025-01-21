@@ -19,11 +19,13 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 
 /**
- * <b>瞄准 Aim</b>
+ * <b>TODO 瞄准 Aim</b>
  * <p>
  * 使用望远镜时，标记敌对生物并提高弹射物伤害。
  * <ul>
@@ -35,5 +37,33 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class AimEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.add(Items.SPYGLASS)
+    );
+
+    private static final ItemTagBuilder PRIMARY_ITEMS = primarySupportedItems(t -> { });
+
+    /**
+     * Ⅰ: 10 - 25 <br>
+     * Ⅱ: 20 - 35 <br>
+     */
+    private static final Cost COST = dynamicCost(10, 10, 25, 10);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        PRIMARY_ITEMS,
+        Rarity.RARE,
+        2,
+        COST,
+        8,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, PRIMARY_ITEMS).tradeable().treasure();
+    }
 
 }

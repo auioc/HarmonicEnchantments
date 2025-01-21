@@ -19,10 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>收割 Harvest</b>
+ * <b>TODO 收割 Harvest</b>
  * <p>
  * 提高收割作物（以及生物）的速度。
  * <ul>
@@ -35,5 +39,37 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @since 2.1.1
  */
 public class HarvestEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.addTags(
+        ItemTags.HOES, ItemTags.SHOVELS
+    ));
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.EFFICIENCY, HEEnchantments.PROFICIENCY
+    );
+
+    /**
+     * Ⅰ: 15 - 61 <br>
+     * Ⅱ: 24 - 71 <br>
+     * Ⅲ: 33 - 81 <br>
+     */
+    private static final Cost COST = dynamicCost(15, 9, 61, 9);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        ItemTags.HOES,
+        EXCLUSIVE,
+        Rarity.VERY_RARE,
+        3,
+        COST,
+        1,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
+    }
 
 }

@@ -19,10 +19,12 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
- * <b>观测 Observer</b>
+ * <b>TODO 观测 Observer</b>
  * <p>
  * 在晴朗的夜晚，了解天象。
  * <ul>
@@ -38,5 +40,33 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @since 2.1.0
  */
 public class ObserverEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.add(Items.SPYGLASS)
+    );
+
+    private static final ItemTagBuilder PRIMARY_ITEMS = primarySupportedItems(t -> { });
+
+    /**
+     * Ⅰ: 10 - 25 <br>
+     * Ⅱ: 20 - 35 <br>
+     */
+    private static final Cost COST = dynamicCost(10, 10, 25, 10);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        PRIMARY_ITEMS,
+        Rarity.VERY_RARE,
+        2,
+        COST,
+        8,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, PRIMARY_ITEMS).tradeable().treasure();
+    }
 
 }

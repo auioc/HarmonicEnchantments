@@ -47,13 +47,13 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  */
 public class BaneOfChampionsEnchantment extends HEEnchantment {
 
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
+        (tag) -> tag.addTag(ItemTags.SWORD_ENCHANTABLE).addTag(ItemTags.AXES)
+    );
+
     private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
         Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
         HEEnchantments.BLUNT
-    );
-
-    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
-        (tag) -> tag.addTag(ItemTags.SWORD_ENCHANTABLE).addTag(ItemTags.AXES)
     );
 
     /**
@@ -88,7 +88,7 @@ public class BaneOfChampionsEnchantment extends HEEnchantment {
     );
 
     public static Bootstrap.Builder bootstrap() {
-        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
     }
 
 }

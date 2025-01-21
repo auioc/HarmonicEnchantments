@@ -44,12 +44,12 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
  */
 public class EfficacyEnchantment extends HEEnchantment {
 
-    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
-        Enchantments.MULTISHOT, Enchantments.PIERCING, Enchantments.POWER, Enchantments.FLAME
-    );
-
     private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
         (tag) -> tag.addTag(ItemTags.BOW_ENCHANTABLE).addTag(ItemTags.CROSSBOW_ENCHANTABLE)
+    );
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MULTISHOT, Enchantments.PIERCING, Enchantments.POWER, Enchantments.FLAME
     );
 
     /**
@@ -90,7 +90,7 @@ public class EfficacyEnchantment extends HEEnchantment {
     );
 
     public static Bootstrap.Builder bootstrap() {
-        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
     }
 
 }

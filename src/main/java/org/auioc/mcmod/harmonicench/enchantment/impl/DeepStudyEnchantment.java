@@ -48,7 +48,7 @@ public class DeepStudyEnchantment extends HEEnchantment {
      * Ⅱ: 24 - 71 <br>
      * Ⅲ: 33 - 81 <br>
      */
-    private static final Cost COST = dynamicCost(15, 9, 65, 9);
+    private static final Cost COST = dynamicCost(15, 9, 61, 9);
 
     private static final BuilderFunction BUILDER = define(
         ItemTags.PICKAXES,

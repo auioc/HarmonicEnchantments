@@ -19,10 +19,15 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.neoforged.neoforge.common.Tags;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>熟练 Proficiency</b>
+ * <b>TODO 熟练 Proficiency</b>
  * <p>
  * 随着挖掘次数增加，永久提高挖掘速度。
  * <ul>
@@ -33,5 +38,44 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class ProficiencyEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.addTags(
+        ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, Tags.Items.TOOLS_SHEAR)
+    );
+
+    private static final ItemTagBuilder PRIMARY_ITEMS = primarySupportedItems((tag) -> tag.addTags(
+        ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES)
+    );
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.EFFICIENCY,
+        HEEnchantments.HARVEST
+    );
+
+    /**
+     * Ⅰ:  1 - 61 <br>
+     * Ⅱ: 11 - 71 <br>
+     * Ⅲ: 21 - 81 <br>
+     * Ⅳ: 31 - 91 <br>
+     * Ⅴ: 41 - 101 <br>
+     */
+    private static final Cost COST = dynamicCost(1, 10, 61, 10);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        PRIMARY_ITEMS,
+        EXCLUSIVE,
+        Rarity.UNCOMMON,
+        5,
+        COST,
+        1,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, PRIMARY_ITEMS, EXCLUSIVE).tradeable();
+    }
 
 }

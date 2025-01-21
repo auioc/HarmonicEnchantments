@@ -59,14 +59,14 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
  */
 public class BluntEnchantment extends HEEnchantment {
 
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.addTags(
+        ItemTags.AXES, ItemTags.SWORD_ENCHANTABLE, Tags.Items.BRICKS)
+    );
+
     private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
         Enchantments.EFFICIENCY,
         Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
         HEEnchantments.BANE_OF_CHAMPIONS, HEEnchantments.RAPIER
-    );
-
-    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
-        (tag) -> tag.addTags(ItemTags.AXES, ItemTags.SWORD_ENCHANTABLE, Tags.Items.BRICKS)
     );
 
     /**
@@ -130,7 +130,7 @@ public class BluntEnchantment extends HEEnchantment {
     );
 
     public static Bootstrap.Builder bootstrap() {
-        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).tradeable();
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
     }
 
 }

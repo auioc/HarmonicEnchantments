@@ -38,15 +38,16 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  */
 public class FreeRidingEnchantment extends HEEnchantment {
 
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.add(
+        Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK
+    ));
+
     private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
         Enchantments.MENDING, Enchantments.UNBREAKING,
         HEEnchantments.REBELLING_CURSE
         // TODO       HEEnchantments.DINING
     );
 
-    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems(
-        (tag) -> tag.add(Items.CARROT_ON_A_STICK, Items.WARPED_FUNGUS_ON_A_STICK)
-    );
 
     /**
      * Ⅰ: 25 - 75 <br>
@@ -69,7 +70,7 @@ public class FreeRidingEnchantment extends HEEnchantment {
     );
 
     public static Bootstrap.Builder bootstrap() {
-        return Bootstrap.of(BUILDER).tag(EXCLUSIVE, SUPPORTED_ITEMS).treasure().tradeable();
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).treasure().tradeable();
     }
 
 }

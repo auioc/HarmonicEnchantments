@@ -19,10 +19,13 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
- * <b>汲取 Siphoning</b>
+ * <b>TODO 汲取 Siphoning</b>
  * <p>
  * 杀死生物后，根据其最大生命值恢复饥饿值和饱和度，优先回复饥饿值。
  * <ul>
@@ -33,5 +36,35 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class SiphoningEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.addTags(
+        ItemTags.SWORDS, ItemTags.AXES
+    ));
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.LOOTING);
+
+    /**
+     * Ⅰ: 15 - 61 <br>
+     * Ⅱ: 24 - 71 <br>
+     * Ⅲ: 33 - 81 <br>
+     */
+    private static final Cost COST = dynamicCost(15, 9, 61, 9);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        ItemTags.SWORDS,
+        EXCLUSIVE,
+        Rarity.RARE,
+        3,
+        COST,
+        4,
+        EquipmentSlotGroup.HAND
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
+    }
 
 }

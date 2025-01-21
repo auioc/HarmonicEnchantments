@@ -32,18 +32,32 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.datagen.HEBlockTagsProvider;
 import org.auioc.mcmod.harmonicench.datagen.HEEnchantmentTagsProvider;
 import org.auioc.mcmod.harmonicench.datagen.HEItemTagsProvider;
+import org.auioc.mcmod.harmonicench.enchantment.impl.AimEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.BaneOfChampionsEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.BlessingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.BluntEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.DeepStudyEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.DiningEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.EfficacyEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ElectrificationEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ForgingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.FreeRidingEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.HandinessEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.HarvestEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.IceAspectEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.LongEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.LuckOfTheSnowEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.MobAffinityEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ObserverEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.ProficiencyEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.RapierEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.RebellingCurseEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.SacrificingCurseEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.impl.SafeTeleportingEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.SiphoningEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.SnipingEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.SunAffinityEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.impl.TideEnchantment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,40 +67,36 @@ import java.util.stream.Collectors;
 
 public class HEEnchantments {
 
-    public static final ResourceKey<Enchantment> AIM = key("aim"); // TODO
+    public static final ResourceKey<Enchantment> AIM = register("aim", AimEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> BANE_OF_CHAMPIONS = register("bane_of_champions", BaneOfChampionsEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> BLESSING = key("blessing"); // TODO
+    public static final ResourceKey<Enchantment> BLESSING = register("blessing", BlessingEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> BLUNT = register("blunt", BluntEnchantment::bootstrap); // TODO WIP
     public static final ResourceKey<Enchantment> DEEP_STUDY = register("deep_study", DeepStudyEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> DINING = key("dining"); // TODO
+    public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::bootstrap); // TODO
-    public static final ResourceKey<Enchantment> ELECTRIFICATION = key("electrification"); // TODO
-    public static final ResourceKey<Enchantment> FORGING = key("forging"); // TODO
+    public static final ResourceKey<Enchantment> ELECTRIFICATION = register("electrification", ElectrificationEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> HARVEST = key("harvest"); // TODO
+    public static final ResourceKey<Enchantment> HARVEST = register("harvest", HarvestEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> ICE_ASPECT = register("ice_aspect", IceAspectEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> LONG = register("long", LongEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> LUCK_OF_THE_SNOW = register("luck_of_the_snow", LuckOfTheSnowEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> MOB_AFFINITY = key("mob_affinity"); // TODO
-    public static final ResourceKey<Enchantment> OBSERVER = key("observer"); // TODO
-    public static final ResourceKey<Enchantment> PROFICIENCY = key("proficiency"); // TODO
+    public static final ResourceKey<Enchantment> MOB_AFFINITY = register("mob_affinity", MobAffinityEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> OBSERVER = register("observer", ObserverEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> RAPIER = register("rapier", RapierEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> REBELLING_CURSE = register("rebelling_curse", RebellingCurseEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> SACRIFICING_CURSE = key("sacrificing_curse"); // TODO
+    public static final ResourceKey<Enchantment> SACRIFICING_CURSE = register("sacrificing_curse", SacrificingCurseEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> SNIPING = key("sniping"); // TODO
-    public static final ResourceKey<Enchantment> SIPHONING = key("siphoning"); // TODO
-    public static final ResourceKey<Enchantment> SUN_AFFINITY = key("sun_affinity"); // TODO
-    public static final ResourceKey<Enchantment> TIDE = key("tide"); // TODO
+    public static final ResourceKey<Enchantment> SNIPING = register("sniping", SiphoningEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> SIPHONING = register("siphoning", SnipingEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> SUN_AFFINITY = register("sun_affinity", SunAffinityEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> TIDE = register("tide", TideEnchantment::bootstrap); // TODO
 
     // ============================================================================================================== //
 
     private static Map<ResourceKey<Enchantment>, Supplier<HEEnchantment.Bootstrap.Builder>> BOOTSTRAPS;
-
-    private static ResourceKey<Enchantment> key(String name) {
-        return ResourceKey.create(Registries.ENCHANTMENT, HarmonicEnchantments.id(name));
-    }
 
     private static ResourceKey<Enchantment> register(String name, Supplier<HEEnchantment.Bootstrap.Builder> bootstrap) {
         var key = ResourceKey.create(Registries.ENCHANTMENT, HarmonicEnchantments.id(name));

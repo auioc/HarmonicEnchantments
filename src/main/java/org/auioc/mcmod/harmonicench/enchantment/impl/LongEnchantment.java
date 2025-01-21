@@ -46,7 +46,6 @@ public class LongEnchantment extends HEEnchantment {
         Enchantments.SWEEPING_EDGE, HEEnchantments.RAPIER
     );
 
-
     /**
      * Ⅰ:  5 - 20 <br>
      * Ⅱ: 14 - 29 <br>

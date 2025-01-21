@@ -32,6 +32,7 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import net.minecraft.world.item.enchantment.effects.RemoveBinomial;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ItemDamagedEffect;
 
 import java.util.function.Function;
@@ -49,9 +50,7 @@ import java.util.function.Function;
  */
 public class RebellingCurseEnchantment extends HEEnchantment {
 
-    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
-        (tag) -> tag.add() // TODO HEEnchantments.FREE_RIDING
-    );
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(HEEnchantments.FREE_RIDING);
 
     /**
      * Ⅰ:  2 - 50

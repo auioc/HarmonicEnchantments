@@ -19,10 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>饱食修补 Dining</b>
+ * <b>TODO 饱食修补 Dining</b>
  * <p>
  * 食用食物后，将玩家增加的饥饿值转化为该物品的耐久度。
  * <ul>
@@ -33,5 +37,34 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class DiningEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder PRIMARY_ITEMS = primarySupportedItems(t -> { });
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MENDING, Enchantments.INFINITY,
+        HEEnchantments.FREE_RIDING, HEEnchantments.DINING, HEEnchantments.FORGING, HEEnchantments.BLESSING
+    );
+
+    /**
+     * Ⅰ: 25 - 75 <br>
+     */
+    private static final Cost COST = constantCost(25, 75);
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.DURABILITY_ENCHANTABLE,
+        PRIMARY_ITEMS,
+        EXCLUSIVE,
+        Rarity.RARE,
+        1,
+        COST,
+        4,
+        EquipmentSlotGroup.ANY
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(PRIMARY_ITEMS, EXCLUSIVE).tradeable().treasure();
+    }
 
 }

@@ -19,10 +19,13 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
- * <b>亲善 Mob Affinity</b>
+ * <b>TODO 亲善 Mob Affinity</b>
  * <p>
  * 穿戴有此附魔的盔甲时，能更好地得到友好生物们的帮助
  * <ul>
@@ -38,6 +41,34 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author LainIO24
  */
 public class MobAffinityEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.addTags(
+        ItemTags.HEAD_ARMOR, ItemTags.CHEST_ARMOR, ItemTags.LEG_ARMOR, ItemTags.FOOT_ARMOR
+    ));
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(Enchantments.AQUA_AFFINITY);
+
+    /**
+     * Ⅰ: 1 - 41 <br>
+     */
+    private static final Cost COST = constantCost(1, 41);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        ItemTags.HEAD_ARMOR,
+        EXCLUSIVE,
+        Rarity.VERY_RARE,
+        1,
+        COST,
+        4,
+        EquipmentSlotGroup.ARMOR
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
+    }
 
 
 }

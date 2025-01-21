@@ -19,10 +19,12 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 
 /**
- * <b>献祭诅咒 Curse of Sacrificing</b>
+ * <b>TODO 献祭诅咒 Curse of Sacrificing</b>
  * <p>
  * 需要定期杀死生物。
  * <ul>
@@ -34,5 +36,25 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class SacrificingCurseEnchantment extends HEEnchantment {
+
+    /**
+     * Ⅰ:  25 - 50
+     */
+    private static final Cost COST = constantCost(25, 50);
+
+    private static final BuilderFunction BUILDER = define(
+        ItemTags.DURABILITY_ENCHANTABLE,
+        Rarity.RARE,
+        1,
+        COST,
+        8,
+        EquipmentSlotGroup.ANY
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).curse().treasure().tradeable();
+    }
 
 }

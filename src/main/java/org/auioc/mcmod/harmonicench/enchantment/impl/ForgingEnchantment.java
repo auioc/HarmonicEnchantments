@@ -19,10 +19,14 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>锻打 Forging</b>
+ * <b>TODO 锻打 Forging</b>
  * <p>
  * 根据盔甲的总附魔数量，增加护甲值和盔甲韧性。
  * <ul>
@@ -33,5 +37,38 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * @author Libellule505
  */
 public class ForgingEnchantment extends HEEnchantment {
+
+    private static final ItemTagBuilder SUPPORTED_ITEMS = supportedItems((tag) -> tag.add(
+        Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS,
+        Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
+        Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS,
+        Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS
+    ));
+
+    private static final EnchantmentTagBuilder EXCLUSIVE = exclusiveSet(
+        Enchantments.MENDING,
+        HEEnchantments.BLESSING, HEEnchantments.DINING
+    );
+
+    /**
+     * Ⅰ: 1 - 41 <br>
+     */
+    private static final Cost COST = constantCost(1, 41);
+
+    private static final BuilderFunction BUILDER = define(
+        SUPPORTED_ITEMS,
+        EXCLUSIVE,
+        Rarity.RARE,
+        1,
+        COST,
+        2,
+        EquipmentSlotGroup.ARMOR
+    ).andThen((key, ctx, builder) -> builder
+
+    );
+
+    public static Bootstrap.Builder bootstrap() {
+        return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();
+    }
 
 }
