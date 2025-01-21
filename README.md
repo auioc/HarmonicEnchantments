@@ -3,7 +3,7 @@
 <div align="center">
 
 [![GitHub license](https://img.shields.io/github/license/auioc/HarmonicEnchantments?style=flat-square)](/LICENSE)
-[![GitHub release](https://img.shields.io/github/v/release/auioc/HarmonicEnchantments?style=flat-square)](https://github.com/auioc/HarmonicEnchantments/releases/latest)
+[![GitHub release](https://img.shields.io/github/v/release/auioc/HarmonicEnchantments?include_prereleases&style=flat-square)](https://github.com/auioc/HarmonicEnchantments/releases/latest)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/auioc/HarmonicEnchantments/dev-build.yml?branch=1.20-forge&label=dev%20build&style=flat-square)](https://github.com/auioc/HarmonicEnchantments/actions/workflows/dev-build.yml)
 <br/>
 ![Minecraft](https://img.shields.io/static/v1?label=Minecraft&message=1.21.4&color=00aa00&style=flat-square)
