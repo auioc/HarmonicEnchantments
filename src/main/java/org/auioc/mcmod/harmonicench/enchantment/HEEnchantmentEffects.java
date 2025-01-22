@@ -22,6 +22,7 @@ package org.auioc.mcmod.harmonicench.enchantment;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
@@ -29,7 +30,9 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeSpectralArrowDuration;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.EnchantmentCountWrapper;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
 
 public class HEEnchantmentEffects {
@@ -43,7 +46,8 @@ public class HEEnchantmentEffects {
 
     // ============================================================================================================== //
 
-    public static final DeferredRegister<MapCodec<? extends EnchantmentEntityEffect>> ENTITY_EFFECT_TYPES = DeferredRegister.create(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, HarmonicEnchantments.MOD_ID);
+    public static final DeferredRegister<MapCodec<? extends EnchantmentEntityEffect>> ENTITY_EFFECT_TYPES =
+        DeferredRegister.create(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, HarmonicEnchantments.MOD_ID);
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<ChangeSpectralArrowDuration>> CHANGE_SPECTRAL_ARROW_DURATION =
         ENTITY_EFFECT_TYPES.register("change_spectral_arrow_duration", () -> ChangeSpectralArrowDuration.CODEC);
@@ -53,5 +57,16 @@ public class HEEnchantmentEffects {
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<ChangeFrozenTicks>> CHANGE_FROZEN_TICKS =
         ENTITY_EFFECT_TYPES.register("change_frozen_ticks", () -> ChangeFrozenTicks.CODEC);
+
+    // ============================================================================================================== //
+
+    public static final DeferredRegister<MapCodec<? extends EnchantmentLocationBasedEffect>> LOCATION_BASED_EFFECT_TYPES =
+        DeferredRegister.create(Registries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE, HarmonicEnchantments.MOD_ID);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentLocationBasedEffect>, MapCodec<EnchantmentCountWrapper>> ENCHANTMENTS_COUNT_WRAPPER =
+        LOCATION_BASED_EFFECT_TYPES.register("enchantments_count_wrapper", () -> EnchantmentCountWrapper.CODEC);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentLocationBasedEffect>, MapCodec<HEAttributeEffect>> ATTRIBUTE =
+        LOCATION_BASED_EFFECT_TYPES.register("attribute", () -> HEAttributeEffect.CODEC);
 
 }

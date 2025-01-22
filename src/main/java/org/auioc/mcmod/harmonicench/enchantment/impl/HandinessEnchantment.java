@@ -30,7 +30,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
 import org.auioc.mcmod.arnicalib.game.enchantment.HLevelBasedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class HandinessEnchantment extends HEEnchantment {
         List.of(6F, 6F),
         HLevelBasedValue.sum(
             LevelBasedValue.constant(6F),
-            HELevelBasedValue.harmonic(3, 2F, LevelBasedValue.perLevel(-1F, 1F))
+            HEValueProviders.harmonic(3, 2F, LevelBasedValue.perLevel(-1F, 1F))
         )
     );
     private static final LevelBasedValue SPEED_AMPLIFIER = LevelBasedValue.lookup(List.of(0F), LevelBasedValue.constant(1F));

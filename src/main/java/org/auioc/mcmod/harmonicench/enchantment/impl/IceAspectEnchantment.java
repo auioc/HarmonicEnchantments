@@ -35,7 +35,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import org.auioc.mcmod.arnicalib.game.critereon.FrozenPredicate;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
 
 /**
@@ -67,7 +67,7 @@ public class IceAspectEnchantment extends HEEnchantment {
     private static final LevelBasedValue SLOWNESS_AMPLIFIER = LevelBasedValue.lookup(List.of(0F), LevelBasedValue.constant(1F));
     // <code>∑(lvl,k=1)(5/k) - 3.5</code>
     private static final LevelBasedValue SLOWNESS_DURATION_BASE = HLevelBasedValue.sum(
-        new HELevelBasedValue.SigmaSum(
+        new HEValueProviders.SigmaSum(
             1,
             new LevelBasedValue.Fraction(
                 LevelBasedValue.constant(5F),
@@ -77,7 +77,7 @@ public class IceAspectEnchantment extends HEEnchantment {
         LevelBasedValue.constant(-3.5F)
     );
     // <code>∑(lvl,k=1)(2.5/k)</code>
-    private static final LevelBasedValue SLOWNESS_DURATION_ADDITION = new HELevelBasedValue.SigmaSum(
+    private static final LevelBasedValue SLOWNESS_DURATION_ADDITION = new HEValueProviders.SigmaSum(
         1,
         new LevelBasedValue.Fraction(
             LevelBasedValue.constant(2.5F),
@@ -92,14 +92,14 @@ public class IceAspectEnchantment extends HEEnchantment {
      * set <code>∑(lvl,k=1)(200/k)</code>
      */
     private static final EnchantmentValueEffect FROZEN_TICKS_BASE = new SetValue(
-        HELevelBasedValue.harmonic(200F, LevelBasedValue.perLevel(1F))
+        HEValueProviders.harmonic(200F, LevelBasedValue.perLevel(1F))
     );
 
     /**
      * add <code>∑(lvl,k=1)(100/k)</code>
      */
     private static final EnchantmentValueEffect FROZEN_TICKS_ADDITION = new AddValue(
-        HELevelBasedValue.harmonic(100F, LevelBasedValue.perLevel(1F))
+        HEValueProviders.harmonic(100F, LevelBasedValue.perLevel(1F))
     );
 
     private static final BuilderFunction BUILDER = define(

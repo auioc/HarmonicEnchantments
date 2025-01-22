@@ -30,7 +30,7 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
 import net.minecraft.world.item.enchantment.effects.MultiplyValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeSpectralArrowDuration;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
 
@@ -68,7 +68,7 @@ public class EfficacyEnchantment extends HEEnchantment {
     /**
      * <code>amplifier + ∑(lvl,k=1)(1/k)</code>
      */
-    private static final EnchantmentValueEffect AMPLIFIER_BONUS = new AddValue(HELevelBasedValue.harmonic());
+    private static final EnchantmentValueEffect AMPLIFIER_BONUS = new AddValue(HEValueProviders.harmonic());
 
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,

@@ -27,7 +27,7 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffects;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 import org.auioc.mcmod.harmonicench.handler.HEEventHandler;
 import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 
@@ -48,9 +48,10 @@ public final class HEInitialization {
 
     private static void modSetup() {
         modEventBus.addListener(HEInitialization::commonSetup);
-        HELevelBasedValue.TYPES.register(modEventBus);
+        HEValueProviders.TYPES.register(modEventBus);
         HEEnchantmentEffectComponents.TYPES.register(modEventBus);
         HEEnchantmentEffects.ENTITY_EFFECT_TYPES.register(modEventBus);
+        HEEnchantmentEffects.LOCATION_BASED_EFFECT_TYPES.register(modEventBus);
         modEventBus.addListener(HEEnchantments::register);
         modEventBus.addListener(HEInitialization::register);
     }

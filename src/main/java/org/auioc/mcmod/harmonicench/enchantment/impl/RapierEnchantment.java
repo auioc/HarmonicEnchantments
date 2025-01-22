@@ -33,7 +33,7 @@ import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class RapierEnchantment extends HEEnchantment {
     /**
      * <code>∑(lvl,k=1)[1/(k+9)]</code>
      */
-    private static final LevelBasedValue ATTACK_SPEED_BONUS = HELevelBasedValue.harmonic(
+    private static final LevelBasedValue ATTACK_SPEED_BONUS = HEValueProviders.harmonic(
         LevelBasedValue.perLevel(10F, 1F)
     );
 

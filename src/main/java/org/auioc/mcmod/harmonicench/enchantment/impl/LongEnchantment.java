@@ -30,7 +30,7 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 
 /**
  * <b>延展之刃 Long</b>
@@ -56,7 +56,7 @@ public class LongEnchantment extends HEEnchantment {
     /**
      * <code>∑(lvl,k=1)(3/4k)</code>
      */
-    private static final LevelBasedValue ATTACK_SPEED_BONUS = HELevelBasedValue.harmonic(
+    private static final LevelBasedValue ATTACK_SPEED_BONUS = HEValueProviders.harmonic(
         3F, LevelBasedValue.perLevel(4F)
     );
 

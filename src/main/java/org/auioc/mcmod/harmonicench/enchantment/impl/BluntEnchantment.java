@@ -41,7 +41,7 @@ import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 
 /**
@@ -88,7 +88,7 @@ public class BluntEnchantment extends HEEnchantment {
     /**
      * <code>∑(lvl,k=1)(5/k)</code>
      */
-    private static final LevelBasedValue EFFECT_DURATION = HELevelBasedValue.harmonic(
+    private static final LevelBasedValue EFFECT_DURATION = HEValueProviders.harmonic(
         5F, LevelBasedValue.perLevel(1F)
     );
     private static final LevelBasedValue EFFECT_AMPLIFIER = LevelBasedValue.constant(0F);

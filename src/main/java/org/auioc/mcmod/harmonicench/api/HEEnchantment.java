@@ -27,6 +27,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -300,6 +301,10 @@ public class HEEnchantment {
 
     protected static HolderGetter<Block> lookupBlock(BootstrapContext<Enchantment> ctx) {
         return ctx.lookup(Registries.BLOCK);
+    }
+
+    protected static HolderGetter<EntityType<?>> lookupEntity(BootstrapContext<Enchantment> ctx) {
+        return ctx.lookup(Registries.ENTITY_TYPE);
     }
 
 }

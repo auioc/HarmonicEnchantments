@@ -29,7 +29,7 @@ import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
 import net.minecraft.world.item.enchantment.effects.SetValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
-import org.auioc.mcmod.harmonicench.enchantment.HELevelBasedValue;
+import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 
@@ -59,7 +59,7 @@ public class SafeTeleportingEnchantment extends HEEnchantment {
     /**
      * <code>∑(lvl,k=1)(20/k)</code>
      */
-    private static final LevelBasedValue RESISTANCE_DURATION = HELevelBasedValue.harmonic(
+    private static final LevelBasedValue RESISTANCE_DURATION = HEValueProviders.harmonic(
         20F, LevelBasedValue.perLevel(1F)
     );
 
