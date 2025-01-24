@@ -24,6 +24,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffects;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
@@ -67,6 +68,9 @@ public final class HEInitialization {
     private static void register(RegisterEvent event) {
         if (event.getRegistryKey().compareTo(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE) == 0) {
             HEEnchantmentEffects.bootstrap();
+        }
+        if (event.getRegistryKey().compareTo(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE) == 0) {
+            HEEnchantedValue.bootstrap();
         }
     }
 

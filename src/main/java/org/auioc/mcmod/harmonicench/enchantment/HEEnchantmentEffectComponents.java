@@ -34,6 +34,7 @@ import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ItemDamagedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.LootBonusCountEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
@@ -55,6 +56,10 @@ public class HEEnchantmentEffectComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Map<ItemAbility, EventResult>>> ITEM_ABILITIES = register(
         "item_abilities", b -> b.persistent(Codec.unboundedMap(ItemAbility.CODEC, EnumCodec.byName(EventResult.class)))
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<HEAttributeEffect>>> ATTRIBUTES = register(
+        "attributes", b -> b.persistent(HEAttributeEffect.CODEC.codec().listOf())
     );
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<LootBonusCountEffect>>>> LOOT_BONUS_COUNT = register(

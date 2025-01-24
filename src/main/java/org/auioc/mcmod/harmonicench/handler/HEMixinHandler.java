@@ -19,18 +19,33 @@
 
 package org.auioc.mcmod.harmonicench.handler;
 
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.mixin.MixinArrow;
+import org.auioc.mcmod.harmonicench.mixin.MixinEnchantmentHelper;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 public class HEMixinHandler {
 
+    /**
+     * @see MixinArrow#doPostHurtEffects
+     */
     public static void handlerArrowPostHurtEffect(Arrow arrow, LivingEntity target) {
         if (target.level().isClientSide()) {
             return;
@@ -60,6 +75,36 @@ public class HEMixinHandler {
         }
 
         mobEffects.forEach(e -> target.addEffect(e, source));
+    }
+
+    /**
+     * @see MixinEnchantmentHelper#forEachModifier(ItemStack, EquipmentSlotGroup, BiConsumer, CallbackInfo)
+     * @see EnchantmentHelper#forEachModifier(ItemStack, EquipmentSlotGroup, BiConsumer)
+     */
+    public static void forEachModifier(ItemStack item, EquipmentSlotGroup slotGroup, BiConsumer<Holder<Attribute>, AttributeModifier> action) {
+        HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.ATTRIBUTES, (ench, effects, lvl) -> {
+            if (ench.value().definition().slots().contains(slotGroup)) {
+                effects.forEach(e -> action.accept(
+                    e.attribute(),
+                    e.getModifier(lvl, new EnchantedItemInUse(item, null, null, i -> { }), slotGroup)
+                ));
+            }
+        });
+    }
+
+    /**
+     * @see MixinEnchantmentHelper#forEachModifier(ItemStack, EquipmentSlot, BiConsumer, CallbackInfo)
+     * @see EnchantmentHelper#forEachModifier(ItemStack, EquipmentSlot, BiConsumer)
+     */
+    public static void forEachModifier(ItemStack item, EquipmentSlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> action) {
+        HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.ATTRIBUTES, (ench, effects, lvl) -> {
+            if (ench.value().matchingSlot(slot)) {
+                effects.forEach(e -> action.accept(
+                    e.attribute(),
+                    e.getModifier(lvl, new EnchantedItemInUse(item, slot, null, i -> { }), slot)
+                ));
+            }
+        });
     }
 
 }

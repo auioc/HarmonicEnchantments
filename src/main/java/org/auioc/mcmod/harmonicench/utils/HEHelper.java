@@ -21,11 +21,14 @@ package org.auioc.mcmod.harmonicench.utils;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.auioc.mcmod.harmonicench.api.EnchantmentOnItemVisitor;
 import org.auioc.mcmod.harmonicench.api.EnchantmentVisitor;
@@ -70,6 +73,19 @@ public class HEHelper {
 
     public static LevelBasedValue ticksToSeconds(LevelBasedValue value) {
         return new LevelBasedValue.Fraction(value, LevelBasedValue.constant(0.05F));
+    }
+
+    // ============================================================================================================== //
+
+    public static ItemEnchantments getAllEnchantments(ItemStack item) {
+        var enchantments = item.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+        var lookup = CommonHooks.resolveLookup(net.minecraft.core.registries.Registries.ENCHANTMENT);
+        if (lookup != null) {
+            enchantments = item.getAllEnchantments(lookup);
+        }
+
+        return enchantments;
     }
 
 }

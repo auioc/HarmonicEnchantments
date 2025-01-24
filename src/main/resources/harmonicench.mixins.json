@@ -3,8 +3,9 @@
     "package": "org.auioc.mcmod.harmonicench.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "SpectralArrowAccessor",
-        "MixinArrow"
+        "MixinArrow",
+        "MixinEnchantmentHelper",
+        "SpectralArrowAccessor"
     ],
     "client": [],
     "server": [],

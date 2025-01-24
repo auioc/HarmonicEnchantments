@@ -30,7 +30,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeSpectralArrowDuration;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
-import org.auioc.mcmod.harmonicench.enchantment.effect.EnchantmentCountWrapper;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
@@ -62,9 +61,6 @@ public class HEEnchantmentEffects {
 
     public static final DeferredRegister<MapCodec<? extends EnchantmentLocationBasedEffect>> LOCATION_BASED_EFFECT_TYPES =
         DeferredRegister.create(Registries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE, HarmonicEnchantments.MOD_ID);
-
-    public static final DeferredHolder<MapCodec<? extends EnchantmentLocationBasedEffect>, MapCodec<EnchantmentCountWrapper>> ENCHANTMENTS_COUNT_WRAPPER =
-        LOCATION_BASED_EFFECT_TYPES.register("enchantments_count_wrapper", () -> EnchantmentCountWrapper.CODEC);
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentLocationBasedEffect>, MapCodec<HEAttributeEffect>> ATTRIBUTE =
         LOCATION_BASED_EFFECT_TYPES.register("attribute", () -> HEAttributeEffect.CODEC);

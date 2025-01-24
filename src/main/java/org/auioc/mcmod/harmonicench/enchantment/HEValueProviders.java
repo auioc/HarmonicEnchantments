@@ -29,15 +29,12 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.arnicalib.base.math.MathUtils;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
-import org.auioc.mcmod.harmonicench.api.HEValueProvider;
 
 public class HEValueProviders {
 
     public static final DeferredRegister<MapCodec<? extends LevelBasedValue>> TYPES = DeferredRegister.create(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE, HarmonicEnchantments.MOD_ID);
 
     public static final DeferredHolder<MapCodec<? extends LevelBasedValue>, MapCodec<SigmaSum>> SIGMA_SUM = TYPES.register("sigma_sum", () -> SigmaSum.CODEC);
-
-    public static final DeferredHolder<MapCodec<? extends LevelBasedValue>, MapCodec<LinearF>> LINEAR = TYPES.register("linear", () -> LinearF.CODEC);
 
     // ============================================================================================================== //
 
@@ -92,31 +89,6 @@ public class HEValueProviders {
 
         @Override
         public MapCodec<SigmaSum> codec() { return CODEC; }
-
-    }
-
-    // ============================================================================================================== //
-
-    public static LinearF linear(float slope, float intercept) { return new LinearF(slope, intercept); }
-
-    public static LinearF linear(float slope) { return new LinearF(slope, 0.0F); }
-
-    public static LinearF linear() { return new LinearF(1.0F, 0.0F); }
-
-    public record LinearF(float slope, float intercept) implements HEValueProvider {
-
-        public static final MapCodec<LinearF> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.fieldOf("slope").forGetter(o -> o.slope),
-            Codec.FLOAT.fieldOf("intercept").forGetter(o -> o.intercept)
-        ).apply(instance, LinearF::new));
-
-        @Override
-        public float calculate(float input) {
-            return slope * input + intercept;
-        }
-
-        @Override
-        public MapCodec<LinearF> codec() { return CODEC; }
 
     }
 

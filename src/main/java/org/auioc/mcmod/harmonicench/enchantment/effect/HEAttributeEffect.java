@@ -25,58 +25,61 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
-import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.phys.Vec3;
-import org.auioc.mcmod.harmonicench.api.HELocationBasedEffect;
-import org.auioc.mcmod.harmonicench.api.HEValueProvider;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 
 /**
- * Variant of {@link EnchantmentAttributeEffect} that supports float input
+ * Variant of {@link EnchantmentAttributeEffect} that supports {@link HEEnchantedValue}
  */
 public record HEAttributeEffect(
     ResourceLocation id,
     Holder<Attribute> attribute,
-    LevelBasedValue amount,
+    HEEnchantedValue amount,
     AttributeModifier.Operation operation
-) implements HELocationBasedEffect {
+) implements EnchantmentLocationBasedEffect {
 
     public static final MapCodec<HEAttributeEffect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ResourceLocation.CODEC.fieldOf("id").forGetter(o -> o.id),
         Attribute.CODEC.fieldOf("attribute").forGetter(o -> o.attribute),
-        LevelBasedValue.CODEC.fieldOf("amount").forGetter(o -> o.amount),
+        HEEnchantedValue.CODEC.fieldOf("amount").forGetter(o -> o.amount),
         AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(o -> o.operation)
     ).apply(instance, HEAttributeEffect::new));
 
-    public void onChangedBlock(ServerLevel level, float input, EnchantedItemInUse item, Entity entity, Vec3 pos, boolean applyTransientEffects) {
+    @Override
+    public void onChangedBlock(ServerLevel level, int lvl, EnchantedItemInUse item, Entity entity, Vec3 pos, boolean applyTransientEffects) {
         if (applyTransientEffects && entity instanceof LivingEntity living) {
-            living.getAttributes().addTransientAttributeModifiers(this.makeAttributeMap(input, item.inSlot()));
+            living.getAttributes().addTransientAttributeModifiers(this.makeAttributeMap(lvl, item, item.inSlot()));
         }
     }
 
-    public void onDeactivated(EnchantedItemInUse item, Entity entity, Vec3 pos, float input) {
+    @Override
+    public void onDeactivated(EnchantedItemInUse item, Entity entity, Vec3 pos, int lvl) {
         if (entity instanceof LivingEntity living) {
-            living.getAttributes().removeAttributeModifiers(this.makeAttributeMap(input, item.inSlot()));
+            living.getAttributes().removeAttributeModifiers(this.makeAttributeMap(lvl, item, item.inSlot()));
         }
     }
 
-    private HashMultimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(float input, EquipmentSlot slot) {
+    public AttributeModifier getModifier(int lvl, EnchantedItemInUse item, StringRepresentable slot) {
+        return new AttributeModifier(
+            id.withSuffix("/" + slot.getSerializedName()),
+            amount.calculate(lvl, item),
+            this.operation()
+        );
+    }
+
+    private HashMultimap<Holder<Attribute>, AttributeModifier> makeAttributeMap(int lvl, EnchantedItemInUse item, EquipmentSlot slot) {
         var map = HashMultimap.<Holder<Attribute>, AttributeModifier>create();
         if (slot == null) { return map; }
-        map.put(
-            this.attribute,
-            new AttributeModifier(
-                id.withSuffix("/" + slot.getSerializedName()),
-                HEValueProvider.calculate(amount, input),
-                this.operation()
-            )
-        );
+        map.put(this.attribute, getModifier(lvl, item, slot));
         return map;
     }
 
