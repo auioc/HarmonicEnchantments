@@ -23,6 +23,7 @@ import com.google.common.collect.HashMultimap;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +55,10 @@ public record HEAttributeEffect(
         HEEnchantedValue.CODEC.fieldOf("amount").forGetter(o -> o.amount),
         AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(o -> o.operation)
     ).apply(instance, HEAttributeEffect::new));
+
+    public HEAttributeEffect(ResourceKey<Enchantment> enchantment, Holder<Attribute> attribute, HEEnchantedValue amount, AttributeModifier.Operation operation) {
+        this(ResourceLocation.fromNamespaceAndPath(enchantment.location().getNamespace(), "enchantment." + enchantment.location().getPath()), attribute, amount, operation);
+    }
 
     @Override
     public void onChangedBlock(ServerLevel level, int lvl, EnchantedItemInUse item, Entity entity, Vec3 pos, boolean applyTransientEffects) {

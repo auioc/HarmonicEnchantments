@@ -20,13 +20,20 @@
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
+
+import java.util.List;
 
 /**
- * <b>TODO 锻打 Forging</b>
+ * <b>锻打 Forging</b>
  * <p>
  * 根据盔甲的总附魔数量，增加护甲值和盔甲韧性。
  * <ul>
@@ -55,6 +62,14 @@ public class ForgingEnchantment extends HEEnchantment {
      */
     private static final Cost COST = constantCost(1, 41);
 
+    /**
+     * <code>enchantmentCount × ∑(lvl,k=1)(1/2k)</code>
+     */
+    private static final HEEnchantedValue BONUS = HEEnchantedValue.product(
+        HEEnchantedValue.countEnchantments(),
+        HEEnchantedValue.harmonic(HEEnchantedValue.linear(2.0F))
+    );
+
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
         EXCLUSIVE,
@@ -64,7 +79,23 @@ public class ForgingEnchantment extends HEEnchantment {
         2,
         EquipmentSlotGroup.ARMOR
     ).andThen((key, ctx, builder) -> builder
-
+        .withSpecialEffect(
+            HEEnchantmentEffectComponents.ATTRIBUTES.get(),
+            List.of(
+                new HEAttributeEffect(
+                    HEEnchantments.FORGING,
+                    Attributes.ARMOR,
+                    BONUS,
+                    AttributeModifier.Operation.ADD_VALUE
+                ),
+                new HEAttributeEffect(
+                    HEEnchantments.FORGING,
+                    Attributes.ARMOR_TOUGHNESS,
+                    BONUS,
+                    AttributeModifier.Operation.ADD_VALUE
+                )
+            )
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {

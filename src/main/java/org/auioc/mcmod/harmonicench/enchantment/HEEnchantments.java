@@ -75,7 +75,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> ELECTRIFICATION = register("electrification", ElectrificationEnchantment::bootstrap); // TODO
-    public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> HARVEST = register("harvest", HarvestEnchantment::bootstrap); // TODO
