@@ -29,7 +29,9 @@ import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeSpectralArrowDuration;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.DestroyBlock;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.DropHead;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
@@ -56,6 +58,13 @@ public class HEEnchantmentEffects {
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<ChangeFrozenTicks>> CHANGE_FROZEN_TICKS =
         ENTITY_EFFECT_TYPES.register("change_frozen_ticks", () -> ChangeFrozenTicks.CODEC);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<DropHead>> DROP_HEAD =
+        ENTITY_EFFECT_TYPES.register("drop_head", () -> DropHead.CODEC);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<DestroyBlock>> DESTROY_BLOCK =
+        ENTITY_EFFECT_TYPES.register("destroy_block", () -> DestroyBlock.CODEC);
+
 
     // ============================================================================================================== //
 
