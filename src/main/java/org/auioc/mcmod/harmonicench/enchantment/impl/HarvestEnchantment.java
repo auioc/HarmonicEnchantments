@@ -19,14 +19,39 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.SetValue;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import org.auioc.mcmod.arnicalib.game.critereon.HealthPredicate;
+import org.auioc.mcmod.arnicalib.game.loot.predicate.EnchantmentLevelCondition;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.effect.DestroyBlock;
+import org.auioc.mcmod.harmonicench.enchantment.effect.DropHead;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * <b>TODO 收割 Harvest</b>
+ * <b>收割 Harvest</b>
  * <p>
  * 提高收割作物（以及生物）的速度。
  * <ul>
@@ -64,9 +89,61 @@ public class HarvestEnchantment extends HEEnchantment {
         COST,
         1,
         EquipmentSlotGroup.HAND
-    ).andThen((key, ctx, builder) -> builder
-
+    ).andThen((key, ctx, builder) -> {
+            builder.withEffect(
+                EnchantmentEffectComponents.POST_ATTACK,
+                EnchantmentTarget.ATTACKER,
+                EnchantmentTarget.VICTIM,
+                new DropHead(),
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().subPredicate(HealthPredicate.current(MinMaxBounds.Doubles.atMost(0.0D)))
+                )
+            );
+            killIf(builder, MinMaxBounds.Ints.exactly(1), MinMaxBounds.Doubles.atMost(0.15D));
+            killIf(builder, MinMaxBounds.Ints.exactly(2), MinMaxBounds.Doubles.atMost(0.30D));
+            killIf(builder, MinMaxBounds.Ints.atLeast(3), MinMaxBounds.Doubles.atMost(0.45D));
+            destroyCropsIf(ctx, builder, MinMaxBounds.Ints.exactly(1), 1);
+            destroyCropsIf(ctx, builder, MinMaxBounds.Ints.exactly(2), 2);
+            destroyCropsIf(ctx, builder, MinMaxBounds.Ints.atLeast(3), 3);
+            return builder;
+        }
     );
+
+    private static void killIf(Enchantment.Builder builder, MinMaxBounds.Ints lvl, MinMaxBounds.Doubles healthPercent) {
+        builder.withEffect(
+            EnchantmentEffectComponents.DAMAGE,
+            new SetValue(LevelBasedValue.constant(Float.MAX_VALUE)),
+            AllOfCondition.allOf(
+                EnchantmentLevelCondition.of(lvl),
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().subPredicate(HealthPredicate.percent(healthPercent))
+                )
+            )
+        );
+    }
+
+    private static void destroyCropsIf(BootstrapContext<Enchantment> ctx, Enchantment.Builder builder, MinMaxBounds.Ints lvl, int d) {
+        var pos1 = BlockPos.ZERO.offset(d, 0, d);
+        var pos2 = BlockPos.ZERO.offset(-d, 0, -d);
+        List<Vec3i> offsets = new ArrayList<>(4 * d * d + 4 * d + 1);
+        for (var pos : BlockPos.betweenClosed(pos1, pos2)) {
+            if (!BlockPos.ZERO.equals(pos)) {
+                offsets.add(new Vec3i(pos.getX(), pos.getY(), pos.getZ()));
+            }
+        }
+        builder.withEffect(
+            HEEnchantmentEffectComponents.BLOCK_DESTROYED.get(),
+            new DestroyBlock(offsets, BlockPredicate.matchesTag(BlockTags.CROPS)),
+            AllOfCondition.allOf(
+                EnchantmentLevelCondition.of(lvl),
+                LocationCheck.checkLocation(LocationPredicate.Builder.location()
+                    .setBlock(net.minecraft.advancements.critereon.BlockPredicate.Builder.block().of(lookupBlock(ctx), BlockTags.CROPS))
+                )
+            )
+        );
+    }
 
     public static Bootstrap.Builder bootstrap() {
         return Bootstrap.of(BUILDER).tag(SUPPORTED_ITEMS, EXCLUSIVE).tradeable();

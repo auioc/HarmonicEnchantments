@@ -78,7 +78,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> HANDINESS = register("handiness", HandinessEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> HARVEST = register("harvest", HarvestEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> HARVEST = register("harvest", HarvestEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> ICE_ASPECT = register("ice_aspect", IceAspectEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> LONG = register("long", LongEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> LUCK_OF_THE_SNOW = register("luck_of_the_snow", LuckOfTheSnowEnchantment::bootstrap);
