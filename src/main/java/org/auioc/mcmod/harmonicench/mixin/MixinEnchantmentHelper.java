@@ -20,18 +20,24 @@
 package org.auioc.mcmod.harmonicench.mixin;
 
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.auioc.mcmod.harmonicench.handler.HEMixinHandler;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.function.BiConsumer;
 
@@ -59,6 +65,22 @@ public class MixinEnchantmentHelper {
     )
     private static void forEachModifier(ItemStack stack, EquipmentSlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> action, CallbackInfo ci) {
         HEMixinHandler.forEachModifier(stack, slot, action);
+    }
+
+    @Inject(
+        method = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;modifyDamage(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;F)F",
+        at = @At(value = "RETURN"),
+        locals = LocalCapture.CAPTURE_FAILHARD,
+        require = 1,
+        allow = 1,
+        cancellable = true
+    )
+    private static void modifyDamage(
+        ServerLevel level, ItemStack tool, Entity entity, DamageSource damageSource, float damage,
+        CallbackInfoReturnable<Float> cir,
+        MutableFloat mutablefloat
+    ) {
+        HEMixinHandler.modifyDamage(level, tool, entity, damageSource, mutablefloat);
     }
 
 }

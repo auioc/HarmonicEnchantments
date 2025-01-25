@@ -23,6 +23,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -58,6 +59,7 @@ public class HELootContextParamSets {
         "enchanted_direct_attack",
         b -> b
             .required(LootContextParams.TOOL)
+            .required(LootContextParams.ENCHANTMENT_LEVEL)
             .required(LootContextParams.THIS_ENTITY)
             .required(LootContextParams.ORIGIN)
             .required(LootContextParams.ATTACKING_ENTITY)
@@ -71,6 +73,27 @@ public class HELootContextParamSets {
             .withParameter(LootContextParams.ORIGIN, target.position())
             .withParameter(LootContextParams.ATTACKING_ENTITY, source)
             .create(ENCHANTED_DIRECT_ATTACK);
+        return new LootContext.Builder(params).create(Optional.empty());
+    }
+
+    public static final ContextKeySet ENCHANTED_BLOCK_DESTROYED = register(
+        "enchanted_block_destroyed",
+        b -> b
+            .required(LootContextParams.TOOL)
+            .required(LootContextParams.ENCHANTMENT_LEVEL)
+            .required(LootContextParams.THIS_ENTITY)
+            .required(LootContextParams.ORIGIN)
+            .required(LootContextParams.BLOCK_STATE)
+    );
+
+    public static LootContext enchantedBlockDestroyed(ServerLevel level, int lvl, ItemStack tool, Entity entity, Vec3 origin, BlockState block) {
+        var params = new LootParams.Builder(level)
+            .withParameter(LootContextParams.TOOL, tool)
+            .withParameter(LootContextParams.ENCHANTMENT_LEVEL, lvl)
+            .withParameter(LootContextParams.THIS_ENTITY, entity)
+            .withParameter(LootContextParams.ORIGIN, origin)
+            .withParameter(LootContextParams.BLOCK_STATE, block)
+            .create(ENCHANTED_BLOCK_DESTROYED);
         return new LootContext.Builder(params).create(Optional.empty());
     }
 

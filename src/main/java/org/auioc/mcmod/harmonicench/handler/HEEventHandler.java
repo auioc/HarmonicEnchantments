@@ -24,10 +24,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.auioc.mcmod.arnicalib.base.event.CancelFlag;
 import org.auioc.mcmod.arnicalib.base.event.EventResult;
@@ -134,5 +136,21 @@ public class HEEventHandler {
     //    public static void onGetEnchantments(GetEnchantmentLevelEvent event) {
     //        event.getEnchantments().removeIf((e) -> true);
     //    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (event.getPlayer() instanceof ServerPlayer player) {
+            HEHelper.runIterationOnEquipment(player, HEEnchantmentEffectComponents.BLOCK_DESTROYED, (ench, effects, lvl, item) -> {
+                var pos = Vec3.atCenterOf(event.getPos());
+                var level = player.serverLevel();
+                Enchantment.applyEffects(
+                    effects,
+                    HELootContextParamSets.enchantedBlockDestroyed(level, lvl, item.itemStack(), player, pos, event.getState()),
+                    (effect) -> effect.apply(level, lvl, item, player, pos)
+                );
+            });
+        }
+    }
+
 
 }

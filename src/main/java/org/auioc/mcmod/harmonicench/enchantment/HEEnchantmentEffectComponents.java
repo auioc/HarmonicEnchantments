@@ -24,6 +24,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -84,6 +85,10 @@ public class HEEnchantmentEffectComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<TargetedConditionalEffect<CriticalHitEffect>>>> CRITICAL_HIT = register(
         "critical_hit", b -> b.persistent(TargetedConditionalEffect.codec(CriticalHitEffect.CODEC, HELootContextParamSets.ENCHANTED_DIRECT_ATTACK).listOf())
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> BLOCK_DESTROYED = register(
+        "block_destroyed", b -> b.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, HELootContextParamSets.ENCHANTED_BLOCK_DESTROYED).listOf())
     );
 
 }

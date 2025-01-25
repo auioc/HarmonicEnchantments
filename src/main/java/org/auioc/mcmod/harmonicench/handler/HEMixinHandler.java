@@ -21,7 +21,9 @@ package org.auioc.mcmod.harmonicench.handler;
 
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.mixin.MixinArrow;
 import org.auioc.mcmod.harmonicench.mixin.MixinEnchantmentHelper;
@@ -105,6 +108,14 @@ public class HEMixinHandler {
                 ));
             }
         });
+    }
+
+    /**
+     * @see MixinEnchantmentHelper#modifyDamage
+     * @see EnchantmentHelper#modifyDamage
+     */
+    public static void modifyDamage(ServerLevel level, ItemStack item, Entity entity, DamageSource damageSource, MutableFloat damage) {
+
     }
 
 }
