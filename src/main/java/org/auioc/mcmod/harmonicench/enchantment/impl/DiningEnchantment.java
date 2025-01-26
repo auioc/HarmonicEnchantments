@@ -23,7 +23,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 
 /**
  * <b>TODO 饱食修补 Dining</b>
@@ -50,6 +52,8 @@ public class DiningEnchantment extends HEEnchantment {
      */
     private static final Cost COST = constantCost(25, 75);
 
+    private static final int REPAIR_PRE_FOOD_POINT = 10;
+
     private static final BuilderFunction BUILDER = define(
         ItemTags.DURABILITY_ENCHANTABLE,
         PRIMARY_ITEMS,
@@ -60,7 +64,10 @@ public class DiningEnchantment extends HEEnchantment {
         4,
         EquipmentSlotGroup.ANY
     ).andThen((key, ctx, builder) -> builder
-
+        .withEffect(
+            HEEnchantmentEffectComponents.EATING.get(),
+            EatingEffect.repairWithFood(REPAIR_PRE_FOOD_POINT)
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {
