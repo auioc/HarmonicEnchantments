@@ -31,10 +31,12 @@ import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.auioc.mcmod.arnicalib.base.event.CancelFlag;
 import org.auioc.mcmod.arnicalib.base.event.EventResult;
 import org.auioc.mcmod.arnicalib.game.event.ItemAbilityCheckEvent;
 import org.auioc.mcmod.arnicalib.game.event.ItemDamageEvent;
+import org.auioc.mcmod.arnicalib.game.event.PlayerEatEvent;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
@@ -152,5 +154,29 @@ public class HEEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerEat(PlayerEatEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            int originalNutrition = event.getNutrition();
+            float originalSaturation = event.getSaturation();
+            var nutrition = new MutableInt(originalNutrition);
+            var saturation = new MutableFloat(originalSaturation);
+            var cancelFlag = new CancelFlag();
+            var food = event.getFood();
+            HEHelper.runIterationOnEquipment(player, HEEnchantmentEffectComponents.EATING, (ench, effects, lvl, item) -> {
+                Enchantment.applyEffects(
+                    effects,
+                    Enchantment.entityContext(player.serverLevel(), lvl, player, player.position()),
+                    (effect) -> effect.apply(player, lvl, item, food, nutrition, saturation, cancelFlag)
+                );
+            });
+            event.setCanceled(cancelFlag.isCanceled());
+            if (originalNutrition != nutrition.intValue() || originalSaturation != saturation.floatValue()) {
+                player.lastSentFood = -99999999; // (AccessTransformer) Ensure food data will be synchronized to the client
+                event.setNutrition(nutrition.intValue());
+                event.setSaturation(saturation.floatValue());
+            }
+        }
+    }
 
 }

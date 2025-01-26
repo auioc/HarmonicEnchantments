@@ -32,6 +32,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DestroyBlock;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DropHead;
+import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
@@ -43,6 +44,7 @@ public class HEEnchantmentEffects {
         DimensionTravelEffect.bootstrap();
         EnderPearlLandedEffect.bootstrap();
         CriticalHitEffect.bootstrap();
+        EatingEffect.bootstrap();
     }
 
     // ============================================================================================================== //

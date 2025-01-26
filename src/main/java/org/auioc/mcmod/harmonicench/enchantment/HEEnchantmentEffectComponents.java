@@ -34,6 +34,7 @@ import org.auioc.mcmod.arnicalib.game.codec.EnumCodec;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ItemDamagedEffect;
@@ -89,6 +90,10 @@ public class HEEnchantmentEffectComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> BLOCK_DESTROYED = register(
         "block_destroyed", b -> b.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, HELootContextParamSets.ENCHANTED_BLOCK_DESTROYED).listOf())
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EatingEffect>>>> EATING = register(
+        "eating", b -> b.persistent(ConditionalEffect.codec(EatingEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY).listOf())
     );
 
 }
