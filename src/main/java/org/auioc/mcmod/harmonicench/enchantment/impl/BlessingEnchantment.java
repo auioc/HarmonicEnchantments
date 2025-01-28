@@ -19,10 +19,17 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.advancements.critereon.DamageSourcePredicate;
+import net.minecraft.advancements.critereon.TagPredicate;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
@@ -54,6 +61,28 @@ public class BlessingEnchantment extends HEEnchantment {
      */
     private static final Cost COST = constantCost(1, 51);
 
+    /**
+     * <code>∑(totalEnchantmentLevel,k=1)(6/k)</code>
+     */
+    private static final HEEnchantedValue _FORMULA_1 = HEEnchantedValue.harmonic(HEEnchantedValue.totalLevel(), 6.0F, HEEnchantedValue.identity());
+    /**
+     * <code>(5 * k) + (-4)</code>
+     */
+    private static final HEEnchantedValue _FORMULA_2_1 = HEEnchantedValue.sum(HEEnchantedValue.linear(5.0F), HEEnchantedValue.constant(-4.0F));
+    /**
+     * <code>∑(lvl,k=1)[1/(5k-4)]</code>
+     */
+    private static final HEEnchantedValue _FORMULA_2 = HEEnchantedValue.harmonic(HEEnchantedValue.level(), 1.0F, _FORMULA_2_1);
+    /**
+     * <code>original + (f1 * f2)</code>
+     */
+    private static final HEEnchantedValue DAMAGE_PROTECTION = HEEnchantedValue.sum(
+        HEEnchantedValue.identity(),
+        HEEnchantedValue.product(_FORMULA_1, _FORMULA_2)
+    );
+
+    private static final TagPredicate<DamageType> IS_MAGIC_DAMAGE = TagPredicate.is(DamageTypeTags.WITCH_RESISTANT_TO);
+
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
         EXCLUSIVE,
@@ -63,7 +92,11 @@ public class BlessingEnchantment extends HEEnchantment {
         2,
         EquipmentSlotGroup.ARMOR
     ).andThen((key, ctx, builder) -> builder
-
+        .withEffect(
+            HEEnchantmentEffectComponents.DAMAGE_PROTECTION.get(),
+            DAMAGE_PROTECTION,
+            DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().tag(IS_MAGIC_DAMAGE))
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {
