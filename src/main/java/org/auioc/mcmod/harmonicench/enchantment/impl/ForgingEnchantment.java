@@ -67,7 +67,7 @@ public class ForgingEnchantment extends HEEnchantment {
      */
     private static final HEEnchantedValue BONUS = HEEnchantedValue.product(
         HEEnchantedValue.countEnchantments(),
-        HEEnchantedValue.harmonic(HEEnchantedValue.linear(2.0F))
+        HEEnchantedValue.harmonic(HEEnchantedValue.level(), 1.0F, HEEnchantedValue.linear(2))
     );
 
     private static final BuilderFunction BUILDER = define(

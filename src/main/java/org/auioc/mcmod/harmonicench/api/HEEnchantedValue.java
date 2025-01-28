@@ -21,9 +21,9 @@ package org.auioc.mcmod.harmonicench.api;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
@@ -49,14 +49,18 @@ public interface HEEnchantedValue {
 
     static void bootstrap() {
         // register("constant", Constant.TYPED_CODEC);
+        register("identity", Identity.CODEC);
         register("nested", Nested.CODEC);
+        register("sum", Sum.CODEC);
         register("multiply", Multiply.CODEC);
         register("product", Product.CODEC);
         register("fraction", Fraction.CODEC);
         register("liner", Linear.CODEC);
+        register("level", Level.CODEC);
         register("pre_level", PreLevel.CODEC);
         register("sigma_sum", SigmaSum.CODEC);
         register("enchantment_count", EnchantmentCount.CODEC);
+        register("total_enchantment_level", TotalEnchantmentLevel.CODEC);
     }
 
     // ============================================================================================================== //
@@ -93,6 +97,24 @@ public interface HEEnchantedValue {
 
     // ============================================================================================================== //
 
+    static Identity identity() { return new Identity(); }
+
+    record Identity() implements HEEnchantedValue {
+
+        public static final MapCodec<Identity> CODEC = MapCodec.unit(Identity::new);
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            return input;
+        }
+
+        @Override
+        public MapCodec<Identity> codec() { return CODEC; }
+
+    }
+
+    // ============================================================================================================== //
+
     static Nested nested(HEEnchantedValue... values) { return new Nested(List.of(values)); }
 
     record Nested(List<HEEnchantedValue> values) implements HEEnchantedValue {
@@ -112,6 +134,30 @@ public interface HEEnchantedValue {
 
         @Override
         public MapCodec<Nested> codec() { return CODEC; }
+
+    }
+
+    // ============================================================================================================== //
+
+    static Sum sum(HEEnchantedValue... summands) { return new Sum(List.of(summands)); }
+
+    record Sum(List<HEEnchantedValue> summands) implements HEEnchantedValue {
+
+        public static final MapCodec<Sum> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            HEEnchantedValue.CODEC.listOf().fieldOf("summands").forGetter(o -> o.summands)
+        ).apply(instance, Sum::new));
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            float output = 0.0F;
+            for (var summand : summands) {
+                output += summand.calculate(input, lvl, item);
+            }
+            return output;
+        }
+
+        @Override
+        public MapCodec<Sum> codec() { return CODEC; }
 
     }
 
@@ -218,6 +264,24 @@ public interface HEEnchantedValue {
 
     // ============================================================================================================== //
 
+    static Level level() { return new Level(); }
+
+    record Level() implements HEEnchantedValue {
+
+        public static final MapCodec<Level> CODEC = MapCodec.unit(Level::new);
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            return lvl;
+        }
+
+        @Override
+        public MapCodec<Level> codec() { return CODEC; }
+
+    }
+
+    // ============================================================================================================== //
+
     static PreLevel perLevel(float base, float perLevelAfterFirst) { return new PreLevel(base, perLevelAfterFirst); }
 
     static PreLevel perLevel(float perLevel) { return new PreLevel(perLevel, perLevel); }
@@ -244,49 +308,38 @@ public interface HEEnchantedValue {
 
     // ============================================================================================================== //
 
+    static SigmaSum harmonic(HEEnchantedValue upperBound, HEEnchantedValue lowerBound, HEEnchantedValue numerator, HEEnchantedValue denominator) {
+        return new SigmaSum(upperBound, lowerBound, fraction(numerator, denominator));
+    }
 
-    /**
-     * <code>∑(<b>lvl</b>,k=<i>lowerBound</i>)[<i>numerator</i>/<i>denominator</i>(k,<b>lvl</b>)]</code>
-     */
-    static SigmaSum harmonic(int lowerBound, float numerator, HEEnchantedValue denominator) {
-        return new SigmaSum(lowerBound, fraction(constant(numerator), denominator));
+    static SigmaSum harmonic(HEEnchantedValue upperBound, HEEnchantedValue lowerBound, float numerator, HEEnchantedValue denominator) {
+        return harmonic(upperBound, lowerBound, constant(numerator), denominator);
+    }
+
+    static SigmaSum harmonic(HEEnchantedValue upperBound, float numerator, HEEnchantedValue denominator) {
+        return harmonic(upperBound, constant(1), constant(numerator), denominator);
     }
 
     /**
-     * @return <code>∑(<b>lvl</b>,k=1)(<i>numerator</i>/<i>denominator</i>(k,<b>lvl</b>))</code>
+     * <code>∑(<i>upperBound</i>(<b>input</b>,<b>lvl</b>),k=<i>lowerBound(<b>input</b>,<b>lvl</b>)</i>)[<i>function</i>(k,<b>lvl</b>)]</code>
      */
-    static SigmaSum harmonic(float numerator, HEEnchantedValue denominator) {
-        return harmonic(1, numerator, denominator);
-    }
-
-    /**
-     * @return <code>∑(<b>lvl</b>,k=1)(1/<i>denominator</i>(k,<b>lvl</b>))</code>
-     */
-    static SigmaSum harmonic(HEEnchantedValue denominator) {
-        return harmonic(1.0F, denominator);
-    }
-
-    /**
-     * @return <code>∑(<b>lvl</b>,k=1)(1/k)</code>
-     */
-    static SigmaSum harmonic() { return harmonic(linear()); }
-
-
-    /**
-     * <code>∑(<b>lvl</b>,k=<i>lowerBound</i>)[<i>function</i>(k,<b>lvl</b>)]</code>
-     */
-    record SigmaSum(int lowerBound, HEEnchantedValue function) implements HEEnchantedValue {
+    record SigmaSum(HEEnchantedValue upperBound, HEEnchantedValue lowerBound, HEEnchantedValue function) implements HEEnchantedValue {
 
         public static final MapCodec<SigmaSum> CODEC = RecordCodecBuilder.<SigmaSum>mapCodec(
             instance -> instance.group(
-                Codec.INT.optionalFieldOf("lower_bound", 1).forGetter(o -> o.lowerBound),
+                HEEnchantedValue.CODEC.optionalFieldOf("upper_bound", constant(1)).forGetter(o -> o.upperBound),
+                HEEnchantedValue.CODEC.optionalFieldOf("lower_bound", constant(1)).forGetter(o -> o.lowerBound),
                 HEEnchantedValue.CODEC.fieldOf("function").forGetter(o -> o.function)
             ).apply(instance, SigmaSum::new)
-        ).validate(o -> o.lowerBound < 1 ? DataResult.error(() -> "Lower bound must be a positive integer") : DataResult.success(o));
+        );
 
         @Override
         public float calculate(float input, int lvl, EnchantedItemInUse item) {
-            return MathUtils.sigma(lvl, lowerBound, (int k) -> function.calculate((float) k, lvl, item));
+            return MathUtils.sigma(
+                (int) upperBound.calculate(input, lvl, item),
+                (int) lowerBound.calculate(input, lvl, item),
+                (int k) -> function.calculate((float) k, lvl, item)
+            );
         }
 
         @Override
@@ -309,6 +362,25 @@ public interface HEEnchantedValue {
 
         @Override
         public MapCodec<EnchantmentCount> codec() { return CODEC; }
+
+    }
+
+    // ============================================================================================================== //
+
+    static TotalEnchantmentLevel totalLevel() { return new TotalEnchantmentLevel(); }
+
+    record TotalEnchantmentLevel() implements HEEnchantedValue {
+
+        public static final MapCodec<TotalEnchantmentLevel> CODEC = MapCodec.unit(TotalEnchantmentLevel::new);
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            return HEHelper.getAllEnchantments(item.itemStack()).entrySet().stream()
+                .mapToInt(Object2IntMap.Entry::getIntValue).sum();
+        }
+
+        @Override
+        public MapCodec<TotalEnchantmentLevel> codec() { return CODEC; }
 
     }
 
