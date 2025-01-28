@@ -72,7 +72,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> BLESSING = register("blessing", BlessingEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> BLUNT = register("blunt", BluntEnchantment::bootstrap); // TODO WIP
     public static final ResourceKey<Enchantment> DEEP_STUDY = register("deep_study", DeepStudyEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> ELECTRIFICATION = register("electrification", ElectrificationEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap);

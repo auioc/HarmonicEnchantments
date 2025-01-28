@@ -23,7 +23,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,11 +110,17 @@ public class HEMixinHandler {
     }
 
     /**
-     * @see MixinEnchantmentHelper#modifyDamage
-     * @see EnchantmentHelper#modifyDamage
+     * @see MixinEnchantmentHelper#getDamageProtection
+     * @see EnchantmentHelper#getDamageProtection
      */
-    public static void modifyDamage(ServerLevel level, ItemStack item, Entity entity, DamageSource damageSource, MutableFloat damage) {
-
+    public static void getDamageProtection(ServerLevel level, LivingEntity living, DamageSource damageSource, MutableFloat damageProtection) {
+        HEHelper.runIterationOnEquipment(living, HEEnchantmentEffectComponents.DAMAGE_PROTECTION, (ench, effects, lvl, item) -> {
+            Enchantment.applyEffects(
+                effects,
+                Enchantment.damageContext(level, lvl, living, damageSource),
+                v -> damageProtection.setValue(v.calculate(damageProtection.floatValue(), lvl, item))
+            );
+        });
     }
 
 }

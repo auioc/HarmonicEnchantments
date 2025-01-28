@@ -32,6 +32,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.arnicalib.base.event.EventResult;
 import org.auioc.mcmod.arnicalib.game.codec.EnumCodec;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.DimensionTravelEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
@@ -94,6 +95,10 @@ public class HEEnchantmentEffectComponents {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EatingEffect>>>> EATING = register(
         "eating", b -> b.persistent(ConditionalEffect.codec(EatingEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY).listOf())
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<HEEnchantedValue>>>> DAMAGE_PROTECTION = register(
+        "damage_protection", b -> b.persistent(ConditionalEffect.codec(HEEnchantedValue.CODEC, LootContextParamSets.ENCHANTED_DAMAGE).listOf())
     );
 
 }

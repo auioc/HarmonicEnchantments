@@ -22,9 +22,9 @@ package org.auioc.mcmod.harmonicench.mixin;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -68,19 +68,23 @@ public class MixinEnchantmentHelper {
     }
 
     @Inject(
-        method = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;modifyDamage(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;F)F",
-        at = @At(value = "RETURN"),
+        method = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getDamageProtection(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/damagesource/DamageSource;)F",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/apache/commons/lang3/mutable/MutableFloat;floatValue()F",
+            shift = At.Shift.BEFORE
+        ),
         locals = LocalCapture.CAPTURE_FAILHARD,
         require = 1,
         allow = 1,
         cancellable = true
     )
-    private static void modifyDamage(
-        ServerLevel level, ItemStack tool, Entity entity, DamageSource damageSource, float damage,
+    private static void getDamageProtection(
+        ServerLevel level, LivingEntity entity, DamageSource damageSource,
         CallbackInfoReturnable<Float> cir,
         MutableFloat mutablefloat
     ) {
-        HEMixinHandler.modifyDamage(level, tool, entity, damageSource, mutablefloat);
+        HEMixinHandler.getDamageProtection(level, entity, damageSource, mutablefloat);
     }
 
 }
