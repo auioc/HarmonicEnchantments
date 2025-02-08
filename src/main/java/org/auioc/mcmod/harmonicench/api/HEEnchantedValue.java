@@ -26,12 +26,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import org.auioc.mcmod.arnicalib.base.math.MathUtils;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface HEEnchantedValue {
@@ -56,6 +59,7 @@ public interface HEEnchantedValue {
         register("product", Product.CODEC);
         register("fraction", Fraction.CODEC);
         register("liner", Linear.CODEC);
+        register("chance", Chance.CODEC);
         register("level", Level.CODEC);
         register("pre_level", PreLevel.CODEC);
         register("sigma_sum", SigmaSum.CODEC);
@@ -76,6 +80,8 @@ public interface HEEnchantedValue {
     // ============================================================================================================== //
 
     static Constant constant(float value) { return new Constant(value); }
+
+    static Constant constant(int value) { return new Constant((float) value); }
 
     record Constant(float value) implements HEEnchantedValue {
 
@@ -261,6 +267,39 @@ public interface HEEnchantedValue {
         public MapCodec<Linear> codec() { return CODEC; }
 
     }
+
+    // ============================================================================================================== //
+
+    static Chance chance(HEEnchantedValue probability, HEEnchantedValue value, HEEnchantedValue or) { return new Chance(probability, value, or); }
+
+    static Chance chance(HEEnchantedValue probability, HEEnchantedValue value) { return chance(probability, value, constant(0)); }
+
+    static Chance chance(float probability, float value) { return chance(constant(probability), constant(value)); }
+
+    record Chance(HEEnchantedValue probability, HEEnchantedValue value, HEEnchantedValue or) implements HEEnchantedValue {
+
+        public static final MapCodec<Chance> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                HEEnchantedValue.CODEC.fieldOf("probability").forGetter(o -> o.probability),
+                HEEnchantedValue.CODEC.fieldOf("value").forGetter(o -> o.value),
+                HEEnchantedValue.CODEC.optionalFieldOf("or", constant(0)).forGetter(o -> o.or)
+            ).apply(instance, Chance::new)
+        );
+
+        private static final RandomSource RANDOM = RandomSource.create();
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            var p = Optional.ofNullable(item.owner()).map(Entity::getRandom).orElse(RANDOM).nextFloat();
+            var b = probability.calculate(input, lvl, item);
+            return p < b ? value.calculate(input, lvl, item) : or.calculate(input, lvl, item);
+        }
+
+        @Override
+        public MapCodec<Chance> codec() { return CODEC; }
+
+    }
+
 
     // ============================================================================================================== //
 
