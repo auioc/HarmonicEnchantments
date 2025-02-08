@@ -73,7 +73,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> BLUNT = register("blunt", BluntEnchantment::bootstrap); // TODO WIP
     public static final ResourceKey<Enchantment> DEEP_STUDY = register("deep_study", DeepStudyEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> EFFICACY = register("efficacy", EfficacyEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> ELECTRIFICATION = register("electrification", ElectrificationEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> FORGING = register("forging", ForgingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> FREE_RIDING = register("free_riding", FreeRidingEnchantment::bootstrap);
@@ -89,8 +89,8 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> REBELLING_CURSE = register("rebelling_curse", RebellingCurseEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> SACRIFICING_CURSE = register("sacrificing_curse", SacrificingCurseEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> SNIPING = register("sniping", SnipingEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> SIPHONING = register("siphoning", SiphoningEnchantment::bootstrap);
+    public static final ResourceKey<Enchantment> SNIPING = register("sniping", SnipingEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> SUN_AFFINITY = register("sun_affinity", SunAffinityEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> TIDE = register("tide", TideEnchantment::bootstrap); // TODO
 

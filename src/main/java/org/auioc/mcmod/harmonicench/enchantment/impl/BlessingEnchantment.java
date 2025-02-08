@@ -81,7 +81,7 @@ public class BlessingEnchantment extends HEEnchantment {
         HEEnchantedValue.product(_FORMULA_1, _FORMULA_2)
     );
 
-    private static final TagPredicate<DamageType> IS_MAGIC_DAMAGE = TagPredicate.is(DamageTypeTags.WITCH_RESISTANT_TO);
+    private static final TagPredicate<DamageType> IS_MAGIC_DAMAGE = TagPredicate.is(DamageTypeTags.WITCH_RESISTANT_TO); // TODO add a new tag?
 
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
