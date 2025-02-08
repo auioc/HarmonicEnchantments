@@ -28,7 +28,7 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 
 /**
- * <b>TODO 饱食修补 Dining</b>
+ * <b>饱食修补 Dining</b>
  * <p>
  * 食用食物后，将玩家增加的饥饿值转化为该物品的耐久度。
  * <ul>

@@ -43,7 +43,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.ChangeFrozenTicks;
  * <p>
  * 被击中的实体会被冰冻，每一击命中会延长冰冻时间。
  * <ul>
- *     <li>TODO 对实体数据 {@link Entity#DATA_TICKS_FROZEN} 为 0 的生物攻击会增加该值 <code>∑(n,k=1)(200/k)</code>，后续每次攻击命中会增加 <code>∑(n,k=1)(100/k)</code>。</li>
+ *     <li>对实体数据 {@link Entity#DATA_TICKS_FROZEN} 为 0 的生物攻击会增加该值 <code>∑(n,k=1)(200/k)</code>，后续每次攻击命中会增加 <code>∑(n,k=1)(100/k)</code>。</li>
  * </ul>
  *
  * @author WakelessSloth56

@@ -51,7 +51,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
  * <ul>
  *     <li>降低 25% 攻击速度。</li>
  *     <li>暴击将造成 <code>0.5×(n+3)×100% </code>伤害。</li>
- *     <li>用红砖或下界砖暴击命中玩家，将给予混乱效果，持续时间 <code>∑(n,k=1)(5/k)</code> 秒。</li>
+ *     <li>TODO 用红砖或下界砖暴击命中玩家，将给予混乱效果，持续时间 <code>∑(n,k=1)(5/k)</code> 秒。</li>
  * </ul>
  *
  * @author WakelessSloth56

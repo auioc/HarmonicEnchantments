@@ -33,7 +33,7 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
 
 /**
- * <b>TODO 祝福 Blessing</b>
+ * <b>祝福 Blessing</b>
  * <p>
  * 根据物品的所有魔咒等级之和，提供魔法抗性。
  * <ul>

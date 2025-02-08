@@ -36,7 +36,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.SetItemProficiency;
 import java.util.List;
 
 /**
- * <b>TODO 熟练 Proficiency</b>
+ * <b>熟练 Proficiency</b>
  * <p>
  * 随着挖掘次数增加，永久提高挖掘速度。
  * <ul>
