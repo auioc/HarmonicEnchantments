@@ -36,6 +36,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SetItemProficiency;
 
 public class HEEnchantmentEffects {
 
@@ -67,6 +68,8 @@ public class HEEnchantmentEffects {
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<DestroyBlock>> DESTROY_BLOCK =
         ENTITY_EFFECT_TYPES.register("destroy_block", () -> DestroyBlock.CODEC);
 
+    public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SetItemProficiency>> SET_ITEM_PROFICIENCY =
+        ENTITY_EFFECT_TYPES.register("set_item_proficiency", () -> SetItemProficiency.CODEC);
 
     // ============================================================================================================== //
 
