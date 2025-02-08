@@ -21,10 +21,19 @@ package org.auioc.mcmod.harmonicench.enchantment.impl;
 
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.neoforge.common.Tags;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.component.HEEDataComponents;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
+import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SetItemProficiency;
+
+import java.util.List;
 
 /**
  * <b>TODO 熟练 Proficiency</b>
@@ -61,6 +70,17 @@ public class ProficiencyEnchantment extends HEEnchantment {
      */
     private static final Cost COST = dynamicCost(1, 10, 61, 10);
 
+
+    /**
+     * <code>[∑(lvl,k=1)(1/k)]/200</code>
+     */
+    private static final HEEnchantedValue PROBABILITY = HEEnchantedValue.fraction(
+        HEEnchantedValue.harmonic(HEEnchantedValue.level(), 1.0F, HEEnchantedValue.identity()),
+        HEEnchantedValue.constant(200)
+    );
+
+    private static final HEEnchantedValue BONUS = HEEnchantedValue.fromDataComponent(HEEDataComponents.PROFICIENCY.get());
+
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
         PRIMARY_ITEMS,
@@ -69,9 +89,24 @@ public class ProficiencyEnchantment extends HEEnchantment {
         5,
         COST,
         1,
-        EquipmentSlotGroup.HAND
+        EquipmentSlotGroup.MAINHAND
     ).andThen((key, ctx, builder) -> builder
-
+        .withEffect(
+            HEEnchantmentEffectComponents.BLOCK_DESTROYED.get(),
+            new SetItemProficiency(HEEnchantedValue.chance(
+                PROBABILITY,
+                HEEnchantedValue.sum(HEEnchantedValue.identity(), HEEnchantedValue.constant(1)),
+                HEEnchantedValue.identity()
+            ))
+        ).withSpecialEffect(
+            HEEnchantmentEffectComponents.ATTRIBUTES.get(),
+            List.of(new HEAttributeEffect(
+                HEEnchantments.PROFICIENCY,
+                Attributes.MINING_EFFICIENCY,
+                BONUS,
+                AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            ))
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {

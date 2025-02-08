@@ -69,7 +69,7 @@ public class HEEnchantments {
 
     public static final ResourceKey<Enchantment> AIM = register("aim", AimEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> BANE_OF_CHAMPIONS = register("bane_of_champions", BaneOfChampionsEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> BLESSING = register("blessing", BlessingEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> BLESSING = register("blessing", BlessingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> BLUNT = register("blunt", BluntEnchantment::bootstrap); // TODO WIP
     public static final ResourceKey<Enchantment> DEEP_STUDY = register("deep_study", DeepStudyEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> DINING = register("dining", DiningEnchantment::bootstrap);
@@ -84,7 +84,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> LUCK_OF_THE_SNOW = register("luck_of_the_snow", LuckOfTheSnowEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> MOB_AFFINITY = register("mob_affinity", MobAffinityEnchantment::bootstrap); // TODO
     public static final ResourceKey<Enchantment> OBSERVER = register("observer", ObserverEnchantment::bootstrap); // TODO
-    public static final ResourceKey<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> RAPIER = register("rapier", RapierEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> REBELLING_CURSE = register("rebelling_curse", RebellingCurseEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> SACRIFICING_CURSE = register("sacrificing_curse", SacrificingCurseEnchantment::bootstrap); // TODO
