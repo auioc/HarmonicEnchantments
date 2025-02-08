@@ -19,13 +19,22 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import org.auioc.mcmod.arnicalib.game.critereon.HealthPredicate;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SiphoningEffect;
 
 /**
- * <b>TODO 汲取 Siphoning</b>
+ * <b>汲取 Siphoning</b>
  * <p>
  * 杀死生物后，根据其最大生命值恢复饥饿值和饱和度，优先回复饥饿值。
  * <ul>
@@ -50,6 +59,11 @@ public class SiphoningEnchantment extends HEEnchantment {
      */
     private static final Cost COST = dynamicCost(15, 9, 61, 9);
 
+    private static final HEEnchantedValue VALUE = HEEnchantedValue.product(
+        HEEnchantedValue.fraction(HEEnchantedValue.identity(), HEEnchantedValue.constant(15)),
+        HEEnchantedValue.harmonic(HEEnchantedValue.level(), 1.0F, HEEnchantedValue.identity()) // TODO reuse?
+    );
+
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
         ItemTags.SWORDS,
@@ -60,7 +74,13 @@ public class SiphoningEnchantment extends HEEnchantment {
         4,
         EquipmentSlotGroup.HAND
     ).andThen((key, ctx, builder) -> builder
-
+        .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+            new SiphoningEffect(VALUE),
+            LootItemEntityPropertyCondition.hasProperties(
+                LootContext.EntityTarget.THIS,
+                EntityPredicate.Builder.entity().subPredicate(HealthPredicate.current(MinMaxBounds.Doubles.atMost(0.0D)))
+            )
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {
