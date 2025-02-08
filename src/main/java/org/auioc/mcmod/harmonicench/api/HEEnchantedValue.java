@@ -24,6 +24,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
@@ -65,6 +66,7 @@ public interface HEEnchantedValue {
         register("sigma_sum", SigmaSum.CODEC);
         register("enchantment_count", EnchantmentCount.CODEC);
         register("total_enchantment_level", TotalEnchantmentLevel.CODEC);
+        register("data_component_value", DataComponentValue.CODEC);
     }
 
     // ============================================================================================================== //
@@ -420,6 +422,26 @@ public interface HEEnchantedValue {
 
         @Override
         public MapCodec<TotalEnchantmentLevel> codec() { return CODEC; }
+
+    }
+
+    // ============================================================================================================== //
+
+    static DataComponentValue fromDataComponent(DataComponentType<? extends Number> component) { return new DataComponentValue(component); }
+
+    record DataComponentValue(DataComponentType<? extends Number> component) implements HEEnchantedValue {
+
+        public static final MapCodec<DataComponentValue> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            DataComponentType.CODEC.fieldOf("component").forGetter(o -> o.component)
+        ).apply(instance, c -> new DataComponentValue((DataComponentType<? extends Number>) c))); // TODO check with codec
+
+        @Override
+        public float calculate(float input, int lvl, EnchantedItemInUse item) {
+            return item.itemStack().getOrDefault(component, 0).floatValue();
+        }
+
+        @Override
+        public MapCodec<DataComponentValue> codec() { return CODEC; }
 
     }
 
