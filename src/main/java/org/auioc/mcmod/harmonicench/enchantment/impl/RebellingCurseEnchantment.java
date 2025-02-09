@@ -44,9 +44,6 @@ import java.util.function.Function;
  * <ul>
  *     <li>每下降1点耐久度，有1%概率对使用者造成4点伤害，无视护甲、魔抗、附魔、抗性提升。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class RebellingCurseEnchantment extends HEEnchantment {
 

@@ -35,8 +35,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  *
  * TODO en_us
  *
- * @author WakelessSloth56
- * @author Libellule505
  * @since 2.1.0
  */
 public class ObserverEnchantment extends HEEnchantment {

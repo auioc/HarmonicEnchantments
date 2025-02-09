@@ -34,9 +34,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
  * <ul>
  *     <li>每 1 点饥饿值增加 10 点耐久度。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class DiningEnchantment extends HEEnchantment {
 

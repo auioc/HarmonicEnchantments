@@ -38,9 +38,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
  * <b>效能 Efficacy</b>
  * <p>
  * 提高射出药箭和光灵箭施加状态效果的等级与持续时间。
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class EfficacyEnchantment extends HEEnchantment {
 

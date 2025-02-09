@@ -42,9 +42,6 @@ import java.util.List;
  *     <li>轻巧Ⅰ（Ⅱ）提供 6 秒速度Ⅰ（Ⅱ）。</li>
  *     <li>更高等级的附魔不提升效果等级，但持续时间增加 <code>∑(n,k=3)[2/(k-2)]</code> 秒。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class HandinessEnchantment extends HEEnchantment {
 

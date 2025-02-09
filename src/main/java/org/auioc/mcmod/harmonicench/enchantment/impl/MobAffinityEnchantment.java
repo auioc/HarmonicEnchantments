@@ -36,8 +36,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  *     <li>猫：玩家醒来时，猫给予礼物的概率从 70% 提高到 100%。</li>
  * </ul>
  *
- * @author WakelessSloth56
- * @author Libellule505
  * @author LainIO24
  */
 public class MobAffinityEnchantment extends HEEnchantment {

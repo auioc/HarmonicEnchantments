@@ -39,9 +39,6 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  * <ul>
  *     <li>增加 <code>∑(N,i=1)(6/i)×∑(n,j=1)[1/(5j-4)]</code> 点魔法抗性。（N：该物品所有魔咒等级之和）</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class BlessingEnchantment extends HEEnchantment {
 

@@ -59,8 +59,6 @@ import java.util.List;
  *     <li>攻击生命值在 15%/30%/45% 以下的目标时，将直接杀死目标并获得对应的头颅（更高等级维持45%）。</li>
  * </ul>
  *
- * @author WakelessSloth56
- * @author Libellule505
  * @since 2.1.1
  */
 public class HarvestEnchantment extends HEEnchantment {

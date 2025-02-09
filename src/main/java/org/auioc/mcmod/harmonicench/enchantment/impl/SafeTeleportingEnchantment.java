@@ -41,9 +41,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
  *     <li>免疫末影珍珠的传送伤害。</li>
  *     <li>穿越维度时，获得抗性提升Ⅰ，持续 <code>∑(n,k=1)(20/k)</code>秒。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class SafeTeleportingEnchantment extends HEEnchantment {
 

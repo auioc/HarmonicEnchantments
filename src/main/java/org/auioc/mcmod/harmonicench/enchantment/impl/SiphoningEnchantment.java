@@ -40,9 +40,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.SiphoningEffect;
  * <ul>
  *     <li>恢复 <code>(x/15)∑(n,k=1)(1/k)</code> 点饥饿值或饱和度。（x：被击杀生物的最大生命值）</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class SiphoningEnchantment extends HEEnchantment {
 

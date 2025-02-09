@@ -32,9 +32,6 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  * <b>无偿骑乘 Free Riding</b>
  * <p>
  * 骑乘猪或炽足兽时，使用提速不再消耗耐久。
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class FreeRidingEnchantment extends HEEnchantment {
 

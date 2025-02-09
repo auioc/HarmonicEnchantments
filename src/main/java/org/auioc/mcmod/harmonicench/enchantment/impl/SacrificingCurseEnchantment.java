@@ -31,9 +31,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  *     <li>每20分钟（一个游戏日）需要使用带有献祭诅咒的物品杀死一个生物，否则该物品会消失。在装备栏或副手持有也可以，杀死生物时会重置计时器。</li>
  *     <li>物品因此消失时，给予玩家负等级的生命提升效果，持续时间为该物品所有魔咒等级之和，效果等级为魔咒总数。同时在对话框发送：“（物品）渴求祭品，在抽取了（玩家）的生命之后消失了。”</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class SacrificingCurseEnchantment extends HEEnchantment {
 

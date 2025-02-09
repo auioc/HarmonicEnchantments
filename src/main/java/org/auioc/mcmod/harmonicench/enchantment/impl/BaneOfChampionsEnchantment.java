@@ -41,9 +41,6 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  * <ul>
  *     <li>每一级增加2.5点额外伤害。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class BaneOfChampionsEnchantment extends HEEnchantment {
 

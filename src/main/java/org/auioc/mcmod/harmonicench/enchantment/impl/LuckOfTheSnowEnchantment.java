@@ -39,9 +39,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  *     <li>在寒冷生物群系中，提供相当于同等级海之眷顾的效果。</li>
  *     <li>在积雪生物群系中，提供相当于两倍等级海之眷顾的效果。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class LuckOfTheSnowEnchantment extends HEEnchantment {
 

@@ -33,9 +33,6 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantments;
  *     <li>对16格以外的实体造成伤害增加 <code>[(x-16)/32]∑(n,k=1)(1/k)</code> 倍。（对近处不会降低伤害）</li>
  *     <li>箭矢降低 15%/30%/45% 所受重力影响。（更高等级维持45%）</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class SnipingEnchantment extends HEEnchantment {
 

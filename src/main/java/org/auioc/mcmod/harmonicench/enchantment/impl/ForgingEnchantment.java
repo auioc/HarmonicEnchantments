@@ -39,9 +39,6 @@ import java.util.List;
  * <ul>
  *     <li>增加 <code>x∑(n,k=1)(1/2k)</code> 点护甲值和盔甲韧性。（x：该物品魔咒数）</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class ForgingEnchantment extends HEEnchantment {
 

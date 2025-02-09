@@ -36,9 +36,6 @@ import org.auioc.mcmod.harmonicench.enchantment.HEValueProviders;
  * <b>延展之刃 Long</b>
  * <p>
  * 提高剑的攻击距离。
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class LongEnchantment extends HEEnchantment {
 

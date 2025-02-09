@@ -29,8 +29,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  * <p>
  * 提高水中投掷速度，击中目标会使其窒息。
  *
- * @author WakelessSloth56
- * @author Libellule505
  * @since 2.1.0
  */
 public class TideEnchantment extends HEEnchantment {

@@ -41,9 +41,6 @@ import java.util.Map;
  * <b>迅捷之刃 Rapier</b>
  * <p>
  * 增加剑的攻击速度，但无法再使出横扫攻击。
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class RapierEnchantment extends HEEnchantment {
 

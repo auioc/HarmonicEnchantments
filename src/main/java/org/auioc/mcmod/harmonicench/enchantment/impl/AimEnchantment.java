@@ -32,9 +32,6 @@ import org.auioc.mcmod.harmonicench.api.HEEnchantment;
  *     <li>每 5/3 秒，给予准心指向的敌对生物发光效果，持续 <code>∑(n,k=1)(20/k)</code> 秒，同时在对话框发送：“发现（生物），距离（玩家）X米。”</li>
  *     <li>使用或手持望远镜时，弹射物对带有发光效果的生物造成伤害增加 <code>[∑(n,k=1)(1/3k)]×100%</code>。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class AimEnchantment extends HEEnchantment {
 

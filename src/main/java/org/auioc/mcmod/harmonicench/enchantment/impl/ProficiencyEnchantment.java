@@ -42,9 +42,6 @@ import java.util.List;
  * <ul>
  *     <li>每次挖掘后，有 <code>[∑(n,k=1)(1/k)]/200</code> 概率使挖掘速度永久提高 1×。</li>
  * </ul>
- *
- * @author WakelessSloth56
- * @author Libellule505
  */
 public class ProficiencyEnchantment extends HEEnchantment {
 
