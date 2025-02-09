@@ -25,16 +25,40 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.auioc.mcmod.arnicalib.base.math.MathUtils;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+
+import java.util.function.Supplier;
 
 public class HEValueProviders {
 
     public static final DeferredRegister<MapCodec<? extends LevelBasedValue>> TYPES = DeferredRegister.create(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE, HarmonicEnchantments.MOD_ID);
 
-    public static final DeferredHolder<MapCodec<? extends LevelBasedValue>, MapCodec<SigmaSum>> SIGMA_SUM = TYPES.register("sigma_sum", () -> SigmaSum.CODEC);
+    public static final Supplier<MapCodec<Floor>> FLOOR = TYPES.register("floor", () -> Floor.CODEC);
+    public static final Supplier<MapCodec<SigmaSum>> SIGMA_SUM = TYPES.register("sigma_sum", () -> SigmaSum.CODEC);
+
+    // ============================================================================================================== //
+
+    public static Floor floor(LevelBasedValue value) {
+        return new Floor(value);
+    }
+
+    public record Floor(LevelBasedValue value) implements LevelBasedValue {  // TODO arnicalib
+
+        public static final MapCodec<Floor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            LevelBasedValue.CODEC.fieldOf("value").forGetter(o -> o.value)
+        ).apply(instance, Floor::new));
+
+        @Override
+        public float calculate(int lvl) {
+            return (float) Math.floor(value.calculate(lvl));
+        }
+
+        @Override
+        public MapCodec<Floor> codec() { return CODEC; }
+
+    }
 
     // ============================================================================================================== //
 
