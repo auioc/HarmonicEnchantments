@@ -19,12 +19,34 @@
 
 package org.auioc.mcmod.harmonicench.enchantment.impl;
 
+import net.minecraft.advancements.critereon.EntityFlagsPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
+import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
+import org.auioc.mcmod.arnicalib.base.event.EventResult;
+import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
+import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+
+import java.util.List;
 
 /**
- * <b>TODO 领航 Sun Affinity</b>
+ * <b>领航 Sun Affinity</b>
  * <p>
  * 鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。
  * <ul>
@@ -45,6 +67,12 @@ public class SunAffinityEnchantment extends HEEnchantment {
      */
     private static final Cost COST = dynamicCost(10, 10, 40, 10);
 
+    private static final LootItemCondition.Builder IS_SUNNY = WeatherCheck.weather().setRaining(false).setThundering(false);
+    private static final LootItemCondition.Builder IS_DAYTIME = new TimeCheck.Builder(IntRange.range(0, 12000)).setPeriod(24000L);
+    private static final LocationPredicate.Builder IS_OVERWORLD = LocationPredicate.Builder.inDimension(Level.OVERWORLD);
+
+    private static final LevelBasedValue GRAVITY_MULTIPLIER = LevelBasedValue.lookup(List.of(0.8F, 0.6F), LevelBasedValue.constant(0.4F));
+
     private static final BuilderFunction BUILDER = define(
         SUPPORTED_ITEMS,
         Rarity.RARE,
@@ -53,7 +81,33 @@ public class SunAffinityEnchantment extends HEEnchantment {
         8,
         EquipmentSlotGroup.CHEST
     ).andThen((key, ctx, builder) -> builder
-
+        .withEffect(
+            HEEnchantmentEffectComponents.GLIDE.get(),
+            EventResult.DENY,
+            InvertedLootItemCondition.invert(AllOfCondition.allOf(
+                IS_SUNNY,
+                IS_DAYTIME,
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().located(IS_OVERWORLD)
+                )
+            ))
+        )
+        .withEffect(
+            EnchantmentEffectComponents.LOCATION_CHANGED,
+            new EnchantmentAttributeEffect(
+                HarmonicEnchantments.id("enchantment.sun_affinity"),
+                Attributes.GRAVITY,
+                GRAVITY_MULTIPLIER,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+            ),
+            LootItemEntityPropertyCondition.hasProperties(
+                LootContext.EntityTarget.THIS,
+                EntityPredicate.Builder.entity().flags(
+                    EntityFlagsPredicate.Builder.flags().setIsFlying(true)
+                )
+            )
+        )
     );
 
     public static Bootstrap.Builder bootstrap() {
