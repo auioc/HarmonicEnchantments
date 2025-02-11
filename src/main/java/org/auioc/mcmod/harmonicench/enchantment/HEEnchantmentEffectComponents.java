@@ -101,4 +101,8 @@ public class HEEnchantmentEffectComponents {
         "damage_protection", b -> b.persistent(ConditionalEffect.codec(HEEnchantedValue.CODEC, LootContextParamSets.ENCHANTED_DAMAGE).listOf())
     );
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EventResult>>>> GLIDE = register(
+        "glide", b -> b.persistent(ConditionalEffect.codec(EnumCodec.byNameLowerCase(EventResult.class), HELootContextParamSets.ENCHANTED_ITEM_WITH_ENTITY).listOf())
+    );
+
 }

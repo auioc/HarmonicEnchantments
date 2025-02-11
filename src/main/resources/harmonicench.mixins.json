@@ -5,6 +5,7 @@
     "mixins": [
         "MixinArrow",
         "MixinEnchantmentHelper",
+        "MixinLivingEntity",
         "SpectralArrowAccessor"
     ],
     "client": [],

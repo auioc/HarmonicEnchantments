@@ -34,9 +34,13 @@ import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableObject;
+import org.auioc.mcmod.arnicalib.base.event.EventResult;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
+import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 import org.auioc.mcmod.harmonicench.mixin.MixinArrow;
 import org.auioc.mcmod.harmonicench.mixin.MixinEnchantmentHelper;
+import org.auioc.mcmod.harmonicench.mixin.MixinLivingEntity;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -49,7 +53,7 @@ public class HEMixinHandler {
      * @see MixinArrow#doPostHurtEffects
      */
     public static void handlerArrowPostHurtEffect(Arrow arrow, LivingEntity target) {
-        if (target.level().isClientSide()) {
+        if (target.level().isClientSide()) { // TODO use field
             return;
         }
 
@@ -121,6 +125,31 @@ public class HEMixinHandler {
                 v -> damageProtection.setValue(v.calculate(damageProtection.floatValue(), lvl, item))
             );
         });
+    }
+
+    /**
+     * @see MixinLivingEntity#redirect_canGlide_canGlideUsing
+     * @see MixinLivingEntity#redirect_lambda$updateFallFlying$17_canGlideUsing
+     * @see LivingEntity#canGlideUsing
+     */
+    public static boolean canGlideUsing(LivingEntity living, ItemStack item, EquipmentSlot slot) {
+        if (living.level().isClientSide) {
+            return LivingEntity.canGlideUsing(item, slot);
+        }
+
+        var result = new MutableObject<>(EventResult.DEFAULT);
+        HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.GLIDE, (ench, effects, lvl) -> {
+            Enchantment.applyEffects(
+                effects,
+                HELootContextParamSets.enchantedItemWithEntity((ServerLevel) living.level(), lvl, item, living, living.position()),
+                result::setValue
+            );
+        });
+        return switch (result.getValue()) {
+            case ALLOW -> true;
+            case DENY -> false;
+            case DEFAULT -> LivingEntity.canGlideUsing(item, slot);
+        };
     }
 
 }
