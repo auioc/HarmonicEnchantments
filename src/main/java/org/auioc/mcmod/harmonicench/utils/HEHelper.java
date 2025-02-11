@@ -24,6 +24,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -33,6 +34,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.auioc.mcmod.harmonicench.api.EnchantmentOnItemVisitor;
 import org.auioc.mcmod.harmonicench.api.EnchantmentVisitor;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class HEHelper {
@@ -67,6 +69,16 @@ public class HEHelper {
 
     public static <T> void runIterationOnEquipment(LivingEntity living, DeferredHolder<DataComponentType<?>, DataComponentType<T>> type, EnchantmentOnItemVisitor<T> visitor) {
         runIterationOnEquipment(living, type.get(), visitor);
+    }
+
+    // ============================================================================================================== //
+
+    public static Optional<EnchantedItemInUse> getItemInUse(LivingEntity owner, ItemStack item, Holder<Enchantment> ench) {
+        return ench.value().getSlotItems(owner).entrySet().stream()
+            .filter(entry -> entry.getValue() == item)
+            .findAny()
+            .map(Map.Entry::getKey)
+            .map(slot -> new EnchantedItemInUse(item, slot, owner));
     }
 
     // ============================================================================================================== //

@@ -32,14 +32,14 @@ import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
 import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
-import org.auioc.mcmod.arnicalib.base.event.EventResult;
 import org.auioc.mcmod.harmonicench.HarmonicEnchantments;
+import org.auioc.mcmod.harmonicench.api.HEEnchantedValue;
 import org.auioc.mcmod.harmonicench.api.HEEnchantment;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 
@@ -51,7 +51,7 @@ import java.util.List;
  * 鞘翅滑翔更加轻盈，但只能在晴朗的白天使用。
  * <ul>
  *     <li>使用鞘翅时，降低玩家 20%/40%/60% 重力影响。（更高等级维持 60%）</li>
- *     <li>鞘翅只能在 0~12000 刻，并且天气为晴天时使用。（在末地和下界将一直无法使用）</li>
+ *     <li>在非日间（0~12000 刻）、非晴天、非主世界、非露天使用鞘翅将消耗三倍耐久。</li>
  * </ul>
  */
 public class SunAffinityEnchantment extends HEEnchantment {
@@ -70,6 +70,8 @@ public class SunAffinityEnchantment extends HEEnchantment {
     private static final LootItemCondition.Builder IS_SUNNY = WeatherCheck.weather().setRaining(false).setThundering(false);
     private static final LootItemCondition.Builder IS_DAYTIME = new TimeCheck.Builder(IntRange.range(0, 12000)).setPeriod(24000L);
     private static final LocationPredicate.Builder IS_OVERWORLD = LocationPredicate.Builder.inDimension(Level.OVERWORLD);
+    private static final LocationPredicate.Builder CANNOT_SEE_SKY = LocationPredicate.Builder.location().setCanSeeSky(false);
+    private static final HEEnchantedValue MODIFY_DAMAGE = HEEnchantedValue.multiply(HEEnchantedValue.constant(3));
 
     private static final LevelBasedValue GRAVITY_MULTIPLIER = LevelBasedValue.lookup(List.of(0.8F, 0.6F), LevelBasedValue.constant(0.4F));
 
@@ -82,16 +84,20 @@ public class SunAffinityEnchantment extends HEEnchantment {
         EquipmentSlotGroup.CHEST
     ).andThen((key, ctx, builder) -> builder
         .withEffect(
-            HEEnchantmentEffectComponents.GLIDE.get(),
-            EventResult.DENY,
-            InvertedLootItemCondition.invert(AllOfCondition.allOf(
-                IS_SUNNY,
-                IS_DAYTIME,
-                LootItemEntityPropertyCondition.hasProperties(
+            HEEnchantmentEffectComponents.ITEM_DAMAGE.get(),
+            MODIFY_DAMAGE,
+            AnyOfCondition.anyOf(
+                InvertedLootItemCondition.invert(IS_SUNNY),
+                InvertedLootItemCondition.invert(IS_DAYTIME),
+                InvertedLootItemCondition.invert(LootItemEntityPropertyCondition.hasProperties(
                     LootContext.EntityTarget.THIS,
                     EntityPredicate.Builder.entity().located(IS_OVERWORLD)
+                )),
+                LootItemEntityPropertyCondition.hasProperties(
+                    LootContext.EntityTarget.THIS,
+                    EntityPredicate.Builder.entity().located(CANNOT_SEE_SKY)
                 )
-            ))
+            )
         )
         .withEffect(
             EnchantmentEffectComponents.LOCATION_CHANGED,

@@ -73,6 +73,10 @@ public class HEEnchantmentEffectComponents {
         "item_damaged", b -> b.persistent(ConditionalEffect.codec(ItemDamagedEffect.CODEC, HELootContextParamSets.ENCHANTED_ITEM_WITH_ENTITY).listOf())
     );
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<HEEnchantedValue>>>> ITEM_DAMAGE = register(
+        "item_damage", b -> b.persistent(ConditionalEffect.codec(HEEnchantedValue.CODEC, HELootContextParamSets.ENCHANTED_ITEM_WITH_ENTITY).listOf())
+    ); // TODO ?merge item_damaged and item_damage
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnderPearlLandedEffect>>>> ENDER_PEARL_LANDED = register(
         "ender_pearl_landed", b -> b.persistent(ConditionalEffect.codec(EnderPearlLandedEffect.CODEC, LootContextParamSets.ENCHANTED_ENTITY).listOf())
     );

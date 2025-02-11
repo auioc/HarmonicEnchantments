@@ -23,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
@@ -45,8 +44,6 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
 import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
 
-import java.util.Map;
-
 public class HEEventHandler {
 
     @SubscribeEvent
@@ -61,19 +58,27 @@ public class HEEventHandler {
         var owner = event.getEntity();
         if (owner != null) {
             var item = event.getItem();
-            HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.ITEM_DAMAGED, (ench, effects, lvl) -> {
-                ench.value().getSlotItems(owner).entrySet().stream()
-                    .filter(entry -> entry.getValue() == item).findAny().map(Map.Entry::getKey).ifPresent(
-                        slot -> {
-                            var itemInUse = new EnchantedItemInUse(item, slot, owner);
-                            var deltaDamage = event.getNewDamage() - event.getOriginalDamage();
-                            Enchantment.applyEffects(
-                                effects,
-                                HELootContextParamSets.enchantedItemWithEntity((ServerLevel) owner.level(), lvl, item, owner, owner.position()),
-                                effect -> effect.apply(lvl, itemInUse, owner, deltaDamage)
-                            );
-                        }
+            HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.ITEM_DAMAGE, (ench, effects, lvl) -> {
+                HEHelper.getItemInUse(owner, item, ench).ifPresent(itemInUse -> {
+                    var deltaDamage = new MutableInt(event.getNewDamage() - event.getOriginalDamage());
+                    Enchantment.applyEffects(
+                        effects,
+                        HELootContextParamSets.enchantedItemWithEntity((ServerLevel) owner.level(), lvl, item, owner, owner.position()),
+                        effect -> deltaDamage.setValue(effect.calculate(deltaDamage.floatValue(), lvl, itemInUse))
                     );
+                    event.setNewDamage(event.getOriginalDamage() + deltaDamage.intValue());
+                });
+            });
+            HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.ITEM_DAMAGED, (ench, effects, lvl) -> {
+                HEHelper.getItemInUse(owner, item, ench).ifPresent(itemInUse -> {
+                        var deltaDamage = event.getNewDamage() - event.getOriginalDamage();
+                        Enchantment.applyEffects(
+                            effects,
+                            HELootContextParamSets.enchantedItemWithEntity((ServerLevel) owner.level(), lvl, item, owner, owner.position()),
+                            effect -> effect.apply(lvl, itemInUse, owner, deltaDamage)
+                        );
+                    }
+                );
             });
         }
     }
