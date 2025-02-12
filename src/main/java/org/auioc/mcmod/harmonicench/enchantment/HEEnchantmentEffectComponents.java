@@ -109,4 +109,8 @@ public class HEEnchantmentEffectComponents {
         "glide", b -> b.persistent(ConditionalEffect.codec(EnumCodec.byNameLowerCase(EventResult.class), HELootContextParamSets.ENCHANTED_ITEM_WITH_ENTITY).listOf())
     );
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnchantmentEntityEffect>>>> INVENTORY_TICK = register(
+        "inventory_tick", b -> b.persistent(ConditionalEffect.codec(EnchantmentEntityEffect.CODEC, HELootContextParamSets.ENCHANTED_ITEM_WITH_ENTITY).listOf())
+    );
+
 }

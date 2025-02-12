@@ -5,6 +5,7 @@
     "mixins": [
         "MixinArrow",
         "MixinEnchantmentHelper",
+        "MixinItemStack",
         "MixinLivingEntity",
         "SpectralArrowAccessor"
     ],

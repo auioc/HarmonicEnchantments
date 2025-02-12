@@ -28,11 +28,13 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.auioc.mcmod.arnicalib.base.event.EventResult;
@@ -40,6 +42,7 @@ import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 import org.auioc.mcmod.harmonicench.mixin.MixinArrow;
 import org.auioc.mcmod.harmonicench.mixin.MixinEnchantmentHelper;
+import org.auioc.mcmod.harmonicench.mixin.MixinItemStack;
 import org.auioc.mcmod.harmonicench.mixin.MixinLivingEntity;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -107,7 +110,7 @@ public class HEMixinHandler {
             if (ench.value().matchingSlot(slot)) {
                 effects.forEach(e -> action.accept(
                     e.attribute(),
-                    e.getModifier(lvl, new EnchantedItemInUse(item, slot, null, i -> { }), slot)
+                    e.getModifier(lvl, new EnchantedItemInUse(item, slot, null, i -> { }), slot) // TODO test onBreak
                 ));
             }
         });
@@ -150,6 +153,26 @@ public class HEMixinHandler {
             case DENY -> false;
             case DEFAULT -> LivingEntity.canGlideUsing(item, slot);
         };
+    }
+
+    /**
+     * @see MixinItemStack#inventoryTick
+     * @see ItemStack#inventoryTick
+     */
+    public static void onInventoryTick(Player player, Level level, ItemStack item, int slotId, boolean isSelected) {
+        if (level.isClientSide) {
+            return;
+        }
+
+        var serverLevel = (ServerLevel) level;
+        HEHelper.runIterationOnItem(item, HEEnchantmentEffectComponents.INVENTORY_TICK, (ench, effects, lvl) -> {
+            var itemInUse = new EnchantedItemInUse(item, null, player, s -> { }); // TODO test onBreak
+            Enchantment.applyEffects(
+                effects,
+                HELootContextParamSets.enchantedItemWithEntity(serverLevel, lvl, item, player, player.position()),
+                effect -> effect.apply(serverLevel, lvl, itemInUse, player, player.position())
+            );
+        });
     }
 
 }
