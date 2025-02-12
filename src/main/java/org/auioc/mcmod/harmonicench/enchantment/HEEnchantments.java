@@ -87,7 +87,7 @@ public class HEEnchantments {
     public static final ResourceKey<Enchantment> PROFICIENCY = register("proficiency", ProficiencyEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> RAPIER = register("rapier", RapierEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> REBELLING_CURSE = register("rebelling_curse", RebellingCurseEnchantment::bootstrap);
-    public static final ResourceKey<Enchantment> SACRIFICING_CURSE = register("sacrificing_curse", SacrificingCurseEnchantment::bootstrap); // TODO
+    public static final ResourceKey<Enchantment> SACRIFICING_CURSE = register("sacrificing_curse", SacrificingCurseEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> SAFE_TELEPORTING = register("safe_teleporting", SafeTeleportingEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> SIPHONING = register("siphoning", SiphoningEnchantment::bootstrap);
     public static final ResourceKey<Enchantment> SNIPING = register("sniping", SnipingEnchantment::bootstrap); // TODO

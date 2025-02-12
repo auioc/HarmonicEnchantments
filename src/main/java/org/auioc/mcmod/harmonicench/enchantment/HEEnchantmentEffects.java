@@ -36,6 +36,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.EatingEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SacrificingEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.SetItemProficiency;
 import org.auioc.mcmod.harmonicench.enchantment.effect.SetNumericData;
 import org.auioc.mcmod.harmonicench.enchantment.effect.SiphoningEffect;
@@ -78,6 +79,9 @@ public class HEEnchantmentEffects {
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SiphoningEffect>> HEE_SIPHONING =
         ENTITY_EFFECT_TYPES.register("hee_siphoning", () -> SiphoningEffect.CODEC);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SacrificingEffect>> HEE_SACRIFICING =
+        ENTITY_EFFECT_TYPES.register("hee_sacrificing", () -> SacrificingEffect.CODEC);
 
     // ============================================================================================================== //
 

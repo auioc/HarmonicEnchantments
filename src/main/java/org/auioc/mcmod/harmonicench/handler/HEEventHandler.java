@@ -23,14 +23,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -41,6 +45,7 @@ import org.auioc.mcmod.arnicalib.game.event.ItemDamageEvent;
 import org.auioc.mcmod.arnicalib.game.event.PlayerEatEvent;
 import org.auioc.mcmod.harmonicench.enchantment.HEEnchantmentEffectComponents;
 import org.auioc.mcmod.harmonicench.enchantment.effect.CriticalHitEffect;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SacrificingEffect;
 import org.auioc.mcmod.harmonicench.loot.HELootContextParamSets;
 import org.auioc.mcmod.harmonicench.utils.HEHelper;
 
@@ -197,6 +202,18 @@ public class HEEventHandler {
                 target,
                 lightning.damageSources().source(DamageTypes.LIGHTNING_BOLT, lightning)
             );
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onItemTooltip(ItemTooltipEvent event) {
+        var stack = event.getItemStack();
+        if (stack.is(Items.ENCHANTED_BOOK)) {
+            return;
+        }
+        {
+            SacrificingEffect.addToTooltip(stack, event.getToolTip());
         }
     }
 

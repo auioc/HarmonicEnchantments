@@ -44,4 +44,9 @@ public class HEEDataComponents {
         b -> b.persistent(ExtraCodecs.NON_NEGATIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT)
     );
 
+    public static final Supplier<DataComponentType<Integer>> SACRIFICING_PROCESS = register(
+        "sacrificing_process",
+        b -> b.persistent(ExtraCodecs.NON_NEGATIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT)
+    );
+
 }
