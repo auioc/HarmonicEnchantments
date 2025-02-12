@@ -37,6 +37,7 @@ import org.auioc.mcmod.harmonicench.enchantment.effect.EnderPearlLandedEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.HEAttributeEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.ModifyMobEffect;
 import org.auioc.mcmod.harmonicench.enchantment.effect.SetItemProficiency;
+import org.auioc.mcmod.harmonicench.enchantment.effect.SetNumericData;
 import org.auioc.mcmod.harmonicench.enchantment.effect.SiphoningEffect;
 
 public class HEEnchantmentEffects {
@@ -71,6 +72,9 @@ public class HEEnchantmentEffects {
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SetItemProficiency>> SET_ITEM_PROFICIENCY =
         ENTITY_EFFECT_TYPES.register("set_item_proficiency", () -> SetItemProficiency.CODEC);
+
+    public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SetNumericData>> SET_NUMERIC_DATA =
+        ENTITY_EFFECT_TYPES.register("set_numeric_data", () -> SetNumericData.CODEC);
 
     public static final DeferredHolder<MapCodec<? extends EnchantmentEntityEffect>, MapCodec<SiphoningEffect>> HEE_SIPHONING =
         ENTITY_EFFECT_TYPES.register("hee_siphoning", () -> SiphoningEffect.CODEC);
